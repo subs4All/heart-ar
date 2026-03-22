@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>💕 Heart AR — Eran loves Mika</title>
+  <title>💕 Eran loves Mika</title>
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
     body { background:#0a0006; font-family:'Georgia',serif; overflow:hidden; touch-action:none; }
@@ -72,9 +72,10 @@
       z-index:500; backdrop-filter:blur(10px); pointer-events:none; white-space:nowrap; display:none;
     }
     #found-banner {
-      position:fixed; top:32px; left:50%; transform:translateX(-50%);
-      color:#ff4466; font-size:1.1rem; letter-spacing:.2em; z-index:300;
-      opacity:0; transition:opacity .5s; text-shadow:0 0 20px #ff4466; pointer-events:none;
+      position:fixed; top:22px; left:50%; transform:translateX(-50%);
+      color:#ffdd55; font-size:1.3rem; font-weight:bold; letter-spacing:.18em; z-index:300;
+      opacity:0; transition:opacity .5s; text-shadow:0 0 25px #ffaa00, 0 0 50px #ff4466;
+      pointer-events:none; white-space:nowrap;
     }
     #found-banner.show{opacity:1}
   </style>
@@ -102,235 +103,276 @@
   <div class="scan-frame"></div>
   <div class="scan-label">AIM AT HEART DRAWING</div>
 </div>
-<div id="found-banner">✨ HAPPY BIRTHDAY ✨</div>
+<div id="found-banner">🎂 HAPPY BIRTHDAY 🎂</div>
 <div id="status">🔍 Scanning for heart…</div>
 
 <script>
 /* ══════════════════════════════════════
-   PARTICLE CLASSES
+   PARTICLES
 ══════════════════════════════════════ */
 class Spark {
   constructor(x,y,vx,vy,color){
     this.x=x;this.y=y;this.vx=vx;this.vy=vy;this.color=color;
-    this.size=Math.random()*4+1;this.life=1;
-    this.decay=Math.random()*.022+.008;this.trail=[];
+    this.size=Math.random()*5+1;this.life=1;
+    this.decay=Math.random()*.018+.006;this.trail=[];
   }
   update(){
     this.trail.push({x:this.x,y:this.y});
-    if(this.trail.length>8)this.trail.shift();
+    if(this.trail.length>10)this.trail.shift();
     this.x+=this.vx;this.y+=this.vy;
-    this.vy+=.12;this.vx*=.98;
+    this.vy+=.1;this.vx*=.98;
     this.life-=this.decay;this.size*=.98;
   }
   draw(c){
     if(this.life<=0)return;
     for(let i=0;i<this.trail.length;i++){
       const t=this.trail[i],f=i/this.trail.length;
-      c.save();c.globalAlpha=f*this.life*.35;
-      c.fillStyle=this.color;c.shadowColor=this.color;c.shadowBlur=8;
-      c.beginPath();c.arc(t.x,t.y,this.size*.5*f,0,Math.PI*2);c.fill();c.restore();
+      c.save();c.globalAlpha=f*this.life*.4;
+      c.fillStyle=this.color;c.shadowColor=this.color;c.shadowBlur=10;
+      c.beginPath();c.arc(t.x,t.y,this.size*.6*f,0,Math.PI*2);c.fill();c.restore();
     }
     c.save();c.globalAlpha=this.life;
-    c.fillStyle=this.color;c.shadowColor=this.color;c.shadowBlur=14;
+    c.fillStyle=this.color;c.shadowColor=this.color;c.shadowBlur=16;
     c.beginPath();c.arc(this.x,this.y,this.size,0,Math.PI*2);c.fill();c.restore();
   }
 }
 
 class Ember {
   constructor(cx,cy){
-    const a=Math.random()*Math.PI*2,s=Math.random()*9+2;
-    this.x=cx+(Math.random()-.5)*30;this.y=cy+(Math.random()-.5)*30;
-    this.vx=Math.cos(a)*s;this.vy=Math.sin(a)*s-3;
-    const C=['#ff2255','#ff6688','#ffaa33','#ff44cc','#ffffff','#ffdd55','#44ffcc','#ffaa88'];
+    const a=Math.random()*Math.PI*2,s=Math.random()*11+3;
+    this.x=cx+(Math.random()-.5)*40;this.y=cy+(Math.random()-.5)*40;
+    this.vx=Math.cos(a)*s;this.vy=Math.sin(a)*s-4;
+    const C=['#ff2255','#ff6688','#ffaa33','#ff44cc','#ffffff','#ffdd55','#44ffcc','#ff88aa','#ffcc00'];
     this.color=C[Math.floor(Math.random()*C.length)];
-    this.size=Math.random()*6+2;this.life=1;
-    this.decay=Math.random()*.013+.005;this.sparkChance=.09;this.trail=[];
+    this.size=Math.random()*7+2;this.life=1;
+    this.decay=Math.random()*.011+.004;this.sparkChance=.1;this.trail=[];
   }
   update(all){
     this.trail.push({x:this.x,y:this.y});
-    if(this.trail.length>12)this.trail.shift();
+    if(this.trail.length>14)this.trail.shift();
     this.x+=this.vx;this.y+=this.vy;
-    this.vy+=.08;this.vx*=.97;
+    this.vy+=.07;this.vx*=.97;
     this.life-=this.decay;this.size*=.97;
     if(Math.random()<this.sparkChance&&this.life>.3){
-      const a2=Math.random()*Math.PI*2,s2=Math.random()*3+1;
-      all.push(new Spark(this.x,this.y,Math.cos(a2)*s2,Math.sin(a2)*s2-1,this.color));
+      const a2=Math.random()*Math.PI*2,s2=Math.random()*4+1;
+      all.push(new Spark(this.x,this.y,Math.cos(a2)*s2,Math.sin(a2)*s2-1.5,this.color));
     }
   }
   draw(c){
     if(this.life<=0)return;
     for(let i=0;i<this.trail.length;i++){
       const t=this.trail[i],f=i/this.trail.length;
-      c.save();c.globalAlpha=f*this.life*.5;
-      c.fillStyle=this.color;c.shadowColor=this.color;c.shadowBlur=20;
+      c.save();c.globalAlpha=f*this.life*.55;
+      c.fillStyle=this.color;c.shadowColor=this.color;c.shadowBlur=22;
       c.beginPath();c.arc(t.x,t.y,this.size*f,0,Math.PI*2);c.fill();c.restore();
     }
     c.save();c.globalAlpha=this.life;
-    c.fillStyle=this.color;c.shadowColor=this.color;c.shadowBlur=25;
+    c.fillStyle=this.color;c.shadowColor=this.color;c.shadowBlur=28;
     c.beginPath();c.arc(this.x,this.y,this.size,0,Math.PI*2);c.fill();
-    c.fillStyle='white';c.shadowBlur=5;c.globalAlpha=this.life*.8;
+    c.fillStyle='white';c.shadowBlur=6;c.globalAlpha=this.life*.85;
     c.beginPath();c.arc(this.x,this.y,this.size*.4,0,Math.PI*2);c.fill();c.restore();
   }
 }
 
 /* ══════════════════════════════════════
-   BIRTHDAY CAKE DRAWING
+   CAKE  — drawn at screen center, large
 ══════════════════════════════════════ */
-function drawCake(c, cx, cy, scale, alpha, t) {
+function drawBigCake(c, cx, cy, masterScale, alpha, t) {
+  if(alpha < 0.01) return;
   c.save();
   c.globalAlpha = alpha;
   c.translate(cx, cy);
-  c.scale(scale, scale);
+  c.scale(masterScale, masterScale);
 
-  const w  = 110;  // half-width of cake
-  const colors = {
-    tier1: { fill:'#ff6699', stroke:'#cc2255' },
-    tier2: { fill:'#ff99bb', stroke:'#ff3366' },
-    tier3: { fill:'#ffccdd', stroke:'#ff6699' },
-    frosting: '#ffffff',
-    plate: '#f5c842',
-  };
-
-  // ── TIER DIMENSIONS (bottom to top) ──
+  // ── tier data (drawn bottom→top, y goes negative upward) ──
+  // each tier: { hw, h, col, topCol, drips }
   const tiers = [
-    { y:0,   h:38, hw:110, col:'#e8294e', stroke:'#b01535', drip:'#ff6699' },
-    { y:-38, h:32, hw:80,  col:'#f5416b', stroke:'#c01845', drip:'#ffaacc' },
-    { y:-70, h:26, hw:54,  col:'#ff6688', stroke:'#d03060', drip:'#ffddee' },
+    { hw:160, h:70,  col:'#e8294e', top:'#f04060', stripe:'#ff6688' },
+    { hw:115, h:60,  col:'#f5416b', top:'#ff5580', stripe:'#ffaabb' },
+    { hw: 75, h:50,  col:'#ff6688', top:'#ff88aa', stripe:'#ffccdd' },
   ];
+
+  let baseY = 0; // starts at 0, goes negative as we stack
 
   // plate
   c.save();
-  c.fillStyle=colors.plate;
-  c.shadowColor='#c8a020';c.shadowBlur=8;
-  c.beginPath();c.ellipse(0,6,120,12,0,0,Math.PI*2);c.fill();
+  c.fillStyle='#f5c842'; c.shadowColor='#c8a020'; c.shadowBlur=14;
+  c.beginPath(); c.ellipse(0, 10, 175, 18, 0, 0, Math.PI*2); c.fill();
+  c.fillStyle='#ffe070';
+  c.beginPath(); c.ellipse(0, 6, 170, 14, 0, 0, Math.PI*2); c.fill();
   c.restore();
 
-  // draw each tier bottom-up
-  tiers.forEach((tier,ti) => {
-    const hw=tier.hw, h=tier.h, by=tier.y;
+  tiers.forEach((tier, ti) => {
+    const { hw, h, col, top, stripe } = tier;
+    const by = baseY; // bottom y of this tier
 
-    // body rect with rounded corners via ellipse top
+    // shadow under tier
     c.save();
-    c.fillStyle=tier.col;
-    c.shadowColor=tier.stroke;c.shadowBlur=6;
+    c.fillStyle='rgba(0,0,0,0.18)';
+    c.beginPath(); c.ellipse(4, by+6, hw+6, 10, 0, 0, Math.PI*2); c.fill();
+    c.restore();
+
+    // main body
+    c.save();
+    c.fillStyle = col;
+    c.shadowColor = '#aa0030'; c.shadowBlur = 8;
     c.beginPath();
     c.moveTo(-hw, by);
-    c.lineTo(-hw, by-h+8);
-    c.quadraticCurveTo(-hw, by-h, -hw+8, by-h);
-    c.lineTo(hw-8, by-h);
-    c.quadraticCurveTo(hw, by-h, hw, by-h+8);
+    c.lineTo(-hw, by-h+10);
+    c.quadraticCurveTo(-hw, by-h, -hw+10, by-h);
+    c.lineTo(hw-10, by-h);
+    c.quadraticCurveTo(hw, by-h, hw, by-h+10);
     c.lineTo(hw, by);
     c.closePath();
     c.fill();
-    c.strokeStyle=tier.stroke;c.lineWidth=2;c.stroke();
     c.restore();
 
-    // top ellipse (3D top face)
+    // side highlight strip
     c.save();
-    c.fillStyle=lighten(tier.col, 30);
-    c.strokeStyle=tier.stroke;c.lineWidth=1.5;
-    c.beginPath();c.ellipse(0,by-h,hw,hw*0.22,0,0,Math.PI*2);
-    c.fill();c.stroke();
+    c.fillStyle='rgba(255,255,255,0.12)';
+    c.beginPath();
+    c.moveTo(-hw+4, by-8);
+    c.lineTo(-hw+4, by-h+14);
+    c.quadraticCurveTo(-hw+4, by-h+4, -hw+14, by-h+4);
+    c.lineTo(hw-14, by-h+4);
+    c.quadraticCurveTo(hw-4, by-h+4, hw-4, by-h+14);
+    c.lineTo(hw-4, by-8);
+    c.closePath();
+    c.fill();
+    c.restore();
+
+    // horizontal stripe bands
+    const bandCount = 3;
+    for(let b=0;b<bandCount;b++){
+      const bandY = by - h*(b+1)/(bandCount+1);
+      c.save();
+      c.fillStyle = 'rgba(255,255,255,0.1)';
+      c.fillRect(-hw+2, bandY-3, hw*2-4, 5);
+      c.restore();
+    }
+
+    // top ellipse (3D face)
+    c.save();
+    c.fillStyle = top;
+    c.strokeStyle = stripe; c.lineWidth = 2;
+    c.shadowColor = '#ff2255'; c.shadowBlur = 6;
+    c.beginPath(); c.ellipse(0, by-h, hw, hw*0.24, 0, 0, Math.PI*2);
+    c.fill(); c.stroke();
     c.restore();
 
     // frosting drips
-    c.save();
-    c.fillStyle='#fff';c.shadowColor='#eee';c.shadowBlur=4;
-    const drips = ti===0?7:ti===1?5:4;
-    for(let d=0;d<drips;d++){
-      const dx = -hw + hw*2/(drips-1||1)*d;
-      const dh = 10+Math.sin(d*1.7+ti)*6;
+    const dripsN = Math.round(hw / 22);
+    c.save(); c.fillStyle='#fff'; c.shadowColor='#eee'; c.shadowBlur=5;
+    for(let d=0;d<dripsN;d++){
+      const dx = -hw + hw*2/(dripsN-1||1)*d;
+      const dh = 14 + Math.sin(d*2.1+ti*1.3)*8;
+      const dw = 10 + Math.sin(d*1.5)*4;
       c.beginPath();
-      c.moveTo(dx-8, by-h+2);
-      c.quadraticCurveTo(dx, by-h+dh, dx+8, by-h+2);
-      c.closePath();c.fill();
+      c.moveTo(dx-dw/2, by-h+4);
+      c.bezierCurveTo(dx-dw/2, by-h+dh, dx+dw/2, by-h+dh, dx+dw/2, by-h+4);
+      c.closePath(); c.fill();
     }
-    // frosting strip on top ellipse
-    c.fillStyle='rgba(255,255,255,0.6)';
-    c.beginPath();c.ellipse(0,by-h,hw*.85,hw*0.14,0,0,Math.PI*2);c.fill();
+    // frosting ellipse on top
+    c.fillStyle='rgba(255,255,255,0.55)';
+    c.beginPath(); c.ellipse(0, by-h, hw*.8, hw*0.16, 0, 0, Math.PI*2); c.fill();
     c.restore();
 
-    // decorative dots on sides
+    // sprinkle dots on sides
     c.save();
-    c.fillStyle='rgba(255,255,255,0.5)';
-    const dotCount = ti===0?8:ti===1?6:4;
-    for(let d=0;d<dotCount;d++){
-      const dx = -hw*0.85 + hw*1.7/(dotCount-1)*d;
-      const dotY = by - h*0.5 + Math.sin(d+ti)*4;
-      c.beginPath();c.arc(dx, dotY, 3.5, 0,Math.PI*2);c.fill();
+    const sprinkleColors=['#ffee44','#44ffcc','#ff44cc','#44aaff','#ff8833'];
+    const sprN = Math.round(hw/14);
+    for(let d=0;d<sprN;d++){
+      const dx = -hw*0.88 + hw*1.76/(sprN-1)*d;
+      const dy = by - h*0.38 - Math.sin(d*1.2+ti)*h*0.22;
+      c.fillStyle = sprinkleColors[d%sprinkleColors.length];
+      c.shadowColor = sprinkleColors[d%sprinkleColors.length]; c.shadowBlur=6;
+      c.save(); c.translate(dx,dy); c.rotate(d*0.6);
+      c.fillRect(-5,-2,10,4); c.restore();
     }
     c.restore();
+
+    baseY -= h; // move up for next tier
   });
 
-  // ── CANDLES (5 on top tier) ──
-  const topTier = tiers[2];
-  const candleX = [-32,-16,0,16,32];
-  const candleColors = ['#ff4455','#44aaff','#ffcc00','#aa44ff','#44dd88'];
-  candleX.forEach((cx2,i)=>{
-    const baseY = topTier.y - topTier.h;
-    // candle body
+  // ── CANDLES (7 on top tier) ──
+  const topY = baseY; // y of top of top tier
+  const candleXs = [-54,-36,-18, 0, 18, 36, 54];
+  const candleCols = ['#ff3344','#3399ff','#ffcc00','#aa44ff','#44dd88','#ff8833','#ff44aa'];
+  candleXs.forEach((cx2, i) => {
+    const cBase = topY;
+    const cH = 28;
+    // body
     c.save();
-    c.fillStyle=candleColors[i];
-    c.strokeStyle='rgba(0,0,0,0.2)';c.lineWidth=1;
-    c.beginPath();
-    c.roundRect(cx2-4, baseY-20, 8, 20, 2);
-    c.fill();c.stroke();
-    // stripes
-    c.fillStyle='rgba(255,255,255,0.35)';
-    for(let s=0;s<3;s++){
-      c.fillRect(cx2-4, baseY-20+s*7, 8, 3);
-    }
+    c.fillStyle = candleCols[i];
+    c.strokeStyle='rgba(0,0,0,0.25)'; c.lineWidth=1.5;
+    c.beginPath(); c.roundRect(cx2-6, cBase-cH, 12, cH, 3); c.fill(); c.stroke();
+    // spiral stripe
+    c.fillStyle='rgba(255,255,255,0.4)';
+    for(let s=0;s<4;s++) c.fillRect(cx2-6, cBase-cH+s*7, 12, 3.5);
     c.restore();
-
-    // flame — animated flicker
-    const flicker = Math.sin(t*8 + i*1.3)*2;
-    const fh = 14+flicker;
-    c.save();
+    // flame flicker
+    const flk = Math.sin(t*9+i*1.7)*2.5;
+    const fh = 18+flk;
     // outer flame
-    c.globalAlpha = alpha;
-    c.fillStyle='#ff8800';
-    c.shadowColor='#ffaa00';c.shadowBlur=12;
+    c.save();
+    c.fillStyle='#ff8800'; c.shadowColor='#ffaa00'; c.shadowBlur=18;
     c.beginPath();
-    c.moveTo(cx2, baseY-20-fh);
-    c.bezierCurveTo(cx2+6, baseY-20-fh*.6, cx2+4, baseY-20, cx2, baseY-20);
-    c.bezierCurveTo(cx2-4, baseY-20, cx2-6, baseY-20-fh*.6, cx2, baseY-20-fh);
+    c.moveTo(cx2, cBase-cH-fh);
+    c.bezierCurveTo(cx2+8,cBase-cH-fh*.5, cx2+5,cBase-cH, cx2,cBase-cH);
+    c.bezierCurveTo(cx2-5,cBase-cH, cx2-8,cBase-cH-fh*.5, cx2,cBase-cH-fh);
     c.fill();
     // inner flame
-    c.fillStyle='#ffff88';
-    c.shadowColor='#ffff00';c.shadowBlur=8;
+    c.fillStyle='#ffff88'; c.shadowColor='#ffff00'; c.shadowBlur=10;
     c.beginPath();
-    c.moveTo(cx2, baseY-20-fh*.7);
-    c.bezierCurveTo(cx2+3, baseY-20-fh*.4, cx2+2, baseY-20, cx2, baseY-20);
-    c.bezierCurveTo(cx2-2, baseY-20, cx2-3, baseY-20-fh*.4, cx2, baseY-20-fh*.7);
+    c.moveTo(cx2, cBase-cH-fh*.72);
+    c.bezierCurveTo(cx2+4,cBase-cH-fh*.4, cx2+3,cBase-cH, cx2,cBase-cH);
+    c.bezierCurveTo(cx2-3,cBase-cH, cx2-4,cBase-cH-fh*.4, cx2,cBase-cH-fh*.72);
     c.fill();
     c.restore();
   });
 
-  // ── TEXT: "Eran loves Mika" ──
-  const textY = tiers[0].y - tiers[0].h * 0.52;
+  // ── BIG TEXT "Eran loves Mika" on BOTTOM tier ──
+  // bottom tier spans from 0 to -tiers[0].h, center at -tiers[0].h/2
+  const textY = -tiers[0].h * 0.5;
+
+  // outline pass for readability
   c.save();
-  // glow pass
-  c.font = 'bold 16px Georgia, serif';
+  c.font = 'bold 32px Georgia, serif';
   c.textAlign = 'center';
   c.textBaseline = 'middle';
-  c.shadowColor = '#ff2255';
-  c.shadowBlur = 12;
+  c.strokeStyle = '#880022';
+  c.lineWidth = 6;
+  c.lineJoin = 'round';
+  c.strokeText('Eran loves Mika', 0, textY);
+  c.restore();
+
+  // glow pass
+  c.save();
+  c.font = 'bold 32px Georgia, serif';
+  c.textAlign = 'center';
+  c.textBaseline = 'middle';
+  c.shadowColor = '#ff2255'; c.shadowBlur = 20;
   c.fillStyle = '#fff';
-  c.globalAlpha = alpha * (0.85 + Math.sin(t*2)*0.15);
-  c.fillText('Eran loves Mika', 0, textY);
-  // crisp pass
-  c.shadowBlur = 0;
-  c.fillStyle = '#ffeeee';
+  c.globalAlpha = alpha * (0.9 + Math.sin(t*2.5)*0.1);
   c.fillText('Eran loves Mika', 0, textY);
   c.restore();
 
-  c.restore(); // end translate/scale
+  // crisp top layer
+  c.save();
+  c.font = 'bold 32px Georgia, serif';
+  c.textAlign = 'center';
+  c.textBaseline = 'middle';
+  c.fillStyle = '#ffe0ea';
+  c.globalAlpha = alpha;
+  c.fillText('Eran loves Mika', 0, textY);
+  c.restore();
+
+  c.restore(); // master
 }
 
-function lighten(hex, amt) {
-  let r=parseInt(hex.slice(1,3),16), g=parseInt(hex.slice(3,5),16), b=parseInt(hex.slice(5,7),16);
-  r=Math.min(255,r+amt); g=Math.min(255,g+amt); b=Math.min(255,b+amt);
-  return `rgb(${r},${g},${b})`;
+function lighten(hex,amt){
+  let r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  return `rgb(${Math.min(255,r+amt)},${Math.min(255,g+amt)},${Math.min(255,b+amt)})`;
 }
 
 /* ══════════════════════════════════════
@@ -342,43 +384,43 @@ let particles=[], ringEffects=[];
 let found=false, confidence=0;
 let heartCX=0, heartCY=0, heartSize=100;
 let heartGlowAlpha=0, heartGlowTarget=0;
-let cakeAlpha=0, cakeTarget=0, cakeScale=0;
+let cakeAlpha=0, cakeTarget=0, cakeEntrance=0;
 let burstTimer=0, time=0, lastDetect=0;
 let detectedBounds=null;
 
 /* ══════════════════════════════════════
-   DRAWING HELPERS
+   HEART DRAWING
 ══════════════════════════════════════ */
 function burst(cx,cy,n){ for(let i=0;i<n;i++) particles.push(new Ember(cx,cy)); }
 
 function heartPath(c,cx,cy,s){
   c.beginPath();
-  for(let t=0;t<=Math.PI*2;t+=.05){
+  for(let t=0;t<=Math.PI*2;t+=.04){
     const x=s*16*Math.pow(Math.sin(t),3)/16;
     const y=-s*(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t))/16;
-    t<.01?c.moveTo(cx+x,cy+y):c.lineTo(cx+x,cy+y);
+    t<.02?c.moveTo(cx+x,cy+y):c.lineTo(cx+x,cy+y);
   }
   c.closePath();
 }
 
 function drawGlowHeart(cx,cy,s,alpha,t){
-  const ss=s*(1+Math.sin(t*3)*.05);
-  for(let i=3;i>=0;i--){
-    ctx.save();ctx.globalAlpha=alpha*(.14-i*.03);
-    ctx.strokeStyle='#ff2255';ctx.lineWidth=4+i*8;
-    ctx.shadowColor='#ff2255';ctx.shadowBlur=30+i*10;
+  const ss=s*(1+Math.sin(t*3)*.06);
+  for(let i=4;i>=0;i--){
+    ctx.save();ctx.globalAlpha=alpha*(.12-i*.02);
+    ctx.strokeStyle='#ff2255';ctx.lineWidth=5+i*10;
+    ctx.shadowColor='#ff2255';ctx.shadowBlur=35+i*12;
     ctx.lineJoin='round';heartPath(ctx,cx,cy,ss);ctx.stroke();ctx.restore();
   }
   ctx.save();ctx.globalAlpha=alpha;
-  ctx.strokeStyle='#ff6688';ctx.lineWidth=2;
-  ctx.shadowColor='#ff99aa';ctx.shadowBlur=15;
+  ctx.strokeStyle='#ff6688';ctx.lineWidth=2.5;
+  ctx.shadowColor='#ff99aa';ctx.shadowBlur=18;
   ctx.lineJoin='round';heartPath(ctx,cx,cy,ss);ctx.stroke();ctx.restore();
 }
 
 function drawRing(cx,cy,r,alpha){
   ctx.save();ctx.globalAlpha=alpha;
-  ctx.strokeStyle='#ff4466';ctx.lineWidth=2;
-  ctx.shadowColor='#ff4466';ctx.shadowBlur=20;
+  ctx.strokeStyle='#ff4466';ctx.lineWidth=2.5;
+  ctx.shadowColor='#ff4466';ctx.shadowBlur=22;
   ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.stroke();ctx.restore();
 }
 
@@ -405,13 +447,11 @@ function analyzeFrame(){
   if(asp>.4&&asp<2.2&&den>.004&&den<.45&&bw>25&&bh>25){
     confidence=Math.min(1,confidence+.09);
     detectedBounds={x:minX,y:minY,w:bw,h:bh};
-  } else {
-    confidence=Math.max(0,confidence-.1);
-  }
+  } else { confidence=Math.max(0,confidence-.1); }
 }
 
 /* ══════════════════════════════════════
-   RENDER LOOP
+   RENDER
 ══════════════════════════════════════ */
 function render(){
   time+=.016;
@@ -430,19 +470,18 @@ function render(){
     heartCY=heartCY*.88+ty*.12;
     const ts=Math.max(detectedBounds.w,detectedBounds.h)*Math.min(sx,sy)*.5;
     heartSize=heartSize*.88+ts*.12;
-
     if(!found){
       found=true;
       document.getElementById('found-banner').classList.add('show');
       document.getElementById('scan-hint').classList.add('hidden');
-      document.getElementById('status').textContent='🎂 Happy Birthday! Eran loves Mika!';
-      burst(heartCX,heartCY,100);
+      document.getElementById('status').textContent='🎂 Eran loves Mika! 💕';
+      burst(heartCX,heartCY,120);
       ringEffects.push({r:0,alpha:1});
-      ringEffects.push({r:0,alpha:.7});
+      ringEffects.push({r:0,alpha:.75});
     }
     burstTimer++;
-    if(burstTimer%8===0) burst(heartCX,heartCY,4);
-    if(burstTimer%45===0){ burst(heartCX,heartCY,30); ringEffects.push({r:0,alpha:.8}); }
+    if(burstTimer%7===0)  burst(heartCX,heartCY,5);
+    if(burstTimer%40===0){ burst(heartCX,heartCY,35); ringEffects.push({r:0,alpha:.85}); }
   } else {
     heartGlowTarget=0; cakeTarget=0;
     if(found&&confidence<.2){
@@ -453,27 +492,33 @@ function render(){
     }
   }
 
-  // Smooth alpha transitions
-  heartGlowAlpha = heartGlowAlpha*.9 + heartGlowTarget*.1;
-  cakeAlpha      = cakeAlpha*.92     + cakeTarget*.08;
-  cakeScale      = cakeScale*.92     + (cakeTarget>0.05 ? 1 : 0)*.08;
+  heartGlowAlpha = heartGlowAlpha*.9  + heartGlowTarget*.1;
+  cakeAlpha      = cakeAlpha*.93      + cakeTarget*.07;
+  cakeEntrance   = cakeEntrance*.93   + (cakeTarget>.05 ? 1 : 0)*.07;
 
-  // Rings
+  // rings
   ringEffects=ringEffects.filter(r=>r.alpha>.01);
-  for(const r of ringEffects){ r.r+=4; r.alpha*=.95; drawRing(heartCX,heartCY,r.r,r.alpha); }
+  for(const r of ringEffects){ r.r+=5; r.alpha*=.94; drawRing(heartCX,heartCY,r.r,r.alpha); }
 
-  // Heart glow
+  // heart glow outline around detected position
   if(heartGlowAlpha>.05&&heartSize>10)
     drawGlowHeart(heartCX,heartCY,heartSize*.85,heartGlowAlpha,time);
 
-  // Birthday cake — floats above the heart
+  // BIG CAKE — always centered on screen, inside the heart area
   if(cakeAlpha>.02){
-    const cakeY = heartCY - heartSize*1.3 - 20;
-    const sc = 0.55 * cakeScale * (heartSize/120);
-    drawCake(ctx, heartCX, cakeY, sc, cakeAlpha, time);
+    const screenCX = W/2;
+    const screenCY = H/2 + 30; // slightly below center so candles sit nicely in frame
+    // scale so cake fills roughly 70% of screen height
+    const desiredH = H * 0.68;
+    // total cake height in local coords: sum of tier heights + candle ~46
+    const localH = 70+60+50+46;
+    const sc = (desiredH / localH) * cakeEntrance;
+    // bounce-in entrance
+    const bounceScale = sc * (1 + Math.sin(Math.max(0,(cakeEntrance-.5)*Math.PI))*0.08);
+    drawBigCake(ctx, screenCX, screenCY, bounceScale, cakeAlpha, time);
   }
 
-  // Particles
+  // particles (fly over everything)
   particles=particles.filter(p=>p.life>0);
   for(const p of particles){ p.update(particles); p.draw(ctx); }
 
@@ -529,6 +574,9 @@ async function startCamera(){
   }
 }
 
+/* ══════════════════════════════════════
+   DEMO MODE
+══════════════════════════════════════ */
 function startDemo(){
   document.getElementById('splash').style.display='none';
   document.getElementById('loading').classList.remove('show');
@@ -538,24 +586,34 @@ function startDemo(){
   document.getElementById('found-banner').classList.add('show');
   initCanvas();
   heartGlowAlpha=1; heartGlowTarget=1;
-  cakeAlpha=1; cakeTarget=1; cakeScale=1;
-  burst(heartCX,heartCY,120);
+  cakeAlpha=1; cakeTarget=1; cakeEntrance=1;
+  burst(heartCX,heartCY,140);
   ringEffects.push({r:0,alpha:1});
   let t2=0;
   function demoLoop(){
     time+=.016; t2++;
     const W=overlayCanvas.width, H=overlayCanvas.height;
     ctx.clearRect(0,0,W,H);
+    // dark vignette bg
     const g=ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,Math.max(W,H)/2);
-    g.addColorStop(0,'rgba(20,0,10,.5)'); g.addColorStop(1,'rgba(5,0,5,.9)');
+    g.addColorStop(0,'rgba(20,0,10,.5)'); g.addColorStop(1,'rgba(4,0,4,.92)');
     ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+
+    // heart glow behind cake
+    drawGlowHeart(W/2, H/2, Math.min(W,H)*.42, 0.85, time);
+
     ringEffects=ringEffects.filter(r=>r.alpha>.01);
-    for(const r of ringEffects){ r.r+=4; r.alpha*=.95; drawRing(heartCX,heartCY,r.r,r.alpha); }
-    drawGlowHeart(heartCX,heartCY,heartSize*.85,1,time);
-    const cakeY=heartCY-heartSize*1.3-20;
-    drawCake(ctx,heartCX,cakeY,0.55*(heartSize/120),1,time);
-    if(t2%10===0) burst(heartCX,heartCY,6);
-    if(t2%50===0){ burst(heartCX,heartCY,40); ringEffects.push({r:0,alpha:.8}); }
+    for(const r of ringEffects){ r.r+=5; r.alpha*=.94; drawRing(W/2,H/2,r.r,r.alpha); }
+
+    // big centered cake
+    const desiredH = H*0.68;
+    const localH = 70+60+50+46;
+    const sc = desiredH/localH;
+    drawBigCake(ctx, W/2, H/2+30, sc, 1, time);
+
+    if(t2%8===0)  burst(W/2,H/2,6);
+    if(t2%50===0){ burst(W/2,H/2,45); ringEffects.push({r:0,alpha:.85}); }
+
     particles=particles.filter(p=>p.life>0);
     for(const p of particles){ p.update(particles); p.draw(ctx); }
     requestAnimationFrame(demoLoop);
