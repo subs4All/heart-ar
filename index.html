@@ -4,171 +4,95 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>💕 Heart AR Sparks</title>
+  <title>💕 Heart AR — Eran loves Mika</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      background: #0a0006;
-      font-family: 'Georgia', serif;
-      overflow: hidden;
-      touch-action: none;
-    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:#0a0006; font-family:'Georgia',serif; overflow:hidden; touch-action:none; }
 
-    /* ── SPLASH SCREEN ── */
     #splash {
-      position: fixed; inset: 0;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      background: radial-gradient(ellipse at center, #1a0010 0%, #0a0006 70%);
-      z-index: 2000;
-      gap: 1.2rem;
+      position:fixed; inset:0; display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      background:radial-gradient(ellipse at center,#1a0010 0%,#0a0006 70%);
+      z-index:2000; gap:1.2rem;
     }
-    #splash .heart {
-      font-size: 5rem;
-      animation: heartbeat 1s ease-in-out infinite;
-      filter: drop-shadow(0 0 20px #ff4466);
-    }
-    @keyframes heartbeat {
-      0%,100% { transform: scale(1); }
-      50%      { transform: scale(1.2); }
-    }
-    #splash h1 {
-      color: #ff4466;
-      font-size: 2rem;
-      letter-spacing: .15em;
-      text-shadow: 0 0 30px #ff446688;
-    }
-    #splash p {
-      color: #ff8899aa;
-      font-size: .9rem;
-      text-align: center;
-      padding: 0 2.5rem;
-      line-height: 1.6;
-      max-width: 340px;
-    }
+    .heart-emoji { font-size:5rem; animation:heartbeat 1s ease-in-out infinite; filter:drop-shadow(0 0 20px #ff4466); }
+    @keyframes heartbeat { 0%,100%{transform:scale(1)} 50%{transform:scale(1.2)} }
+    #splash h1 { color:#ff4466; font-size:2rem; letter-spacing:.15em; text-shadow:0 0 30px #ff446688; }
+    #splash p { color:#ff8899aa; font-size:.9rem; text-align:center; padding:0 2.5rem; line-height:1.6; max-width:340px; }
     #startBtn {
-      margin-top: .5rem;
-      padding: 16px 44px;
-      background: linear-gradient(135deg, #ff2255, #ff6688);
-      border: none; border-radius: 50px;
-      color: #fff; font-size: 1.1rem;
-      letter-spacing: .08em;
-      cursor: pointer;
-      box-shadow: 0 0 30px #ff446666, 0 0 60px #ff446622;
-      animation: glow 2s ease-in-out infinite;
-      transition: transform .15s;
+      margin-top:.5rem; padding:16px 44px;
+      background:linear-gradient(135deg,#ff2255,#ff6688);
+      border:none; border-radius:50px; color:#fff; font-size:1.1rem;
+      letter-spacing:.08em; cursor:pointer;
+      box-shadow:0 0 30px #ff446666; animation:glow 2s ease-in-out infinite; transition:transform .15s;
     }
-    #startBtn:active { transform: scale(.95); }
+    #startBtn:active{transform:scale(.95)}
     @keyframes glow {
-      0%,100% { box-shadow: 0 0 30px #ff446666, 0 0 60px #ff446622; }
-      50%      { box-shadow: 0 0 50px #ff4466aa, 0 0 90px #ff446644; }
+      0%,100%{box-shadow:0 0 30px #ff446666,0 0 60px #ff446622}
+      50%{box-shadow:0 0 50px #ff4466aa,0 0 90px #ff446644}
     }
-    #demoBtn {
-      background: transparent;
-      border: 1px solid #ff446644;
-      border-radius: 50px;
-      color: #ff8899;
-      font-size: .85rem;
-      padding: 10px 28px;
-      cursor: pointer;
-      letter-spacing: .05em;
-    }
+    #demoBtn { background:transparent; border:1px solid #ff446644; border-radius:50px; color:#ff8899; font-size:.85rem; padding:10px 28px; cursor:pointer; }
 
-    /* ── LOADING (after tap) ── */
     #loading {
-      position: fixed; inset: 0;
-      display: none; flex-direction: column;
-      align-items: center; justify-content: center;
-      background: #0a0006; z-index: 1500;
-      color: #ff4466; gap: 1rem;
+      position:fixed; inset:0; display:none; flex-direction:column;
+      align-items:center; justify-content:center;
+      background:#0a0006; z-index:1500; color:#ff4466; gap:1rem;
     }
-    #loading.show { display: flex; }
-    #loading .lheart { font-size:3rem; animation:heartbeat 1s ease-in-out infinite; }
-    #loading h2 { font-size:1.4rem; letter-spacing:.1em; }
-    #loading span { color:#ff8899aa; font-size:.9rem; text-align:center; padding:0 2rem; }
+    #loading.show{display:flex}
+    #loading .lheart{font-size:3rem;animation:heartbeat 1s ease-in-out infinite}
+    #loading h2{font-size:1.4rem;letter-spacing:.1em}
+    #loading span{color:#ff8899aa;font-size:.9rem;text-align:center;padding:0 2rem}
 
-    /* ── AR LAYER ── */
-    #video-el {
-      position: fixed; inset: 0;
-      width: 100%; height: 100%;
-      object-fit: cover;
-    }
-    #overlay-canvas {
-      position: fixed; inset: 0;
-      width: 100%; height: 100%;
-      pointer-events: none;
-      z-index: 100;
-    }
+    #video-el { position:fixed; inset:0; width:100%; height:100%; object-fit:cover; }
+    #overlay-canvas { position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:100; }
 
-    /* ── HUD ── */
     #scan-hint {
-      position: fixed; top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      pointer-events: none; z-index: 200;
-      transition: opacity .8s;
+      position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
+      pointer-events:none; z-index:200; transition:opacity .8s;
     }
-    #scan-hint.hidden { opacity: 0; pointer-events:none; }
+    #scan-hint.hidden{opacity:0;pointer-events:none}
     .scan-frame {
-      width: 200px; height: 200px;
-      border: 2px solid #ff446666;
-      border-radius: 8px; position:relative;
-      animation: scanPulse 2s ease-in-out infinite;
+      width:200px; height:200px; border:2px solid #ff446666;
+      border-radius:8px; position:relative;
+      animation:scanPulse 2s ease-in-out infinite;
     }
     @keyframes scanPulse {
-      0%,100% { border-color:#ff446666; box-shadow:0 0 20px #ff446615; }
-      50%      { border-color:#ff4466bb; box-shadow:0 0 40px #ff446630; }
+      0%,100%{border-color:#ff446666;box-shadow:0 0 20px #ff446615}
+      50%{border-color:#ff4466bb;box-shadow:0 0 40px #ff446630}
     }
-    .scan-frame::before, .scan-frame::after {
-      content:''; position:absolute;
-      width:28px; height:28px;
-      border-color:#ff4466; border-style:solid;
-    }
-    .scan-frame::before { top:-2px; left:-2px; border-width:3px 0 0 3px; }
-    .scan-frame::after  { bottom:-2px; right:-2px; border-width:0 3px 3px 0; }
-    .scan-label {
-      text-align:center; color:#ff8899aa;
-      font-size:.75rem; margin-top:10px;
-      letter-spacing:.12em;
-    }
+    .scan-frame::before,.scan-frame::after{content:'';position:absolute;width:28px;height:28px;border-color:#ff4466;border-style:solid}
+    .scan-frame::before{top:-2px;left:-2px;border-width:3px 0 0 3px}
+    .scan-frame::after{bottom:-2px;right:-2px;border-width:0 3px 3px 0}
+    .scan-label{text-align:center;color:#ff8899aa;font-size:.75rem;margin-top:10px;letter-spacing:.12em}
+
     #status {
-      position:fixed; bottom:24px; left:50%;
-      transform:translateX(-50%);
-      background:rgba(255,68,102,.12);
-      border:1px solid #ff446633;
-      color:#ff8899; padding:10px 22px;
-      border-radius:20px; font-size:.82rem;
-      z-index:500; backdrop-filter:blur(10px);
-      pointer-events:none; white-space:nowrap;
-      display:none;
+      position:fixed; bottom:24px; left:50%; transform:translateX(-50%);
+      background:rgba(255,68,102,.12); border:1px solid #ff446633;
+      color:#ff8899; padding:10px 22px; border-radius:20px; font-size:.82rem;
+      z-index:500; backdrop-filter:blur(10px); pointer-events:none; white-space:nowrap; display:none;
     }
     #found-banner {
-      position:fixed; top:32px; left:50%;
-      transform:translateX(-50%);
-      color:#ff4466; font-size:1.1rem;
-      letter-spacing:.2em; z-index:300;
-      opacity:0; transition:opacity .5s;
-      text-shadow:0 0 20px #ff4466;
-      pointer-events:none;
+      position:fixed; top:32px; left:50%; transform:translateX(-50%);
+      color:#ff4466; font-size:1.1rem; letter-spacing:.2em; z-index:300;
+      opacity:0; transition:opacity .5s; text-shadow:0 0 20px #ff4466; pointer-events:none;
     }
-    #found-banner.show { opacity:1; }
+    #found-banner.show{opacity:1}
   </style>
 </head>
 <body>
 
-<!-- SPLASH — user must tap to trigger camera permission -->
 <div id="splash">
-  <div class="heart">💕</div>
+  <div class="heart-emoji">💕</div>
   <h1>Heart AR</h1>
-  <p>Tap <strong>Start Camera</strong> — your browser will ask for camera access. Then point at the heart drawing to see sparks!</p>
+  <p>Tap <strong>Start Camera</strong> — allow access, then point at the heart drawing!</p>
   <button id="startBtn" onclick="startCamera()">✨ Start Camera</button>
   <button id="demoBtn"  onclick="startDemo()">Try Demo (no camera)</button>
 </div>
 
-<!-- LOADING shown after tap while permission dialog / stream loads -->
 <div id="loading">
   <div class="lheart">💕</div>
   <h2>Opening camera…</h2>
-  <span>When your browser asks, tap <strong>Allow</strong> to enable the camera</span>
+  <span>Tap <strong>Allow</strong> when your browser asks for camera access</span>
 </div>
 
 <video id="video-el" autoplay playsinline muted></video>
@@ -178,11 +102,13 @@
   <div class="scan-frame"></div>
   <div class="scan-label">AIM AT HEART DRAWING</div>
 </div>
-<div id="found-banner">✨ HEART DETECTED ✨<br>LOVE YOU MIKA (Eran)</br></div></div>
+<div id="found-banner">✨ HAPPY BIRTHDAY ✨</div>
 <div id="status">🔍 Scanning for heart…</div>
 
 <script>
-/* ─── PARTICLE CLASSES ─── */
+/* ══════════════════════════════════════
+   PARTICLE CLASSES
+══════════════════════════════════════ */
 class Spark {
   constructor(x,y,vx,vy,color){
     this.x=x;this.y=y;this.vx=vx;this.vy=vy;this.color=color;
@@ -196,17 +122,17 @@ class Spark {
     this.vy+=.12;this.vx*=.98;
     this.life-=this.decay;this.size*=.98;
   }
-  draw(ctx){
+  draw(c){
     if(this.life<=0)return;
     for(let i=0;i<this.trail.length;i++){
       const t=this.trail[i],f=i/this.trail.length;
-      ctx.save();ctx.globalAlpha=f*this.life*.35;
-      ctx.fillStyle=this.color;ctx.shadowColor=this.color;ctx.shadowBlur=8;
-      ctx.beginPath();ctx.arc(t.x,t.y,this.size*.5*f,0,Math.PI*2);ctx.fill();ctx.restore();
+      c.save();c.globalAlpha=f*this.life*.35;
+      c.fillStyle=this.color;c.shadowColor=this.color;c.shadowBlur=8;
+      c.beginPath();c.arc(t.x,t.y,this.size*.5*f,0,Math.PI*2);c.fill();c.restore();
     }
-    ctx.save();ctx.globalAlpha=this.life;
-    ctx.fillStyle=this.color;ctx.shadowColor=this.color;ctx.shadowBlur=14;
-    ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fill();ctx.restore();
+    c.save();c.globalAlpha=this.life;
+    c.fillStyle=this.color;c.shadowColor=this.color;c.shadowBlur=14;
+    c.beginPath();c.arc(this.x,this.y,this.size,0,Math.PI*2);c.fill();c.restore();
   }
 }
 
@@ -215,7 +141,7 @@ class Ember {
     const a=Math.random()*Math.PI*2,s=Math.random()*9+2;
     this.x=cx+(Math.random()-.5)*30;this.y=cy+(Math.random()-.5)*30;
     this.vx=Math.cos(a)*s;this.vy=Math.sin(a)*s-3;
-    const C=['#ff2255','#ff6688','#ffaa33','#ff44cc','#ffffff','#ffdd55'];
+    const C=['#ff2255','#ff6688','#ffaa33','#ff44cc','#ffffff','#ffdd55','#44ffcc','#ffaa88'];
     this.color=C[Math.floor(Math.random()*C.length)];
     this.size=Math.random()*6+2;this.life=1;
     this.decay=Math.random()*.013+.005;this.sparkChance=.09;this.trail=[];
@@ -231,43 +157,208 @@ class Ember {
       all.push(new Spark(this.x,this.y,Math.cos(a2)*s2,Math.sin(a2)*s2-1,this.color));
     }
   }
-  draw(ctx){
+  draw(c){
     if(this.life<=0)return;
     for(let i=0;i<this.trail.length;i++){
       const t=this.trail[i],f=i/this.trail.length;
-      ctx.save();ctx.globalAlpha=f*this.life*.5;
-      ctx.fillStyle=this.color;ctx.shadowColor=this.color;ctx.shadowBlur=20;
-      ctx.beginPath();ctx.arc(t.x,t.y,this.size*f,0,Math.PI*2);ctx.fill();ctx.restore();
+      c.save();c.globalAlpha=f*this.life*.5;
+      c.fillStyle=this.color;c.shadowColor=this.color;c.shadowBlur=20;
+      c.beginPath();c.arc(t.x,t.y,this.size*f,0,Math.PI*2);c.fill();c.restore();
     }
-    ctx.save();ctx.globalAlpha=this.life;
-    ctx.fillStyle=this.color;ctx.shadowColor=this.color;ctx.shadowBlur=25;
-    ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fill();
-    ctx.fillStyle='white';ctx.shadowBlur=5;ctx.globalAlpha=this.life*.8;
-    ctx.beginPath();ctx.arc(this.x,this.y,this.size*.4,0,Math.PI*2);ctx.fill();ctx.restore();
+    c.save();c.globalAlpha=this.life;
+    c.fillStyle=this.color;c.shadowColor=this.color;c.shadowBlur=25;
+    c.beginPath();c.arc(this.x,this.y,this.size,0,Math.PI*2);c.fill();
+    c.fillStyle='white';c.shadowBlur=5;c.globalAlpha=this.life*.8;
+    c.beginPath();c.arc(this.x,this.y,this.size*.4,0,Math.PI*2);c.fill();c.restore();
   }
 }
 
-/* ─── STATE ─── */
-let overlayCanvas,ctx,videoEl;
-let detCanvas,detCtx;
-let particles=[],ringEffects=[];
-let found=false,confidence=0;
-let heartCX=0,heartCY=0,heartSize=100;
-let heartGlowAlpha=0,heartGlowTarget=0;
-let burstTimer=0,time=0,lastDetect=0;
+/* ══════════════════════════════════════
+   BIRTHDAY CAKE DRAWING
+══════════════════════════════════════ */
+function drawCake(c, cx, cy, scale, alpha, t) {
+  c.save();
+  c.globalAlpha = alpha;
+  c.translate(cx, cy);
+  c.scale(scale, scale);
+
+  const w  = 110;  // half-width of cake
+  const colors = {
+    tier1: { fill:'#ff6699', stroke:'#cc2255' },
+    tier2: { fill:'#ff99bb', stroke:'#ff3366' },
+    tier3: { fill:'#ffccdd', stroke:'#ff6699' },
+    frosting: '#ffffff',
+    plate: '#f5c842',
+  };
+
+  // ── TIER DIMENSIONS (bottom to top) ──
+  const tiers = [
+    { y:0,   h:38, hw:110, col:'#e8294e', stroke:'#b01535', drip:'#ff6699' },
+    { y:-38, h:32, hw:80,  col:'#f5416b', stroke:'#c01845', drip:'#ffaacc' },
+    { y:-70, h:26, hw:54,  col:'#ff6688', stroke:'#d03060', drip:'#ffddee' },
+  ];
+
+  // plate
+  c.save();
+  c.fillStyle=colors.plate;
+  c.shadowColor='#c8a020';c.shadowBlur=8;
+  c.beginPath();c.ellipse(0,6,120,12,0,0,Math.PI*2);c.fill();
+  c.restore();
+
+  // draw each tier bottom-up
+  tiers.forEach((tier,ti) => {
+    const hw=tier.hw, h=tier.h, by=tier.y;
+
+    // body rect with rounded corners via ellipse top
+    c.save();
+    c.fillStyle=tier.col;
+    c.shadowColor=tier.stroke;c.shadowBlur=6;
+    c.beginPath();
+    c.moveTo(-hw, by);
+    c.lineTo(-hw, by-h+8);
+    c.quadraticCurveTo(-hw, by-h, -hw+8, by-h);
+    c.lineTo(hw-8, by-h);
+    c.quadraticCurveTo(hw, by-h, hw, by-h+8);
+    c.lineTo(hw, by);
+    c.closePath();
+    c.fill();
+    c.strokeStyle=tier.stroke;c.lineWidth=2;c.stroke();
+    c.restore();
+
+    // top ellipse (3D top face)
+    c.save();
+    c.fillStyle=lighten(tier.col, 30);
+    c.strokeStyle=tier.stroke;c.lineWidth=1.5;
+    c.beginPath();c.ellipse(0,by-h,hw,hw*0.22,0,0,Math.PI*2);
+    c.fill();c.stroke();
+    c.restore();
+
+    // frosting drips
+    c.save();
+    c.fillStyle='#fff';c.shadowColor='#eee';c.shadowBlur=4;
+    const drips = ti===0?7:ti===1?5:4;
+    for(let d=0;d<drips;d++){
+      const dx = -hw + hw*2/(drips-1||1)*d;
+      const dh = 10+Math.sin(d*1.7+ti)*6;
+      c.beginPath();
+      c.moveTo(dx-8, by-h+2);
+      c.quadraticCurveTo(dx, by-h+dh, dx+8, by-h+2);
+      c.closePath();c.fill();
+    }
+    // frosting strip on top ellipse
+    c.fillStyle='rgba(255,255,255,0.6)';
+    c.beginPath();c.ellipse(0,by-h,hw*.85,hw*0.14,0,0,Math.PI*2);c.fill();
+    c.restore();
+
+    // decorative dots on sides
+    c.save();
+    c.fillStyle='rgba(255,255,255,0.5)';
+    const dotCount = ti===0?8:ti===1?6:4;
+    for(let d=0;d<dotCount;d++){
+      const dx = -hw*0.85 + hw*1.7/(dotCount-1)*d;
+      const dotY = by - h*0.5 + Math.sin(d+ti)*4;
+      c.beginPath();c.arc(dx, dotY, 3.5, 0,Math.PI*2);c.fill();
+    }
+    c.restore();
+  });
+
+  // ── CANDLES (5 on top tier) ──
+  const topTier = tiers[2];
+  const candleX = [-32,-16,0,16,32];
+  const candleColors = ['#ff4455','#44aaff','#ffcc00','#aa44ff','#44dd88'];
+  candleX.forEach((cx2,i)=>{
+    const baseY = topTier.y - topTier.h;
+    // candle body
+    c.save();
+    c.fillStyle=candleColors[i];
+    c.strokeStyle='rgba(0,0,0,0.2)';c.lineWidth=1;
+    c.beginPath();
+    c.roundRect(cx2-4, baseY-20, 8, 20, 2);
+    c.fill();c.stroke();
+    // stripes
+    c.fillStyle='rgba(255,255,255,0.35)';
+    for(let s=0;s<3;s++){
+      c.fillRect(cx2-4, baseY-20+s*7, 8, 3);
+    }
+    c.restore();
+
+    // flame — animated flicker
+    const flicker = Math.sin(t*8 + i*1.3)*2;
+    const fh = 14+flicker;
+    c.save();
+    // outer flame
+    c.globalAlpha = alpha;
+    c.fillStyle='#ff8800';
+    c.shadowColor='#ffaa00';c.shadowBlur=12;
+    c.beginPath();
+    c.moveTo(cx2, baseY-20-fh);
+    c.bezierCurveTo(cx2+6, baseY-20-fh*.6, cx2+4, baseY-20, cx2, baseY-20);
+    c.bezierCurveTo(cx2-4, baseY-20, cx2-6, baseY-20-fh*.6, cx2, baseY-20-fh);
+    c.fill();
+    // inner flame
+    c.fillStyle='#ffff88';
+    c.shadowColor='#ffff00';c.shadowBlur=8;
+    c.beginPath();
+    c.moveTo(cx2, baseY-20-fh*.7);
+    c.bezierCurveTo(cx2+3, baseY-20-fh*.4, cx2+2, baseY-20, cx2, baseY-20);
+    c.bezierCurveTo(cx2-2, baseY-20, cx2-3, baseY-20-fh*.4, cx2, baseY-20-fh*.7);
+    c.fill();
+    c.restore();
+  });
+
+  // ── TEXT: "Eran loves Mika" ──
+  const textY = tiers[0].y - tiers[0].h * 0.52;
+  c.save();
+  // glow pass
+  c.font = 'bold 16px Georgia, serif';
+  c.textAlign = 'center';
+  c.textBaseline = 'middle';
+  c.shadowColor = '#ff2255';
+  c.shadowBlur = 12;
+  c.fillStyle = '#fff';
+  c.globalAlpha = alpha * (0.85 + Math.sin(t*2)*0.15);
+  c.fillText('Eran loves Mika', 0, textY);
+  // crisp pass
+  c.shadowBlur = 0;
+  c.fillStyle = '#ffeeee';
+  c.fillText('Eran loves Mika', 0, textY);
+  c.restore();
+
+  c.restore(); // end translate/scale
+}
+
+function lighten(hex, amt) {
+  let r=parseInt(hex.slice(1,3),16), g=parseInt(hex.slice(3,5),16), b=parseInt(hex.slice(5,7),16);
+  r=Math.min(255,r+amt); g=Math.min(255,g+amt); b=Math.min(255,b+amt);
+  return `rgb(${r},${g},${b})`;
+}
+
+/* ══════════════════════════════════════
+   STATE
+══════════════════════════════════════ */
+let overlayCanvas, ctx, videoEl;
+let detCanvas, detCtx;
+let particles=[], ringEffects=[];
+let found=false, confidence=0;
+let heartCX=0, heartCY=0, heartSize=100;
+let heartGlowAlpha=0, heartGlowTarget=0;
+let cakeAlpha=0, cakeTarget=0, cakeScale=0;
+let burstTimer=0, time=0, lastDetect=0;
 let detectedBounds=null;
 
-/* ─── DRAWING ─── */
-function burst(cx,cy,n){for(let i=0;i<n;i++)particles.push(new Ember(cx,cy));}
+/* ══════════════════════════════════════
+   DRAWING HELPERS
+══════════════════════════════════════ */
+function burst(cx,cy,n){ for(let i=0;i<n;i++) particles.push(new Ember(cx,cy)); }
 
-function heartPath(ctx,cx,cy,s){
-  ctx.beginPath();
+function heartPath(c,cx,cy,s){
+  c.beginPath();
   for(let t=0;t<=Math.PI*2;t+=.05){
     const x=s*16*Math.pow(Math.sin(t),3)/16;
     const y=-s*(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t))/16;
-    t<.01?ctx.moveTo(cx+x,cy+y):ctx.lineTo(cx+x,cy+y);
+    t<.01?c.moveTo(cx+x,cy+y):c.lineTo(cx+x,cy+y);
   }
-  ctx.closePath();
+  c.closePath();
 }
 
 function drawGlowHeart(cx,cy,s,alpha,t){
@@ -291,24 +382,26 @@ function drawRing(cx,cy,r,alpha){
   ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.stroke();ctx.restore();
 }
 
-/* ─── DETECTION ─── */
+/* ══════════════════════════════════════
+   DETECTION
+══════════════════════════════════════ */
 function analyzeFrame(){
   if(!videoEl||videoEl.readyState<2)return;
   detCtx.drawImage(videoEl,0,0,detCanvas.width,detCanvas.height);
   const d=detCtx.getImageData(0,0,detCanvas.width,detCanvas.height).data;
-  const w=detCanvas.width,h=detCanvas.height;
-  let cnt=0,minX=w,maxX=0,minY=h,maxY=0;
+  const w=detCanvas.width, h=detCanvas.height;
+  let cnt=0, minX=w,maxX=0,minY=h,maxY=0;
   for(let i=0;i<d.length;i+=4){
     const r=d[i],g=d[i+1],b=d[i+2];
     if((r>80&&g<70&&b<70&&r>g*1.8&&r>b*1.8)||(r>55&&g<38&&b<38&&r>g+18)){
       cnt++;
-      const px=(i/4)%w,py=Math.floor((i/4)/w);
-      if(px<minX)minX=px;if(px>maxX)maxX=px;
-      if(py<minY)minY=py;if(py>maxY)maxY=py;
+      const px=(i/4)%w, py=Math.floor((i/4)/w);
+      if(px<minX)minX=px; if(px>maxX)maxX=px;
+      if(py<minY)minY=py; if(py>maxY)maxY=py;
     }
   }
-  if(cnt<60){confidence=Math.max(0,confidence-.06);return;}
-  const bw=maxX-minX,bh=maxY-minY,asp=bw/(bh||1),den=cnt/(bw*bh||1);
+  if(cnt<60){ confidence=Math.max(0,confidence-.06); return; }
+  const bw=maxX-minX, bh=maxY-minY, asp=bw/(bh||1), den=cnt/(bw*bh||1);
   if(asp>.4&&asp<2.2&&den>.004&&den<.45&&bw>25&&bh>25){
     confidence=Math.min(1,confidence+.09);
     detectedBounds={x:minX,y:minY,w:bw,h:bh};
@@ -317,77 +410,99 @@ function analyzeFrame(){
   }
 }
 
-/* ─── RENDER ─── */
+/* ══════════════════════════════════════
+   RENDER LOOP
+══════════════════════════════════════ */
 function render(){
   time+=.016;
-  const W=overlayCanvas.width,H=overlayCanvas.height;
+  const W=overlayCanvas.width, H=overlayCanvas.height;
   ctx.clearRect(0,0,W,H);
-  if(Date.now()-lastDetect>80){analyzeFrame();lastDetect=Date.now();}
+  if(Date.now()-lastDetect>80){ analyzeFrame(); lastDetect=Date.now(); }
 
-  const isDetected=confidence>.5&&detectedBounds;
+  const isDetected = confidence>.5 && detectedBounds;
+
   if(isDetected){
-    heartGlowTarget=1;
-    const sx=W/detCanvas.width,sy=H/detCanvas.height;
+    heartGlowTarget=1; cakeTarget=1;
+    const sx=W/detCanvas.width, sy=H/detCanvas.height;
     const tx=(detectedBounds.x+detectedBounds.w/2)*sx;
     const ty=(detectedBounds.y+detectedBounds.h/2)*sy;
-    heartCX=heartCX*.88+tx*.12;heartCY=heartCY*.88+ty*.12;
+    heartCX=heartCX*.88+tx*.12;
+    heartCY=heartCY*.88+ty*.12;
     const ts=Math.max(detectedBounds.w,detectedBounds.h)*Math.min(sx,sy)*.5;
     heartSize=heartSize*.88+ts*.12;
+
     if(!found){
       found=true;
       document.getElementById('found-banner').classList.add('show');
       document.getElementById('scan-hint').classList.add('hidden');
-      document.getElementById('status').textContent='💕 Heart detected!';
-      burst(heartCX,heartCY,90);
-      ringEffects.push({r:0,alpha:1});ringEffects.push({r:0,alpha:.7});
+      document.getElementById('status').textContent='🎂 Happy Birthday! Eran loves Mika!';
+      burst(heartCX,heartCY,100);
+      ringEffects.push({r:0,alpha:1});
+      ringEffects.push({r:0,alpha:.7});
     }
     burstTimer++;
-    if(burstTimer%8===0)burst(heartCX,heartCY,4);
-    if(burstTimer%45===0){burst(heartCX,heartCY,28);ringEffects.push({r:0,alpha:.8});}
+    if(burstTimer%8===0) burst(heartCX,heartCY,4);
+    if(burstTimer%45===0){ burst(heartCX,heartCY,30); ringEffects.push({r:0,alpha:.8}); }
   } else {
-    heartGlowTarget=0;
+    heartGlowTarget=0; cakeTarget=0;
     if(found&&confidence<.2){
-      found=false;burstTimer=0;
+      found=false; burstTimer=0;
       document.getElementById('found-banner').classList.remove('show');
       document.getElementById('scan-hint').classList.remove('hidden');
       document.getElementById('status').textContent='🔍 Scanning for heart…';
     }
   }
-  heartGlowAlpha=heartGlowAlpha*.9+heartGlowTarget*.1;
+
+  // Smooth alpha transitions
+  heartGlowAlpha = heartGlowAlpha*.9 + heartGlowTarget*.1;
+  cakeAlpha      = cakeAlpha*.92     + cakeTarget*.08;
+  cakeScale      = cakeScale*.92     + (cakeTarget>0.05 ? 1 : 0)*.08;
+
+  // Rings
   ringEffects=ringEffects.filter(r=>r.alpha>.01);
-  for(const r of ringEffects){r.r+=4;r.alpha*=.95;drawRing(heartCX,heartCY,r.r,r.alpha);}
-  if(heartGlowAlpha>.05&&heartSize>10)drawGlowHeart(heartCX,heartCY,heartSize*.85,heartGlowAlpha,time);
+  for(const r of ringEffects){ r.r+=4; r.alpha*=.95; drawRing(heartCX,heartCY,r.r,r.alpha); }
+
+  // Heart glow
+  if(heartGlowAlpha>.05&&heartSize>10)
+    drawGlowHeart(heartCX,heartCY,heartSize*.85,heartGlowAlpha,time);
+
+  // Birthday cake — floats above the heart
+  if(cakeAlpha>.02){
+    const cakeY = heartCY - heartSize*1.3 - 20;
+    const sc = 0.55 * cakeScale * (heartSize/120);
+    drawCake(ctx, heartCX, cakeY, sc, cakeAlpha, time);
+  }
+
+  // Particles
   particles=particles.filter(p=>p.life>0);
-  for(const p of particles){p.update(particles);p.draw(ctx);}
+  for(const p of particles){ p.update(particles); p.draw(ctx); }
+
   requestAnimationFrame(render);
 }
 
-/* ─── INIT CANVAS ─── */
+/* ══════════════════════════════════════
+   INIT
+══════════════════════════════════════ */
 function initCanvas(){
   overlayCanvas=document.getElementById('overlay-canvas');
   ctx=overlayCanvas.getContext('2d');
   detCanvas=document.createElement('canvas');
-  detCanvas.width=160;detCanvas.height=120;
+  detCanvas.width=160; detCanvas.height=120;
   detCtx=detCanvas.getContext('2d',{willReadFrequently:true});
-  function resize(){overlayCanvas.width=window.innerWidth;overlayCanvas.height=window.innerHeight;}
-  resize();window.addEventListener('resize',resize);
-  heartCX=window.innerWidth/2;heartCY=window.innerHeight/2;
+  function resize(){ overlayCanvas.width=window.innerWidth; overlayCanvas.height=window.innerHeight; }
+  resize(); window.addEventListener('resize',resize);
+  heartCX=window.innerWidth/2; heartCY=window.innerHeight/2;
   heartSize=Math.min(window.innerWidth,window.innerHeight)*.2;
 }
 
-/* ─── START CAMERA (triggered by user tap = permission prompt fires) ─── */
 async function startCamera(){
-  // Hide splash, show loading immediately so user sees feedback
   document.getElementById('splash').style.display='none';
   document.getElementById('loading').classList.add('show');
-
   videoEl=document.getElementById('video-el');
   initCanvas();
-
-  try {
+  try{
     const stream=await navigator.mediaDevices.getUserMedia({
-      video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}},
-      audio:false
+      video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}},audio:false
     });
     videoEl.srcObject=stream;
     videoEl.onloadedmetadata=()=>{
@@ -397,51 +512,52 @@ async function startCamera(){
       document.getElementById('scan-hint').classList.remove('hidden');
       render();
     };
-  } catch(err){
-    console.error(err);
+  }catch(err){
     document.getElementById('loading').innerHTML=`
       <div style="text-align:center;padding:2rem;gap:1.2rem;display:flex;flex-direction:column;align-items:center">
         <div style="font-size:3rem">😕</div>
         <h2 style="color:#ff4466;font-size:1.3rem">Camera blocked</h2>
         <p style="color:#ff8899aa;line-height:1.7;max-width:300px;font-size:.88rem">
-          Your browser needs camera permission.<br><br>
+          Please allow camera permission.<br><br>
           <strong>iPhone/Safari:</strong> Settings → Safari → Camera → Allow<br>
-          <strong>Android/Chrome:</strong> Tap the 🔒 in the address bar → Camera → Allow<br><br>
-          Then reload the page and tap <em>Start Camera</em> again.
+          <strong>Android/Chrome:</strong> Tap 🔒 in address bar → Camera → Allow<br><br>
+          Then reload and tap <em>Start Camera</em>.
         </p>
-        <button onclick="location.reload()" style="padding:12px 30px;background:linear-gradient(135deg,#ff2255,#ff6688);border:none;border-radius:25px;color:#fff;font-size:1rem;cursor:pointer;box-shadow:0 0 20px #ff446655">🔄 Reload & Try Again</button>
-        <button onclick="startDemo()" style="padding:10px 25px;background:transparent;border:1px solid #ff446644;border-radius:25px;color:#ff8899;font-size:.9rem;cursor:pointer">✨ Demo Mode instead</button>
+        <button onclick="location.reload()" style="padding:12px 30px;background:linear-gradient(135deg,#ff2255,#ff6688);border:none;border-radius:25px;color:#fff;font-size:1rem;cursor:pointer">🔄 Reload</button>
+        <button onclick="startDemo()" style="padding:10px 25px;background:transparent;border:1px solid #ff446644;border-radius:25px;color:#ff8899;font-size:.9rem;cursor:pointer">✨ Demo Mode</button>
       </div>`;
   }
 }
 
-/* ─── DEMO MODE ─── */
 function startDemo(){
   document.getElementById('splash').style.display='none';
   document.getElementById('loading').classList.remove('show');
   document.getElementById('scan-hint').classList.add('hidden');
   document.getElementById('status').style.display='block';
-  document.getElementById('status').textContent='💕 Demo mode — no camera needed';
+  document.getElementById('status').textContent='🎂 Eran loves Mika! 💕';
   document.getElementById('found-banner').classList.add('show');
   initCanvas();
-  heartGlowAlpha=1;heartGlowTarget=1;
-  burst(heartCX,heartCY,100);
+  heartGlowAlpha=1; heartGlowTarget=1;
+  cakeAlpha=1; cakeTarget=1; cakeScale=1;
+  burst(heartCX,heartCY,120);
   ringEffects.push({r:0,alpha:1});
   let t2=0;
   function demoLoop(){
-    time+=.016;t2++;
-    const W=overlayCanvas.width,H=overlayCanvas.height;
+    time+=.016; t2++;
+    const W=overlayCanvas.width, H=overlayCanvas.height;
     ctx.clearRect(0,0,W,H);
     const g=ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,Math.max(W,H)/2);
-    g.addColorStop(0,'rgba(20,0,10,.4)');g.addColorStop(1,'rgba(5,0,5,.85)');
-    ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+    g.addColorStop(0,'rgba(20,0,10,.5)'); g.addColorStop(1,'rgba(5,0,5,.9)');
+    ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
     ringEffects=ringEffects.filter(r=>r.alpha>.01);
-    for(const r of ringEffects){r.r+=4;r.alpha*=.95;drawRing(heartCX,heartCY,r.r,r.alpha);}
+    for(const r of ringEffects){ r.r+=4; r.alpha*=.95; drawRing(heartCX,heartCY,r.r,r.alpha); }
     drawGlowHeart(heartCX,heartCY,heartSize*.85,1,time);
-    if(t2%10===0)burst(heartCX,heartCY,6);
-    if(t2%50===0){burst(heartCX,heartCY,40);ringEffects.push({r:0,alpha:.8});}
+    const cakeY=heartCY-heartSize*1.3-20;
+    drawCake(ctx,heartCX,cakeY,0.55*(heartSize/120),1,time);
+    if(t2%10===0) burst(heartCX,heartCY,6);
+    if(t2%50===0){ burst(heartCX,heartCY,40); ringEffects.push({r:0,alpha:.8}); }
     particles=particles.filter(p=>p.life>0);
-    for(const p of particles){p.update(particles);p.draw(ctx);}
+    for(const p of particles){ p.update(particles); p.draw(ctx); }
     requestAnimationFrame(demoLoop);
   }
   demoLoop();
