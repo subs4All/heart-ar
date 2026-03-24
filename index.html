@@ -52,7 +52,7 @@
     }
     #scan-hint.hidden{opacity:0;pointer-events:none}
     .scan-frame {
-      width:200px; height:200px; border:2px solid #ff446666;
+      width:220px; height:220px; border:2px solid #ff446666;
       border-radius:8px; position:relative;
       animation:scanPulse 2s ease-in-out infinite;
     }
@@ -67,9 +67,9 @@
 
     #status {
       position:fixed; bottom:24px; left:50%; transform:translateX(-50%);
-      background:rgba(255,68,102,.12); border:1px solid #ff446633;
-      color:#ff8899; padding:10px 22px; border-radius:20px; font-size:.82rem;
-      z-index:500; backdrop-filter:blur(10px); pointer-events:none; white-space:nowrap; display:none;
+      background:rgba(0,0,0,0.6); border:1px solid #ff446633;
+      color:#ff8899; padding:8px 18px; border-radius:20px; font-size:.78rem;
+      z-index:500; pointer-events:none; display:none; max-width:90vw; text-align:center;
     }
     #found-banner {
       position:fixed; top:22px; left:50%; transform:translateX(-50%);
@@ -79,11 +79,10 @@
     }
     #found-banner.show{opacity:1}
 
-    /* debug overlay toggle */
     #debugBtn {
       position:fixed; top:10px; right:10px; z-index:600;
-      background:rgba(0,0,0,0.5); border:1px solid #ff446644;
-      color:#ff8899; font-size:.7rem; padding:5px 10px; border-radius:10px; cursor:pointer;
+      background:rgba(0,0,0,0.6); border:1px solid #ff446666;
+      color:#ff8899; font-size:.75rem; padding:6px 12px; border-radius:10px; cursor:pointer;
       display:none;
     }
   </style>
@@ -93,7 +92,7 @@
 <div id="splash">
   <div class="heart-emoji">💕</div>
   <h1>Heart AR</h1>
-  <p>Tap <strong>Start Camera</strong> — allow access, then point at the heart drawing!</p>
+  <p>Tap <strong>Start Camera</strong>, allow access, then hold the heart drawing in front of the camera.</p>
   <button id="startBtn" onclick="startCamera()">✨ Start Camera</button>
   <button id="demoBtn"  onclick="startDemo()">Try Demo (no camera)</button>
 </div>
@@ -101,7 +100,7 @@
 <div id="loading">
   <div class="lheart">💕</div>
   <h2>Opening camera…</h2>
-  <span>Tap <strong>Allow</strong> when your browser asks for camera access</span>
+  <span>Tap <strong>Allow</strong> when your browser asks</span>
 </div>
 
 <video id="video-el" autoplay playsinline muted></video>
@@ -109,39 +108,35 @@
 
 <div id="scan-hint" class="hidden">
   <div class="scan-frame"></div>
-  <div class="scan-label">AIM AT HEART DRAWING</div>
+  <div class="scan-label">HOLD HEART DRAWING HERE</div>
 </div>
 <div id="found-banner">🎂 HAPPY BIRTHDAY 🎂</div>
-<div id="status">🔍 Scanning for heart…</div>
-<button id="debugBtn" onclick="toggleDebug()">debug</button>
+<div id="status">🔍 Scanning…</div>
+<button id="debugBtn" onclick="toggleDebug()">🔍 debug</button>
 
 <script>
-/* ══════════════════════════════════
+/* ═══════════════════════════════════════
    PARTICLES
-══════════════════════════════════ */
+═══════════════════════════════════════ */
 class Spark {
   constructor(x,y,vx,vy,color){
     this.x=x;this.y=y;this.vx=vx;this.vy=vy;this.color=color;
-    this.size=Math.random()*5+1;this.life=1;
-    this.decay=Math.random()*.018+.006;this.trail=[];
+    this.size=Math.random()*5+1;this.life=1;this.decay=Math.random()*.018+.006;this.trail=[];
   }
   update(){
     this.trail.push({x:this.x,y:this.y});
     if(this.trail.length>10)this.trail.shift();
-    this.x+=this.vx;this.y+=this.vy;
-    this.vy+=.1;this.vx*=.98;
+    this.x+=this.vx;this.y+=this.vy;this.vy+=.1;this.vx*=.98;
     this.life-=this.decay;this.size*=.98;
   }
   draw(c){
     if(this.life<=0)return;
     for(let i=0;i<this.trail.length;i++){
       const t=this.trail[i],f=i/this.trail.length;
-      c.save();c.globalAlpha=f*this.life*.4;
-      c.fillStyle=this.color;c.shadowColor=this.color;c.shadowBlur=10;
+      c.save();c.globalAlpha=f*this.life*.4;c.fillStyle=this.color;c.shadowColor=this.color;c.shadowBlur=10;
       c.beginPath();c.arc(t.x,t.y,this.size*.6*f,0,Math.PI*2);c.fill();c.restore();
     }
-    c.save();c.globalAlpha=this.life;
-    c.fillStyle=this.color;c.shadowColor=this.color;c.shadowBlur=16;
+    c.save();c.globalAlpha=this.life;c.fillStyle=this.color;c.shadowColor=this.color;c.shadowBlur=16;
     c.beginPath();c.arc(this.x,this.y,this.size,0,Math.PI*2);c.fill();c.restore();
   }
 }
@@ -152,14 +147,12 @@ class Ember {
     this.vx=Math.cos(a)*s;this.vy=Math.sin(a)*s-4;
     const C=['#ff2255','#ff6688','#ffaa33','#ff44cc','#ffffff','#ffdd55','#44ffcc','#ff88aa','#ffcc00'];
     this.color=C[Math.floor(Math.random()*C.length)];
-    this.size=Math.random()*7+2;this.life=1;
-    this.decay=Math.random()*.011+.004;this.sparkChance=.1;this.trail=[];
+    this.size=Math.random()*7+2;this.life=1;this.decay=Math.random()*.011+.004;this.sparkChance=.1;this.trail=[];
   }
   update(all){
     this.trail.push({x:this.x,y:this.y});
     if(this.trail.length>14)this.trail.shift();
-    this.x+=this.vx;this.y+=this.vy;
-    this.vy+=.07;this.vx*=.97;
+    this.x+=this.vx;this.y+=this.vy;this.vy+=.07;this.vx*=.97;
     this.life-=this.decay;this.size*=.97;
     if(Math.random()<this.sparkChance&&this.life>.3){
       const a2=Math.random()*Math.PI*2,s2=Math.random()*4+1;
@@ -170,354 +163,276 @@ class Ember {
     if(this.life<=0)return;
     for(let i=0;i<this.trail.length;i++){
       const t=this.trail[i],f=i/this.trail.length;
-      c.save();c.globalAlpha=f*this.life*.55;
-      c.fillStyle=this.color;c.shadowColor=this.color;c.shadowBlur=22;
+      c.save();c.globalAlpha=f*this.life*.55;c.fillStyle=this.color;c.shadowColor=this.color;c.shadowBlur=22;
       c.beginPath();c.arc(t.x,t.y,this.size*f,0,Math.PI*2);c.fill();c.restore();
     }
-    c.save();c.globalAlpha=this.life;
-    c.fillStyle=this.color;c.shadowColor=this.color;c.shadowBlur=28;
+    c.save();c.globalAlpha=this.life;c.fillStyle=this.color;c.shadowColor=this.color;c.shadowBlur=28;
     c.beginPath();c.arc(this.x,this.y,this.size,0,Math.PI*2);c.fill();
     c.fillStyle='white';c.shadowBlur=6;c.globalAlpha=this.life*.85;
     c.beginPath();c.arc(this.x,this.y,this.size*.4,0,Math.PI*2);c.fill();c.restore();
   }
 }
 
-/* ══════════════════════════════════
+/* ═══════════════════════════════════════
    CAKE
-══════════════════════════════════ */
-function drawBigCake(c, cx, cy, masterScale, alpha, t) {
-  if(alpha < 0.01) return;
-  c.save();
-  c.globalAlpha = alpha;
-  c.translate(cx, cy);
-  c.scale(masterScale, masterScale);
-
-  const tiers = [
-    { hw:160, h:70, col:'#e8294e', top:'#f04060' },
-    { hw:115, h:60, col:'#f5416b', top:'#ff5580' },
-    { hw: 75, h:50, col:'#ff6688', top:'#ff88aa' },
-  ];
-
-  let baseY = 0;
-
-  // plate
-  c.save();
-  c.fillStyle='#f5c842'; c.shadowColor='#c8a020'; c.shadowBlur=14;
-  c.beginPath(); c.ellipse(0,10,175,18,0,0,Math.PI*2); c.fill();
-  c.fillStyle='#ffe070';
-  c.beginPath(); c.ellipse(0,6,170,14,0,0,Math.PI*2); c.fill();
-  c.restore();
-
+═══════════════════════════════════════ */
+function drawBigCake(c,cx,cy,masterScale,alpha,t){
+  if(alpha<0.01)return;
+  c.save();c.globalAlpha=alpha;c.translate(cx,cy);c.scale(masterScale,masterScale);
+  const tiers=[{hw:160,h:70,col:'#e8294e',top:'#f04060'},{hw:115,h:60,col:'#f5416b',top:'#ff5580'},{hw:75,h:50,col:'#ff6688',top:'#ff88aa'}];
+  let baseY=0;
+  c.save();c.fillStyle='#f5c842';c.shadowColor='#c8a020';c.shadowBlur=14;
+  c.beginPath();c.ellipse(0,10,175,18,0,0,Math.PI*2);c.fill();
+  c.fillStyle='#ffe070';c.beginPath();c.ellipse(0,6,170,14,0,0,Math.PI*2);c.fill();c.restore();
   tiers.forEach((tier,ti)=>{
-    const {hw,h,col,top}=tier, by=baseY;
-    c.save();
-    c.fillStyle=col; c.shadowColor='#aa0030'; c.shadowBlur=8;
-    c.beginPath();
-    c.moveTo(-hw,by); c.lineTo(-hw,by-h+10);
-    c.quadraticCurveTo(-hw,by-h,-hw+10,by-h);
-    c.lineTo(hw-10,by-h); c.quadraticCurveTo(hw,by-h,hw,by-h+10);
-    c.lineTo(hw,by); c.closePath(); c.fill();
-    c.restore();
-    // highlight
-    c.save(); c.fillStyle='rgba(255,255,255,0.12)';
-    c.beginPath(); c.moveTo(-hw+4,by-8); c.lineTo(-hw+4,by-h+14);
-    c.quadraticCurveTo(-hw+4,by-h+4,-hw+14,by-h+4);
-    c.lineTo(hw-14,by-h+4); c.quadraticCurveTo(hw-4,by-h+4,hw-4,by-h+14);
-    c.lineTo(hw-4,by-8); c.closePath(); c.fill(); c.restore();
-    // top face
-    c.save(); c.fillStyle=top; c.strokeStyle='rgba(255,50,80,.5)'; c.lineWidth=2;
-    c.beginPath(); c.ellipse(0,by-h,hw,hw*0.24,0,0,Math.PI*2); c.fill(); c.stroke(); c.restore();
-    // frosting drips
+    const{hw,h,col,top}=tier,by=baseY;
+    c.save();c.fillStyle=col;c.shadowColor='#aa0030';c.shadowBlur=8;
+    c.beginPath();c.moveTo(-hw,by);c.lineTo(-hw,by-h+10);c.quadraticCurveTo(-hw,by-h,-hw+10,by-h);
+    c.lineTo(hw-10,by-h);c.quadraticCurveTo(hw,by-h,hw,by-h+10);c.lineTo(hw,by);c.closePath();c.fill();c.restore();
+    c.save();c.fillStyle='rgba(255,255,255,0.12)';
+    c.beginPath();c.moveTo(-hw+4,by-8);c.lineTo(-hw+4,by-h+14);c.quadraticCurveTo(-hw+4,by-h+4,-hw+14,by-h+4);
+    c.lineTo(hw-14,by-h+4);c.quadraticCurveTo(hw-4,by-h+4,hw-4,by-h+14);c.lineTo(hw-4,by-8);c.closePath();c.fill();c.restore();
+    c.save();c.fillStyle=top;c.strokeStyle='rgba(255,50,80,.5)';c.lineWidth=2;
+    c.beginPath();c.ellipse(0,by-h,hw,hw*0.24,0,0,Math.PI*2);c.fill();c.stroke();c.restore();
     const dn=Math.round(hw/22);
-    c.save(); c.fillStyle='#fff'; c.shadowColor='#eee'; c.shadowBlur=5;
+    c.save();c.fillStyle='#fff';c.shadowColor='#eee';c.shadowBlur=5;
     for(let d=0;d<dn;d++){
-      const dx=-hw+hw*2/(dn-1||1)*d, dh=14+Math.sin(d*2.1+ti*1.3)*8, dw=10+Math.sin(d*1.5)*4;
-      c.beginPath(); c.moveTo(dx-dw/2,by-h+4);
-      c.bezierCurveTo(dx-dw/2,by-h+dh,dx+dw/2,by-h+dh,dx+dw/2,by-h+4);
-      c.closePath(); c.fill();
+      const dx=-hw+hw*2/(dn-1||1)*d,dh=14+Math.sin(d*2.1+ti*1.3)*8,dw=10+Math.sin(d*1.5)*4;
+      c.beginPath();c.moveTo(dx-dw/2,by-h+4);c.bezierCurveTo(dx-dw/2,by-h+dh,dx+dw/2,by-h+dh,dx+dw/2,by-h+4);c.closePath();c.fill();
     }
-    c.fillStyle='rgba(255,255,255,0.55)';
-    c.beginPath(); c.ellipse(0,by-h,hw*.8,hw*0.16,0,0,Math.PI*2); c.fill(); c.restore();
-    // sprinkles
-    c.save();
-    const sc2=['#ffee44','#44ffcc','#ff44cc','#44aaff','#ff8833'];
-    const sn=Math.round(hw/14);
+    c.fillStyle='rgba(255,255,255,0.55)';c.beginPath();c.ellipse(0,by-h,hw*.8,hw*0.16,0,0,Math.PI*2);c.fill();c.restore();
+    c.save();const sc2=['#ffee44','#44ffcc','#ff44cc','#44aaff','#ff8833'];const sn=Math.round(hw/14);
     for(let d=0;d<sn;d++){
-      const dx=-hw*.88+hw*1.76/(sn-1)*d, dy=by-h*.38-Math.sin(d*1.2+ti)*h*.22;
-      c.fillStyle=sc2[d%sc2.length]; c.shadowColor=sc2[d%sc2.length]; c.shadowBlur=6;
-      c.save(); c.translate(dx,dy); c.rotate(d*.6); c.fillRect(-5,-2,10,4); c.restore();
+      const dx=-hw*.88+hw*1.76/(sn-1)*d,dy=by-h*.38-Math.sin(d*1.2+ti)*h*.22;
+      c.fillStyle=sc2[d%sc2.length];c.shadowColor=sc2[d%sc2.length];c.shadowBlur=6;
+      c.save();c.translate(dx,dy);c.rotate(d*.6);c.fillRect(-5,-2,10,4);c.restore();
     }
     c.restore();
     baseY-=h;
   });
-
-  // candles
   const topY=baseY;
   const cxs=[-54,-36,-18,0,18,36,54];
   const cc=['#ff3344','#3399ff','#ffcc00','#aa44ff','#44dd88','#ff8833','#ff44aa'];
   cxs.forEach((cx2,i)=>{
-    const cBase=topY, cH=28;
-    c.save(); c.fillStyle=cc[i]; c.strokeStyle='rgba(0,0,0,0.25)'; c.lineWidth=1.5;
-    c.beginPath(); c.roundRect(cx2-6,cBase-cH,12,cH,3); c.fill(); c.stroke();
-    c.fillStyle='rgba(255,255,255,0.4)';
-    for(let s=0;s<4;s++) c.fillRect(cx2-6,cBase-cH+s*7,12,3.5);
-    c.restore();
-    const flk=Math.sin(t*9+i*1.7)*2.5, fh=18+flk;
-    c.save(); c.fillStyle='#ff8800'; c.shadowColor='#ffaa00'; c.shadowBlur=18;
-    c.beginPath(); c.moveTo(cx2,cBase-cH-fh);
-    c.bezierCurveTo(cx2+8,cBase-cH-fh*.5,cx2+5,cBase-cH,cx2,cBase-cH);
-    c.bezierCurveTo(cx2-5,cBase-cH,cx2-8,cBase-cH-fh*.5,cx2,cBase-cH-fh);
-    c.fill();
-    c.fillStyle='#ffff88'; c.shadowColor='#ffff00'; c.shadowBlur=10;
-    c.beginPath(); c.moveTo(cx2,cBase-cH-fh*.72);
-    c.bezierCurveTo(cx2+4,cBase-cH-fh*.4,cx2+3,cBase-cH,cx2,cBase-cH);
-    c.bezierCurveTo(cx2-3,cBase-cH,cx2-4,cBase-cH-fh*.4,cx2,cBase-cH-fh*.72);
-    c.fill(); c.restore();
+    const cBase=topY,cH=28;
+    c.save();c.fillStyle=cc[i];c.strokeStyle='rgba(0,0,0,0.25)';c.lineWidth=1.5;
+    c.beginPath();c.roundRect(cx2-6,cBase-cH,12,cH,3);c.fill();c.stroke();
+    c.fillStyle='rgba(255,255,255,0.4)';for(let s=0;s<4;s++)c.fillRect(cx2-6,cBase-cH+s*7,12,3.5);c.restore();
+    const flk=Math.sin(t*9+i*1.7)*2.5,fh=18+flk;
+    c.save();c.fillStyle='#ff8800';c.shadowColor='#ffaa00';c.shadowBlur=18;
+    c.beginPath();c.moveTo(cx2,cBase-cH-fh);c.bezierCurveTo(cx2+8,cBase-cH-fh*.5,cx2+5,cBase-cH,cx2,cBase-cH);
+    c.bezierCurveTo(cx2-5,cBase-cH,cx2-8,cBase-cH-fh*.5,cx2,cBase-cH-fh);c.fill();
+    c.fillStyle='#ffff88';c.shadowColor='#ffff00';c.shadowBlur=10;
+    c.beginPath();c.moveTo(cx2,cBase-cH-fh*.72);c.bezierCurveTo(cx2+4,cBase-cH-fh*.4,cx2+3,cBase-cH,cx2,cBase-cH);
+    c.bezierCurveTo(cx2-3,cBase-cH,cx2-4,cBase-cH-fh*.4,cx2,cBase-cH-fh*.72);c.fill();c.restore();
   });
-
-  // big text on bottom tier
-  const textY = -tiers[0].h * 0.5;
-  c.save(); c.font='bold 32px Georgia,serif'; c.textAlign='center'; c.textBaseline='middle';
-  c.strokeStyle='#880022'; c.lineWidth=7; c.lineJoin='round';
-  c.strokeText('Eran loves Mika',0,textY);
-  c.shadowColor='#ff2255'; c.shadowBlur=22; c.fillStyle='#fff';
-  c.globalAlpha=alpha*(0.9+Math.sin(t*2.5)*.1);
-  c.fillText('Eran loves Mika',0,textY);
-  c.shadowBlur=0; c.fillStyle='#ffe0ea'; c.globalAlpha=alpha;
-  c.fillText('Eran loves Mika',0,textY);
-  c.restore();
-
+  const textY=-tiers[0].h*.5;
+  c.save();c.font='bold 32px Georgia,serif';c.textAlign='center';c.textBaseline='middle';
+  c.strokeStyle='#880022';c.lineWidth=7;c.lineJoin='round';c.strokeText('Eran loves Mika',0,textY);
+  c.shadowColor='#ff2255';c.shadowBlur=22;c.fillStyle='#fff';c.globalAlpha=alpha*(0.9+Math.sin(t*2.5)*.1);
+  c.fillText('Eran loves Mika',0,textY);c.shadowBlur=0;c.fillStyle='#ffe0ea';c.globalAlpha=alpha;
+  c.fillText('Eran loves Mika',0,textY);c.restore();
   c.restore();
 }
 
-/* ══════════════════════════════════
-   HEART SHAPE DETECTOR
-   — checks actual heart geometry, not just red pixels
-══════════════════════════════════ */
+/* ═══════════════════════════════════════
+   DETECTION — balanced approach
+   
+   Strategy: use TWO signals combined:
+   1. COLOR: detect the dark-red/maroon ink pixels
+   2. SHAPE: check that the blob has heart-like geometry
+   
+   Each check is tolerant individually but combined they are precise.
+═══════════════════════════════════════ */
 
-// Returns a score 0..1 indicating how heart-like the pixel grid looks
-// Grid is a 2D boolean array [row][col], dims gridH x gridW
-function scoreHeartShape(grid, gridW, gridH) {
-  // ── 1. ASPECT RATIO: heart is roughly as wide as it is tall (0.75–1.25) ──
-  // Already guaranteed by caller, skip here.
-
-  // ── 2. SYMMETRY: left half should mirror right half ──
-  let symMatch=0, symTotal=0;
-  const midX = Math.floor(gridW/2);
-  for(let r=0;r<gridH;r++){
-    for(let c=0;c<midX;c++){
-      const mirror = gridW-1-c;
-      symTotal++;
-      if(grid[r][c] === grid[r][mirror]) symMatch++;
-    }
-  }
-  const symmetry = symMatch/symTotal; // 1.0 = perfectly symmetric
-  if(symmetry < 0.55) return 0; // reject asymmetric blobs
-
-  // ── 3. TOP-HALF vs BOTTOM-HALF width profile ──
-  // Heart: top half has TWO wide bumps, bottom half NARROWS to a point
-  const topHalf   = Math.floor(gridH * 0.5);
-  const btmStart  = topHalf;
-
-  // Compute width of each row (leftmost to rightmost set pixel)
-  const rowWidths = [];
-  for(let r=0;r<gridH;r++){
-    let lo=gridW, hi=-1;
-    for(let c=0;c<gridW;c++){
-      if(grid[r][c]){ if(c<lo)lo=c; if(c>hi)hi=c; }
-    }
-    rowWidths.push(hi>=lo ? hi-lo+1 : 0);
-  }
-
-  // Average width in top quarter vs bottom quarter
-  const q = Math.floor(gridH/4);
-  let topW=0, botW=0, topN=0, botN=0;
-  for(let r=q; r<q*2; r++){    topW+=rowWidths[r]; topN++; }
-  for(let r=gridH-q; r<gridH; r++){ botW+=rowWidths[r]; botN++; }
-  const avgTop = topN>0 ? topW/topN : 0;
-  const avgBot = botN>0 ? botW/botN : 0;
-  // Bottom should be significantly narrower than top
-  const taperRatio = avgTop > 0 ? avgBot/avgTop : 1;
-  if(taperRatio > 0.65) return 0; // bottom is too wide — not a heart
-
-  // ── 4. TWO BUMPS in top third ──
-  // Scan across middle of top third and look for a DIP in the center
-  // (the cleft between the two lobes)
-  const scanRow = Math.floor(gridH * 0.22); // ~22% down from top
-  let rowPixels = [];
-  for(let c=0;c<gridW;c++) rowPixels.push(grid[scanRow] && grid[scanRow][c] ? 1 : 0);
-
-  // Smooth the row
-  const smooth = rowPixels.map((_,i)=>{
-    let s=0, n=0;
-    for(let d=-2;d<=2;d++){ if(i+d>=0&&i+d<gridW){s+=rowPixels[i+d];n++;} }
-    return s/n;
-  });
-
-  // Find left peak, center dip, right peak
-  const leftThird  = Math.floor(gridW*0.2);
-  const rightThird = Math.floor(gridW*0.8);
-  const centerQ    = Math.floor(gridW*0.45);
-  const centerQ2   = Math.floor(gridW*0.55);
-
-  const leftPeak  = Math.max(...smooth.slice(leftThird, midX));
-  const rightPeak = Math.max(...smooth.slice(midX, rightThird));
-  const centerDip = Math.min(...smooth.slice(centerQ, centerQ2));
-
-  // Both bumps should be present and center should dip below them
-  const bumpStrength = Math.min(leftPeak,rightPeak) > 0.1
-    ? (Math.min(leftPeak,rightPeak) - centerDip) / Math.max(Math.min(leftPeak,rightPeak), 0.001)
-    : 0;
-  if(bumpStrength < 0.15) return 0; // no clear double-bump
-
-  // ── 5. BOTTOM POINT: bottom rows should converge to narrow tip ──
-  const lastRows = rowWidths.slice(Math.floor(gridH*0.75));
-  const isNarrowing = lastRows.every((w,i)=> i===0 || w <= lastRows[i-1]*1.3);
-  // (allow slight noise with *1.3 tolerance)
-  if(!isNarrowing) return 0;
-
-  // ── 6. OUTLINE vs FILLED: real drawing = thin strokes, not solid fill ──
-  // Count "interior" pixels (surrounded on all 4 sides by set pixels)
-  let interiorCount=0, totalSet=0;
-  for(let r=1;r<gridH-1;r++){
-    for(let c=1;c<gridW-1;c++){
-      if(grid[r][c]){
-        totalSet++;
-        if(grid[r-1][c]&&grid[r+1][c]&&grid[r][c-1]&&grid[r][c+1]) interiorCount++;
-      }
-    }
-  }
-  const fillRatio = totalSet>0 ? interiorCount/totalSet : 0;
-  // A drawn outline has low fill ratio (< 0.5). A solid blob is high.
-  if(fillRatio > 0.55) return 0; // solid blob, not a drawn heart
-
-  // ── FINAL SCORE ──
-  const symScore      = (symmetry - 0.55) / 0.45;       // 0..1
-  const taperScore    = (0.65 - taperRatio) / 0.65;      // 0..1
-  const bumpScore     = Math.min(bumpStrength / 0.5, 1); // 0..1
-  const outlineScore  = 1 - fillRatio;                   // 0..1
-
-  return (symScore*0.3 + taperScore*0.3 + bumpScore*0.25 + outlineScore*0.15);
-}
-
-/* ══════════════════════════════════
-   MAIN DETECTION FUNCTION
-══════════════════════════════════ */
 let debugMode = false;
-function toggleDebug(){ debugMode=!debugMode; }
+let debugInfo = {};
+
+function toggleDebug(){
+  debugMode = !debugMode;
+  document.getElementById('debugBtn').textContent = debugMode ? '❌ debug off' : '🔍 debug';
+}
+
+function detectInk(r, g, b, brightness) {
+  // Dark red / maroon (pen drawing color)
+  if(r > 50 && r < 210 && g < 80 && b < 90 && r > g + 15 && r > b + 10) return true;
+  // Very dark stroke (dark pen on paper)
+  if(brightness < 55 && Math.abs(r-g)<25 && Math.abs(r-b)<25) return true;
+  // Dark brownish-red
+  if(r > 40 && r < 160 && g < 60 && b < 60 && r > g*1.5) return true;
+  return false;
+}
 
 function analyzeFrame() {
-  if(!videoEl || videoEl.readyState<2) return;
+  if(!videoEl || videoEl.readyState < 2) return;
 
   const DW = detCanvas.width, DH = detCanvas.height;
   detCtx.drawImage(videoEl, 0, 0, DW, DH);
   const data = detCtx.getImageData(0, 0, DW, DH).data;
 
-  // ── STEP 1: build binary mask of "could be heart ink" pixels ──
-  // The heart is drawn with dark maroon/red pen on light paper
-  // We detect: dark-reddish, or near-black (pencil/pen)
+  // Build ink mask + bounding box
   const mask = new Uint8Array(DW * DH);
   let minX=DW, maxX=0, minY=DH, maxY=0, cnt=0;
 
   for(let i=0; i<data.length; i+=4){
     const r=data[i], g=data[i+1], b=data[i+2];
-    const px=(i/4)%DW, py=Math.floor((i/4)/DW);
-
-    // Detect dark-red / maroon ink (the heart color)
-    const isDarkRed = (r>60 && r<200) && g<70 && b<80 && r>(g+20) && r>(b+15);
-    // Also detect very dark near-black strokes (some pens look almost black)
-    const isVeryDark = r<60 && g<60 && b<60;
-
-    if(isDarkRed || isVeryDark){
+    const brightness = (r+g+b)/3;
+    if(detectInk(r,g,b,brightness)){
+      const px=(i/4)%DW, py=Math.floor((i/4)/DW);
       mask[py*DW+px]=1; cnt++;
       if(px<minX)minX=px; if(px>maxX)maxX=px;
       if(py<minY)minY=py; if(py>maxY)maxY=py;
     }
   }
 
-  // ── STEP 2: reject trivially bad candidates ──
-  if(cnt < 80){
-    confidence = Math.max(0, confidence - 0.08);
+  // Need a minimum amount of ink
+  if(cnt < 60){
+    confidence = Math.max(0, confidence - 0.07);
+    debugInfo = {cnt, reason:'too few ink pixels'};
     return;
   }
 
   const bw=maxX-minX+1, bh=maxY-minY+1;
-  if(bw<20 || bh<20){
-    confidence = Math.max(0, confidence - 0.08);
+
+  // Must be a reasonable size on screen
+  if(bw < 15 || bh < 15){
+    confidence = Math.max(0, confidence - 0.07);
+    debugInfo = {cnt, bw, bh, reason:'too small'};
     return;
   }
 
-  // Aspect ratio must be heart-like
-  const asp = bw/bh;
-  if(asp < 0.55 || asp > 1.6){
+  // Aspect ratio: hearts are 0.7 to 1.4 wide-to-tall
+  const asp = bw / bh;
+  if(asp < 0.5 || asp > 1.7){
     confidence = Math.max(0, confidence - 0.08);
+    debugInfo = {cnt, asp: asp.toFixed(2), reason:'bad aspect ratio'};
     return;
   }
 
-  // Overall density: not too sparse, not too solid
-  const density = cnt/(bw*bh);
-  if(density < 0.02 || density > 0.5){
-    confidence = Math.max(0, confidence - 0.08);
-    return;
-  }
-
-  // ── STEP 3: extract sub-grid around the blob and score its shape ──
-  // Resample into a normalised 32x32 grid for shape analysis
-  const GRID = 32;
-  const grid = Array.from({length:GRID}, ()=>new Uint8Array(GRID));
-
-  for(let gr=0; gr<GRID; gr++){
-    for(let gc=0; gc<GRID; gc++){
-      // Map grid cell to source pixel region
-      const x0 = minX + Math.floor(gc*bw/GRID);
-      const y0 = minY + Math.floor(gr*bh/GRID);
-      const x1 = minX + Math.floor((gc+1)*bw/GRID);
-      const y1 = minY + Math.floor((gr+1)*bh/GRID);
-      // Count set pixels in this region
-      let setCount=0, total=0;
-      for(let py=y0; py<=Math.min(y1,DH-1); py++){
-        for(let px=x0; px<=Math.min(x1,DW-1); px++){
-          total++;
-          if(mask[py*DW+px]) setCount++;
-        }
-      }
-      grid[gr][gc] = (total>0 && setCount/total > 0.15) ? 1 : 0;
+  // ── Resample to 24×24 grid ──
+  const G = 24;
+  const grid = [];
+  for(let r=0; r<G; r++){
+    grid.push(new Uint8Array(G));
+    for(let c=0; c<G; c++){
+      const x0=minX+Math.floor(c*bw/G), y0=minY+Math.floor(r*bh/G);
+      const x1=minX+Math.floor((c+1)*bw/G), y1=minY+Math.floor((r+1)*bh/G);
+      let s=0, n=0;
+      for(let py=y0; py<=Math.min(y1,DH-1); py++)
+        for(let px=x0; px<=Math.min(x1,DW-1); px++){ s+=mask[py*DW+px]; n++; }
+      grid[r][c] = (n>0 && s/n > 0.12) ? 1 : 0;
     }
   }
 
-  const score = scoreHeartShape(grid, GRID, GRID);
+  // ── TEST 1: LEFT-RIGHT SYMMETRY ──
+  // Hearts are approximately symmetric. Score how mirrored it is.
+  let symHits=0, symTotal=0;
+  for(let r=0; r<G; r++)
+    for(let c=0; c<Math.floor(G/2); c++){
+      symTotal++;
+      if(grid[r][c] === grid[r][G-1-c]) symHits++;
+    }
+  const symmetry = symHits/symTotal; // 0..1, expect > 0.58 for hearts
 
-  // ── STEP 4: update confidence with the shape score ──
-  // High score → ramp up quickly; low score → ramp down quickly
-  if(score > 0.35){
-    // Scale gain by how good the score is
-    const gain = 0.06 + score * 0.08; // 0.06..0.14
+  // ── TEST 2: TOP HALF WIDER THAN BOTTOM HALF ──
+  // Compute average row-span in top half vs bottom half
+  let topSpanSum=0, topSpanN=0, botSpanSum=0, botSpanN=0;
+  for(let r=0; r<G; r++){
+    let lo=G, hi=-1;
+    for(let c=0; c<G; c++) if(grid[r][c]){ if(c<lo)lo=c; if(c>hi)hi=c; }
+    const span = hi>=lo ? hi-lo+1 : 0;
+    if(r < G/2){ topSpanSum+=span; topSpanN++; }
+    else        { botSpanSum+=span; botSpanN++; }
+  }
+  const avgTop = topSpanN>0 ? topSpanSum/topSpanN : 0;
+  const avgBot = botSpanN>0 ? botSpanSum/botSpanN : 0;
+  // Taper ratio: bottom/top — should be < 0.72 for a heart
+  const taper = avgTop>2 ? avgBot/avgTop : 1;
+
+  // ── TEST 3: CLEFT DIP at top-center ──
+  // At ~15-25% down, look for a valley in the middle
+  let cleftScore = 0;
+  for(let r=Math.floor(G*0.12); r<Math.floor(G*0.30); r++){
+    const midC = Math.floor(G/2);
+    const leftFilled  = grid[r][midC-2] || grid[r][midC-3] || grid[r][midC-4];
+    const rightFilled = grid[r][midC+2] || grid[r][midC+3] || grid[r][midC+4];
+    const centerEmpty = !grid[r][midC] && !grid[r][midC-1] && !grid[r][midC+1];
+    if(leftFilled && rightFilled && centerEmpty) cleftScore++;
+  }
+  // cleftScore: how many rows in top section have the cleft pattern (max ~4)
+  const cleftNorm = Math.min(cleftScore / 2, 1); // 0..1
+
+  // ── TEST 4: BOTTOM ROWS CONVERGE (V-point) ──
+  // The last few rows should have very few pixels (narrowing to point)
+  let bottomRows = [];
+  for(let r=Math.floor(G*0.75); r<G; r++){
+    let s=0; for(let c=0; c<G; c++) s+=grid[r][c];
+    bottomRows.push(s);
+  }
+  // Should narrow — last row narrower than first of these rows
+  const bottomNarrowing = bottomRows.length>1 && bottomRows[bottomRows.length-1] <= bottomRows[0];
+  const bottomTip = bottomRows[bottomRows.length-1] <= 4; // very few pixels at tip
+
+  // ── WEIGHTED SCORE ──
+  const symScore    = Math.max(0, (symmetry - 0.50) / 0.35);     // 0..1 (passes at >0.50)
+  const taperScore  = Math.max(0, (0.72 - taper)   / 0.52);     // 0..1 (passes at <0.72)
+  const tipScore    = (bottomNarrowing ? 0.5 : 0) + (bottomTip ? 0.5 : 0); // 0..1
+
+  // Cleft is a strong signal but optional (some drawings don't have obvious cleft)
+  const score = symScore*0.40 + taperScore*0.35 + cleftNorm*0.15 + tipScore*0.10;
+
+  debugInfo = {
+    cnt, asp:asp.toFixed(2),
+    sym:symmetry.toFixed(2), taper:taper.toFixed(2),
+    cleft:cleftScore, tip:bottomTip?1:0,
+    score:score.toFixed(2)
+  };
+
+  // ── UPDATE CONFIDENCE ──
+  // Score > 0.30 = plausible heart → ramp up
+  // Score < 0.15 = definitely not → ramp down fast
+  if(score > 0.30){
+    const gain = 0.05 + score * 0.10; // 0.05..0.15 per frame
     confidence = Math.min(1, confidence + gain);
     detectedBounds = {x:minX, y:minY, w:bw, h:bh};
+  } else if(score > 0.15){
+    // ambiguous — hold steady
+    confidence = Math.max(0, confidence - 0.02);
   } else {
-    confidence = Math.max(0, confidence - 0.12); // drop fast on bad frames
+    confidence = Math.max(0, confidence - 0.10);
   }
 
-  // ── DEBUG: draw the 32x32 grid and score ──
-  if(debugMode && ctx){
-    const W=overlayCanvas.width, H=overlayCanvas.height;
-    const cell=6;
-    const ox=10, oy=60;
-    for(let gr=0;gr<GRID;gr++){
-      for(let gc=0;gc<GRID;gc++){
-        ctx.fillStyle = grid[gr][gc] ? '#ff4466' : 'rgba(255,255,255,0.05)';
-        ctx.fillRect(ox+gc*cell, oy+gr*cell, cell-1, cell-1);
+  // ── DEBUG RENDER ──
+  if(debugMode){
+    // Draw grid
+    const cell=7, ox=10, oy=55;
+    for(let r=0; r<G; r++)
+      for(let c=0; c<G; c++){
+        ctx.fillStyle = grid[r][c] ? '#ff4466' : 'rgba(255,255,255,0.04)';
+        ctx.fillRect(ox+c*cell, oy+r*cell, cell-1, cell-1);
       }
-    }
-    ctx.fillStyle='#fff';
-    ctx.font='12px monospace';
-    ctx.fillText(`score:${score.toFixed(2)} conf:${confidence.toFixed(2)}`, ox, oy+GRID*cell+14);
+    // Highlight cleft row range
+    ctx.strokeStyle='rgba(255,220,0,0.4)';ctx.lineWidth=1;
+    ctx.strokeRect(ox, oy+Math.floor(G*0.12)*cell, G*cell, (Math.floor(G*0.30)-Math.floor(G*0.12))*cell);
+
+    const info = debugInfo;
+    ctx.fillStyle='rgba(0,0,0,0.7)';
+    ctx.fillRect(ox, oy+G*cell+4, 200, 80);
+    ctx.fillStyle='#fff';ctx.font='11px monospace';
+    const lines=[
+      `ink:${info.cnt} asp:${info.asp}`,
+      `sym:${info.sym} taper:${info.taper}`,
+      `cleft:${info.cleft} tip:${info.tip}`,
+      `score:${info.score}  conf:${confidence.toFixed(2)}`,
+      info.reason||''
+    ];
+    lines.forEach((l,i)=> ctx.fillText(l, ox+4, oy+G*cell+18+i*13));
   }
 }
 
-/* ══════════════════════════════════
-   STATE & RENDER GLOBALS
-══════════════════════════════════ */
+/* ═══════════════════════════════════════
+   STATE
+═══════════════════════════════════════ */
 let overlayCanvas, ctx, videoEl;
 let detCanvas, detCtx;
 let particles=[], ringEffects=[];
@@ -539,49 +454,38 @@ function heartPath(c,cx,cy,s){
   }
   c.closePath();
 }
-
 function drawGlowHeart(cx,cy,s,alpha,t){
   const ss=s*(1+Math.sin(t*3)*.06);
   for(let i=4;i>=0;i--){
-    ctx.save();ctx.globalAlpha=alpha*(.12-i*.02);
-    ctx.strokeStyle='#ff2255';ctx.lineWidth=5+i*10;
-    ctx.shadowColor='#ff2255';ctx.shadowBlur=35+i*12;
-    ctx.lineJoin='round';heartPath(ctx,cx,cy,ss);ctx.stroke();ctx.restore();
+    ctx.save();ctx.globalAlpha=alpha*(.12-i*.02);ctx.strokeStyle='#ff2255';ctx.lineWidth=5+i*10;
+    ctx.shadowColor='#ff2255';ctx.shadowBlur=35+i*12;ctx.lineJoin='round';heartPath(ctx,cx,cy,ss);ctx.stroke();ctx.restore();
   }
-  ctx.save();ctx.globalAlpha=alpha;
-  ctx.strokeStyle='#ff6688';ctx.lineWidth=2.5;
-  ctx.shadowColor='#ff99aa';ctx.shadowBlur=18;
-  ctx.lineJoin='round';heartPath(ctx,cx,cy,ss);ctx.stroke();ctx.restore();
+  ctx.save();ctx.globalAlpha=alpha;ctx.strokeStyle='#ff6688';ctx.lineWidth=2.5;
+  ctx.shadowColor='#ff99aa';ctx.shadowBlur=18;ctx.lineJoin='round';heartPath(ctx,cx,cy,ss);ctx.stroke();ctx.restore();
 }
-
 function drawRing(cx,cy,r,alpha){
-  ctx.save();ctx.globalAlpha=alpha;
-  ctx.strokeStyle='#ff4466';ctx.lineWidth=2.5;
-  ctx.shadowColor='#ff4466';ctx.shadowBlur=22;
-  ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.stroke();ctx.restore();
+  ctx.save();ctx.globalAlpha=alpha;ctx.strokeStyle='#ff4466';ctx.lineWidth=2.5;
+  ctx.shadowColor='#ff4466';ctx.shadowBlur=22;ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.stroke();ctx.restore();
 }
 
-/* ══════════════════════════════════
-   RENDER LOOP
-══════════════════════════════════ */
+/* ═══════════════════════════════════════
+   RENDER
+═══════════════════════════════════════ */
 function render(){
   time+=.016;
   const W=overlayCanvas.width, H=overlayCanvas.height;
   ctx.clearRect(0,0,W,H);
 
-  if(Date.now()-lastDetect > 80){ analyzeFrame(); lastDetect=Date.now(); }
+  if(Date.now()-lastDetect > 70){ analyzeFrame(); lastDetect=Date.now(); }
 
-  // Threshold: need confidence > 0.6 AND it must have been sustained
-  // (confidence can't reach 0.6 in fewer than ~5 good frames)
-  const isDetected = confidence > 0.60 && detectedBounds;
+  const isDetected = confidence > 0.55 && detectedBounds;
 
   if(isDetected){
     heartGlowTarget=1; cakeTarget=1;
     const sx=W/detCanvas.width, sy=H/detCanvas.height;
     const tx=(detectedBounds.x+detectedBounds.w/2)*sx;
     const ty=(detectedBounds.y+detectedBounds.h/2)*sy;
-    heartCX=heartCX*.88+tx*.12;
-    heartCY=heartCY*.88+ty*.12;
+    heartCX=heartCX*.88+tx*.12; heartCY=heartCY*.88+ty*.12;
     const ts=Math.max(detectedBounds.w,detectedBounds.h)*Math.min(sx,sy)*.5;
     heartSize=heartSize*.88+ts*.12;
     if(!found){
@@ -590,20 +494,25 @@ function render(){
       document.getElementById('scan-hint').classList.add('hidden');
       document.getElementById('status').textContent='🎂 Eran loves Mika! 💕';
       burst(heartCX,heartCY,120);
-      ringEffects.push({r:0,alpha:1});
-      ringEffects.push({r:0,alpha:.75});
+      ringEffects.push({r:0,alpha:1}); ringEffects.push({r:0,alpha:.75});
     }
     burstTimer++;
     if(burstTimer%7===0)  burst(heartCX,heartCY,5);
     if(burstTimer%40===0){ burst(heartCX,heartCY,35); ringEffects.push({r:0,alpha:.85}); }
   } else {
     heartGlowTarget=0; cakeTarget=0;
-    if(found && confidence<0.25){
+    if(found && confidence < 0.20){
       found=false; burstTimer=0;
       document.getElementById('found-banner').classList.remove('show');
       document.getElementById('scan-hint').classList.remove('hidden');
       document.getElementById('status').textContent='🔍 Scanning for heart…';
     }
+  }
+
+  // Update status with live score when not found
+  if(!found && debugInfo.score){
+    document.getElementById('status').textContent =
+      `🔍 score:${debugInfo.score} conf:${confidence.toFixed(2)} — ${debugInfo.reason||'analyzing…'}`;
   }
 
   heartGlowAlpha = heartGlowAlpha*.9  + heartGlowTarget*.1;
@@ -613,13 +522,11 @@ function render(){
   ringEffects=ringEffects.filter(r=>r.alpha>.01);
   for(const r of ringEffects){ r.r+=5; r.alpha*=.94; drawRing(heartCX,heartCY,r.r,r.alpha); }
 
-  if(heartGlowAlpha>.05&&heartSize>10)
-    drawGlowHeart(heartCX,heartCY,heartSize*.85,heartGlowAlpha,time);
+  if(heartGlowAlpha>.05&&heartSize>10) drawGlowHeart(heartCX,heartCY,heartSize*.85,heartGlowAlpha,time);
 
   if(cakeAlpha>.02){
     const screenCX=W/2, screenCY=H/2+30;
-    const desiredH=H*0.68;
-    const localH=70+60+50+46;
+    const desiredH=H*0.68, localH=70+60+50+46;
     const sc=(desiredH/localH)*cakeEntrance;
     const bs=sc*(1+Math.sin(Math.max(0,(cakeEntrance-.5)*Math.PI))*.08);
     drawBigCake(ctx,screenCX,screenCY,bs,cakeAlpha,time);
@@ -631,14 +538,14 @@ function render(){
   requestAnimationFrame(render);
 }
 
-/* ══════════════════════════════════
+/* ═══════════════════════════════════════
    INIT
-══════════════════════════════════ */
+═══════════════════════════════════════ */
 function initCanvas(){
   overlayCanvas=document.getElementById('overlay-canvas');
   ctx=overlayCanvas.getContext('2d');
   detCanvas=document.createElement('canvas');
-  detCanvas.width=200; detCanvas.height=150; // slightly bigger for better shape analysis
+  detCanvas.width=240; detCanvas.height=180;
   detCtx=detCanvas.getContext('2d',{willReadFrequently:true});
   function resize(){ overlayCanvas.width=window.innerWidth; overlayCanvas.height=window.innerHeight; }
   resize(); window.addEventListener('resize',resize);
@@ -688,27 +595,25 @@ function startDemo(){
   document.getElementById('status').textContent='🎂 Eran loves Mika! 💕';
   document.getElementById('found-banner').classList.add('show');
   initCanvas();
-  heartGlowAlpha=1; heartGlowTarget=1;
-  cakeAlpha=1; cakeTarget=1; cakeEntrance=1;
-  burst(heartCX,heartCY,140);
-  ringEffects.push({r:0,alpha:1});
+  heartGlowAlpha=1; heartGlowTarget=1; cakeAlpha=1; cakeTarget=1; cakeEntrance=1;
+  burst(heartCX,heartCY,140); ringEffects.push({r:0,alpha:1});
   let t2=0;
   function demoLoop(){
     time+=.016; t2++;
     const W=overlayCanvas.width, H=overlayCanvas.height;
     ctx.clearRect(0,0,W,H);
     const g=ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,Math.max(W,H)/2);
-    g.addColorStop(0,'rgba(20,0,10,.5)'); g.addColorStop(1,'rgba(4,0,4,.92)');
-    ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+    g.addColorStop(0,'rgba(20,0,10,.5)');g.addColorStop(1,'rgba(4,0,4,.92)');
+    ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
     drawGlowHeart(W/2,H/2,Math.min(W,H)*.42,0.85,time);
     ringEffects=ringEffects.filter(r=>r.alpha>.01);
-    for(const r of ringEffects){ r.r+=5; r.alpha*=.94; drawRing(W/2,H/2,r.r,r.alpha); }
-    const dH=H*0.68, lH=70+60+50+46, sc=dH/lH;
+    for(const r of ringEffects){r.r+=5;r.alpha*=.94;drawRing(W/2,H/2,r.r,r.alpha);}
+    const dH=H*0.68,lH=70+60+50+46,sc=dH/lH;
     drawBigCake(ctx,W/2,H/2+30,sc,1,time);
-    if(t2%8===0)  burst(W/2,H/2,6);
-    if(t2%50===0){ burst(W/2,H/2,45); ringEffects.push({r:0,alpha:.85}); }
+    if(t2%8===0)burst(W/2,H/2,6);
+    if(t2%50===0){burst(W/2,H/2,45);ringEffects.push({r:0,alpha:.85});}
     particles=particles.filter(p=>p.life>0);
-    for(const p of particles){ p.update(particles); p.draw(ctx); }
+    for(const p of particles){p.update(particles);p.draw(ctx);}
     requestAnimationFrame(demoLoop);
   }
   demoLoop();
