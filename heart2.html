@@ -1,15 +1,4 @@
 <!-- saved from url=(0022)http://internet.e-mail -->
-You’re right to call that out—the way I wired the button + MindAR init before was fragile. Let’s fix it properly.
-
-Here’s a clean, working index.html where:
-
-- the scene waits until MindAR is fully loaded  
-- only then the button is wired to mindar.start()  
-- on click, the button hides and the camera + tracking actually start
-
-Save this as index.html (replacing your current one):
-
-`html
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -20,8 +9,8 @@ Save this as index.html (replacing your current one):
     <!-- A-Frame -->
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
 
-    <!-- MindAR (image tracking + A-Frame integration) -->
-    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+    <!-- MindAR (A-Frame integration) -->
+    <script src="https://unpkg.com/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
 
     <!-- Particle system -->
     <script src="https://unpkg.com/aframe-particle-system-component@1.0.0/dist/aframe-particle-system-component.min.js"></script>
@@ -61,9 +50,9 @@ Save this as index.html (replacing your current one):
       color-space="sRGB"
       renderer="colorManagement: true, physicallyCorrectLights: true"
       vr-mode-ui="enabled: false"
-      device-orientation-permission-ui="enabled: true"
+      device-orientation-permission-ui="enabled: false"
     >
-      <a-camera look-controls="enabled: false"></a-camera>
+      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
       <!-- Content appears when heart is detected -->
       <a-entity mindar-image-target="targetIndex: 0">
@@ -137,23 +126,21 @@ Save this as index.html (replacing your current one):
     </a-scene>
 
     <script>
-      const btn = document.getElementById("startButton");
+      const startButton = document.getElementById("startButton");
 
-      // Wait for the whole page to load
       window.addEventListener("load", () => {
-        const scene = document.querySelector("a-scene");
+        const sceneEl = document.querySelector("a-scene");
 
-        // Wait until A-Frame + MindAR are fully initialized
-        scene.addEventListener("loaded", () => {
-          const mindar = scene.components["mindar-image"];
+        sceneEl.addEventListener("loaded", () => {
+          // MindAR is exposed as a *system* in A-Frame
+          const mindarSystem = sceneEl.systems["mindar-image-system"];
 
-          // Only now wire the button
-          btn.addEventListener("click", () => {
-            btn.style.display = "none";
-            if (mindar && mindar.start) {
-              mindar.start();
-            } else {
-              console.error("MindAR not ready");
+          startButton.addEventListener("click", async () => {
+            startButton.style.display = "none";
+            try {
+              await mindarSystem.start(); // this actually starts camera + tracking
+            } catch (e) {
+              console.error("Failed to start MindAR:", e);
             }
           });
         });
@@ -161,12 +148,3 @@ Save this as index.html (replacing your current one):
     </script>
   </body>
 </html>
-`
-
-Quick checklist so you don’t chase ghosts:
-
-- heart.mind is in the same folder as index.html  
-- You open it via HTTPS (GitHub Pages URL), not file://  
-- Browser has camera permission allowed for that URL  
-
-If after this the button still feels dead, tell me which browser you’re using on Android 13 (Chrome, Samsung Internet, etc.), and we’ll tune it for that specifically.
