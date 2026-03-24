@@ -1,0 +1,62 @@
+<!-- saved from url=(0022)http://internet.e-mail -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Eran ❤️ Mika AR</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- A-Frame -->
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+
+    <!-- MindAR -->
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+
+    <!-- Particle system -->
+    <script src="https://unpkg.com/aframe-particle-system-component@1.0.0/dist/aframe-particle-system-component.min.js"></script>
+
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+        background: #000;
+        font-family: sans-serif;
+      }
+      #startButton {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 14px 24px;
+        border-radius: 999px;
+        border: none;
+        font-size: 16px;
+        font-weight: 600;
+        background: #ff4b6e;
+        color: #fff;
+        z-index: 10;
+      }
+    </style>
+  </head>
+
+  <body>
+    <button id="startButton">Start AR ❤️</button>
+
+    <a-scene
+      mindar-image="imageTargetSrc: ./heart.mind; autoStart: false;"
+      embedded
+      color-space="sRGB"
+      renderer="colorManagement: true, physicallyCorrectLights: true"
+      vr-mode-ui="enabled: false"
+      device-orientation-permission-ui="enabled: true"
+    >
+      <a-camera look-controls="enabled: false"></a-camera>
+
+      <!-- Content appears when heart is detected -->
+      <a-entity mindar-image-target="targetIndex: 0">
+
+        <!-- Cake plate -->
+        <a-cylinder position="0 0 0" radius="0.6" height="0.05" color="#fff"></a-cylinder>
+
+        <!-- Cake floors -->
+        <a-cylinder position="0 0.15 0" radius="0.45" height="0.25" color="#ffb6c1"></a-cylinder>
