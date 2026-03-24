@@ -9,50 +9,32 @@
     <!-- A-Frame -->
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
 
-    <!-- WebXR AR support -->
-    <script src="https://cdn.jsdelivr.net/npm/aframe-extras@7.0.0/dist/aframe-extras.min.js"></script>
+    <!-- AR.js (A-Frame version) -->
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+
+    <!-- Particle system -->
+    <script src="https://unpkg.com/aframe-particle-system-component@1.0.0/dist/aframe-particle-system-component.min.js"></script>
 
     <style>
       body {
         margin: 0;
         overflow: hidden;
-        background: #000;
-        font-family: sans-serif;
-      }
-      #enterAR {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        padding: 14px 24px;
-        border-radius: 999px;
-        border: none;
-        font-size: 16px;
-        font-weight: 600;
-        background: #ff4b6e;
-        color: #fff;
-        z-index: 10;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
       }
     </style>
   </head>
 
   <body>
-    <button id="enterAR">Start AR ❤️</button>
-
     <a-scene
-      renderer="colorManagement: true; physicallyCorrectLights: true"
-      xr-mode-ui="enabled: true"
       embedded
       vr-mode-ui="enabled: false"
-      arjs="sourceType: webcam;"
+      renderer="logarithmicDepthBuffer: true"
+      arjs="sourceType: webcam; debugUIEnabled: false;"
     >
-      <a-entity id="cameraRig">
-        <a-camera></a-camera>
-      </a-entity>
+      <!-- Camera -->
+      <a-entity camera></a-entity>
 
-      <!-- Cake group (initially hidden) -->
-      <a-entity id="cake" visible="false">
+      <!-- Marker (hiro) -->
+      <a-marker preset="hiro">
         <!-- Cake plate -->
         <a-cylinder position="0 0 0" radius="0.6" height="0.05" color="#ffffff"></a-cylinder>
 
@@ -68,3 +50,31 @@
         <!-- Text -->
         <a-text
           value="Eran love Mika"
+          position="0 0.45 0.35"
+          rotation="0 180 0"
+          align="center"
+          color="#5b0033"
+          width="1.8"
+        ></a-text>
+
+        <!-- Sparks -->
+        <a-entity
+          position="0 1.1 0"
+          particle-system="preset: dust; color: #ffdd55, #ff4b6e, #ffffff; particleCount: 400; size: 0.03; velocityValue: 0 1 0;"
+        ></a-entity>
+
+        <!-- Rotation animation -->
+        <a-animation
+          attribute="rotation"
+          dur="12000"
+          to="0 360 0"
+          repeat="indefinite"
+          easing="linear"
+        ></a-animation>
+      </a-marker>
+
+      <!-- Needed for AR.js -->
+      <a-entity arjs-debug></a-entity>
+    </a-scene>
+  </body>
+</html>
