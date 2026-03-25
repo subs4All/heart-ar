@@ -15,23 +15,31 @@
       background:radial-gradient(ellipse at center,#1a0010 0%,#0a0006 70%);
       z-index:2000; gap:1.2rem;
     }
-    .heart-emoji { font-size:5rem; animation:heartbeat 1s ease-in-out infinite; filter:drop-shadow(0 0 20px #ff4466); }
+    .heart-emoji { font-size:4rem; animation:heartbeat 1s ease-in-out infinite; filter:drop-shadow(0 0 20px #ff4466); }
     @keyframes heartbeat { 0%,100%{transform:scale(1)} 50%{transform:scale(1.2)} }
-    #splash h1 { color:#ff4466; font-size:2rem; letter-spacing:.15em; text-shadow:0 0 30px #ff446688; }
-    #splash p { color:#ff8899aa; font-size:.9rem; text-align:center; padding:0 2.5rem; line-height:1.6; max-width:340px; }
+    #splash h1 { color:#ff4466; font-size:1.8rem; letter-spacing:.1em; text-shadow:0 0 30px #ff446688; }
+    #splash p { color:#ff8899bb; font-size:.88rem; text-align:center; padding:0 2rem; line-height:1.65; max-width:330px; }
+    #splash .target-hint {
+      display:flex; flex-direction:column; align-items:center; gap:.4rem;
+      background:rgba(255,68,102,.07); border:1px solid #ff446633;
+      border-radius:16px; padding:14px 24px;
+    }
+    #splash .target-hint span { color:#ff8899; font-size:.8rem; letter-spacing:.05em; }
+    .double-heart-icon {
+      position:relative; width:60px; height:55px;
+    }
+    .double-heart-icon svg { position:absolute; top:0; left:0; }
     #startBtn {
-      margin-top:.5rem; padding:16px 44px;
-      background:linear-gradient(135deg,#ff2255,#ff6688);
-      border:none; border-radius:50px; color:#fff; font-size:1.1rem;
-      letter-spacing:.08em; cursor:pointer;
-      box-shadow:0 0 30px #ff446666; animation:glow 2s ease-in-out infinite; transition:transform .15s;
+      padding:15px 42px; background:linear-gradient(135deg,#ff2255,#ff6688);
+      border:none; border-radius:50px; color:#fff; font-size:1.05rem;
+      letter-spacing:.07em; cursor:pointer;
+      box-shadow:0 0 28px #ff446655; animation:glow 2s ease-in-out infinite; transition:transform .15s;
     }
     #startBtn:active{transform:scale(.95)}
     @keyframes glow {
-      0%,100%{box-shadow:0 0 30px #ff446666,0 0 60px #ff446622}
-      50%{box-shadow:0 0 50px #ff4466aa,0 0 90px #ff446644}
+      0%,100%{box-shadow:0 0 28px #ff446655} 50%{box-shadow:0 0 48px #ff4466aa}
     }
-    #demoBtn { background:transparent; border:1px solid #ff446644; border-radius:50px; color:#ff8899; font-size:.85rem; padding:10px 28px; cursor:pointer; }
+    #demoBtn { background:transparent; border:1px solid #ff446644; border-radius:50px; color:#ff8899; font-size:.85rem; padding:9px 26px; cursor:pointer; }
 
     #loading {
       position:fixed; inset:0; display:none; flex-direction:column;
@@ -40,8 +48,8 @@
     }
     #loading.show{display:flex}
     #loading .lheart{font-size:3rem;animation:heartbeat 1s ease-in-out infinite}
-    #loading h2{font-size:1.4rem;letter-spacing:.1em}
-    #loading span{color:#ff8899aa;font-size:.9rem;text-align:center;padding:0 2rem}
+    #loading h2{font-size:1.3rem;letter-spacing:.1em}
+    #loading span{color:#ff8899aa;font-size:.88rem;text-align:center;padding:0 2rem}
 
     #video-el { position:fixed; inset:0; width:100%; height:100%; object-fit:cover; }
     #overlay-canvas { position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:100; }
@@ -49,41 +57,41 @@
     #scan-hint {
       position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
       pointer-events:none; z-index:200; transition:opacity .8s;
+      display:flex; flex-direction:column; align-items:center; gap:10px;
     }
     #scan-hint.hidden{opacity:0;pointer-events:none}
     .scan-frame {
-      width:220px; height:220px; border:2px solid #ff446666;
+      width:210px; height:210px; border:2px solid #ff446655;
       border-radius:8px; position:relative;
       animation:scanPulse 2s ease-in-out infinite;
+      display:flex; align-items:center; justify-content:center;
     }
     @keyframes scanPulse {
-      0%,100%{border-color:#ff446666;box-shadow:0 0 20px #ff446615}
-      50%{border-color:#ff4466bb;box-shadow:0 0 40px #ff446630}
+      0%,100%{border-color:#ff446655;box-shadow:0 0 18px #ff446610}
+      50%{border-color:#ff4466aa;box-shadow:0 0 36px #ff446628}
     }
-    .scan-frame::before,.scan-frame::after{content:'';position:absolute;width:28px;height:28px;border-color:#ff4466;border-style:solid}
+    .scan-frame::before,.scan-frame::after{content:'';position:absolute;width:26px;height:26px;border-color:#ff4466;border-style:solid}
     .scan-frame::before{top:-2px;left:-2px;border-width:3px 0 0 3px}
     .scan-frame::after{bottom:-2px;right:-2px;border-width:0 3px 3px 0}
-    .scan-label{text-align:center;color:#ff8899aa;font-size:.75rem;margin-top:10px;letter-spacing:.12em}
+    .scan-label{text-align:center;color:#ff8899aa;font-size:.72rem;letter-spacing:.1em}
 
     #status {
-      position:fixed; bottom:24px; left:50%; transform:translateX(-50%);
-      background:rgba(0,0,0,0.6); border:1px solid #ff446633;
-      color:#ff8899; padding:8px 18px; border-radius:20px; font-size:.78rem;
-      z-index:500; pointer-events:none; display:none; max-width:90vw; text-align:center;
+      position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
+      background:rgba(0,0,0,0.65); border:1px solid #ff446630;
+      color:#ff8899bb; padding:7px 16px; border-radius:18px; font-size:.75rem;
+      z-index:500; pointer-events:none; display:none; max-width:92vw; text-align:center;
     }
     #found-banner {
-      position:fixed; top:22px; left:50%; transform:translateX(-50%);
-      color:#ffdd55; font-size:1.3rem; font-weight:bold; letter-spacing:.18em; z-index:300;
-      opacity:0; transition:opacity .5s; text-shadow:0 0 25px #ffaa00, 0 0 50px #ff4466;
+      position:fixed; top:20px; left:50%; transform:translateX(-50%);
+      color:#ffdd55; font-size:1.25rem; font-weight:bold; letter-spacing:.15em; z-index:300;
+      opacity:0; transition:opacity .5s; text-shadow:0 0 24px #ffaa00, 0 0 48px #ff4466;
       pointer-events:none; white-space:nowrap;
     }
     #found-banner.show{opacity:1}
-
     #debugBtn {
-      position:fixed; top:10px; right:10px; z-index:600;
-      background:rgba(0,0,0,0.6); border:1px solid #ff446666;
-      color:#ff8899; font-size:.75rem; padding:6px 12px; border-radius:10px; cursor:pointer;
-      display:none;
+      position:fixed; top:8px; right:8px; z-index:600;
+      background:rgba(0,0,0,0.6); border:1px solid #ff446655;
+      color:#ff8899; font-size:.72rem; padding:5px 10px; border-radius:9px; cursor:pointer; display:none;
     }
   </style>
 </head>
@@ -92,7 +100,17 @@
 <div id="splash">
   <div class="heart-emoji">💕</div>
   <h1>Heart AR</h1>
-  <p>Tap <strong>Start Camera</strong>, allow access, then hold the heart drawing in front of the camera.</p>
+  <div class="target-hint">
+    <span>SHOW THIS TO THE CAMERA:</span>
+    <!-- Double concentric heart SVG -->
+    <svg width="70" height="65" viewBox="0 0 70 65">
+      <path d="M35 58 C10 40 2 25 2 16 C2 7 9 2 18 2 C24 2 30 6 35 12 C40 6 46 2 52 2 C61 2 68 7 68 16 C68 25 60 40 35 58Z"
+            fill="none" stroke="#ff4466" stroke-width="2.5"/>
+      <path d="M35 45 C18 32 12 21 12 14 C12 9 17 6 22 6 C27 6 31 9 35 14 C39 9 43 6 48 6 C53 6 58 9 58 14 C58 21 52 32 35 45Z"
+            fill="none" stroke="#ff6688" stroke-width="2"/>
+    </svg>
+    <span style="color:#ff8899aa;font-size:.72rem">two hearts, one inside the other</span>
+  </div>
   <button id="startBtn" onclick="startCamera()">✨ Start Camera</button>
   <button id="demoBtn"  onclick="startDemo()">Try Demo (no camera)</button>
 </div>
@@ -107,17 +125,24 @@
 <canvas id="overlay-canvas"></canvas>
 
 <div id="scan-hint" class="hidden">
-  <div class="scan-frame"></div>
-  <div class="scan-label">HOLD HEART DRAWING HERE</div>
+  <div class="scan-frame">
+    <!-- mini double heart inside scan frame as guide -->
+    <svg width="80" height="75" viewBox="0 0 70 65" style="opacity:0.25">
+      <path d="M35 58 C10 40 2 25 2 16 C2 7 9 2 18 2 C24 2 30 6 35 12 C40 6 46 2 52 2 C61 2 68 7 68 16 C68 25 60 40 35 58Z" fill="none" stroke="#ff4466" stroke-width="3"/>
+      <path d="M35 45 C18 32 12 21 12 14 C12 9 17 6 22 6 C27 6 31 9 35 14 C39 9 43 6 48 6 C53 6 58 9 58 14 C58 21 52 32 35 45Z" fill="none" stroke="#ff6688" stroke-width="2.5"/>
+    </svg>
+  </div>
+  <div class="scan-label">SHOW DOUBLE-HEART DRAWING</div>
 </div>
+
 <div id="found-banner">🎂 HAPPY BIRTHDAY 🎂</div>
-<div id="status">🔍 Scanning…</div>
-<button id="debugBtn" onclick="toggleDebug()">🔍 debug</button>
+<div id="status">scanning…</div>
+<button id="debugBtn" onclick="toggleDebug()">debug</button>
 
 <script>
-/* ═══════════════════════════════════════
+/* ═══════════════════════════════════════════
    PARTICLES
-═══════════════════════════════════════ */
+═══════════════════════════════════════════ */
 class Spark {
   constructor(x,y,vx,vy,color){
     this.x=x;this.y=y;this.vx=vx;this.vy=vy;this.color=color;
@@ -150,8 +175,7 @@ class Ember {
     this.size=Math.random()*7+2;this.life=1;this.decay=Math.random()*.011+.004;this.sparkChance=.1;this.trail=[];
   }
   update(all){
-    this.trail.push({x:this.x,y:this.y});
-    if(this.trail.length>14)this.trail.shift();
+    this.trail.push({x:this.x,y:this.y});if(this.trail.length>14)this.trail.shift();
     this.x+=this.vx;this.y+=this.vy;this.vy+=.07;this.vx*=.97;
     this.life-=this.decay;this.size*=.97;
     if(Math.random()<this.sparkChance&&this.life>.3){
@@ -173,12 +197,12 @@ class Ember {
   }
 }
 
-/* ═══════════════════════════════════════
+/* ═══════════════════════════════════════════
    CAKE
-═══════════════════════════════════════ */
-function drawBigCake(c,cx,cy,masterScale,alpha,t){
+═══════════════════════════════════════════ */
+function drawBigCake(c,cx,cy,ms,alpha,t){
   if(alpha<0.01)return;
-  c.save();c.globalAlpha=alpha;c.translate(cx,cy);c.scale(masterScale,masterScale);
+  c.save();c.globalAlpha=alpha;c.translate(cx,cy);c.scale(ms,ms);
   const tiers=[{hw:160,h:70,col:'#e8294e',top:'#f04060'},{hw:115,h:60,col:'#f5416b',top:'#ff5580'},{hw:75,h:50,col:'#ff6688',top:'#ff88aa'}];
   let baseY=0;
   c.save();c.fillStyle='#f5c842';c.shadowColor='#c8a020';c.shadowBlur=14;
@@ -207,14 +231,11 @@ function drawBigCake(c,cx,cy,masterScale,alpha,t){
       c.fillStyle=sc2[d%sc2.length];c.shadowColor=sc2[d%sc2.length];c.shadowBlur=6;
       c.save();c.translate(dx,dy);c.rotate(d*.6);c.fillRect(-5,-2,10,4);c.restore();
     }
-    c.restore();
-    baseY-=h;
+    c.restore();baseY-=h;
   });
   const topY=baseY;
-  const cxs=[-54,-36,-18,0,18,36,54];
-  const cc=['#ff3344','#3399ff','#ffcc00','#aa44ff','#44dd88','#ff8833','#ff44aa'];
-  cxs.forEach((cx2,i)=>{
-    const cBase=topY,cH=28;
+  [-54,-36,-18,0,18,36,54].forEach((cx2,i)=>{
+    const cBase=topY,cH=28,cc=['#ff3344','#3399ff','#ffcc00','#aa44ff','#44dd88','#ff8833','#ff44aa'];
     c.save();c.fillStyle=cc[i];c.strokeStyle='rgba(0,0,0,0.25)';c.lineWidth=1.5;
     c.beginPath();c.roundRect(cx2-6,cBase-cH,12,cH,3);c.fill();c.stroke();
     c.fillStyle='rgba(255,255,255,0.4)';for(let s=0;s<4;s++)c.fillRect(cx2-6,cBase-cH+s*7,12,3.5);c.restore();
@@ -235,212 +256,279 @@ function drawBigCake(c,cx,cy,masterScale,alpha,t){
   c.restore();
 }
 
-/* ═══════════════════════════════════════
-   DETECTION — balanced approach
-   
-   Strategy: use TWO signals combined:
-   1. COLOR: detect the dark-red/maroon ink pixels
-   2. SHAPE: check that the blob has heart-like geometry
-   
-   Each check is tolerant individually but combined they are precise.
-═══════════════════════════════════════ */
+/* ═══════════════════════════════════════════
+   CONCENTRIC DOUBLE-HEART DETECTOR
+
+   Core idea:
+   1. Find all dark ink pixels → build mask
+   2. Erode/shrink the mask to find the OUTER ring pixels
+      (pixels at the edge of ink clusters)
+   3. Flood-fill from outside to find the GAP region between the two hearts
+   4. Check that there IS a gap band (ring of empty space between two ink rings)
+   5. Both ink rings must have heart-like aspect ratios and be concentric
+
+   This is robust because almost nothing else in the world has
+   two separate closed-loop strokes at different scales sharing the same center.
+═══════════════════════════════════════════ */
 
 let debugMode = false;
-let debugInfo = {};
+function toggleDebug(){ debugMode=!debugMode; document.getElementById('debugBtn').textContent=debugMode?'debug OFF':'debug'; }
 
-function toggleDebug(){
-  debugMode = !debugMode;
-  document.getElementById('debugBtn').textContent = debugMode ? '❌ debug off' : '🔍 debug';
+// Label connected components in a binary grid using BFS
+function labelComponents(grid, W, H) {
+  const labels = new Int16Array(W * H); // 0=unlabeled
+  let nextLabel = 1;
+  const queue = [];
+  const componentSizes = [0]; // index 0 unused
+
+  for(let i=0; i<W*H; i++){
+    if(grid[i] && !labels[i]){
+      const label = nextLabel++;
+      componentSizes.push(0);
+      queue.push(i);
+      labels[i] = label;
+      let head = 0;
+      while(head < queue.length){
+        const idx = queue[head++];
+        componentSizes[label]++;
+        const x=idx%W, y=Math.floor(idx/W);
+        // 4-connected neighbours
+        const nbrs = [];
+        if(x>0)   nbrs.push(idx-1);
+        if(x<W-1) nbrs.push(idx+1);
+        if(y>0)   nbrs.push(idx-W);
+        if(y<H-1) nbrs.push(idx+W);
+        for(const n of nbrs){
+          if(grid[n] && !labels[n]){ labels[n]=label; queue.push(n); }
+        }
+      }
+    }
+  }
+  return { labels, componentSizes, count: nextLabel-1 };
 }
 
-function detectInk(r, g, b, brightness) {
-  // Dark red / maroon (pen drawing color)
-  if(r > 50 && r < 210 && g < 80 && b < 90 && r > g + 15 && r > b + 10) return true;
-  // Very dark stroke (dark pen on paper)
-  if(brightness < 55 && Math.abs(r-g)<25 && Math.abs(r-b)<25) return true;
-  // Dark brownish-red
-  if(r > 40 && r < 160 && g < 60 && b < 60 && r > g*1.5) return true;
-  return false;
+// Get bounding box of a component
+function componentBBox(labels, label, W, H){
+  let minX=W,maxX=0,minY=H,maxY=0;
+  for(let i=0;i<W*H;i++){
+    if(labels[i]===label){
+      const x=i%W,y=Math.floor(i/W);
+      if(x<minX)minX=x;if(x>maxX)maxX=x;
+      if(y<minY)minY=y;if(y>maxY)maxY=y;
+    }
+  }
+  return {minX,maxX,minY,maxY,w:maxX-minX+1,h:maxY-minY+1};
 }
 
-function analyzeFrame() {
-  if(!videoEl || videoEl.readyState < 2) return;
+// Centroid of a component
+function componentCentroid(labels, label, W, H){
+  let sx=0,sy=0,n=0;
+  for(let i=0;i<W*H;i++){
+    if(labels[i]===label){ sx+=i%W; sy+=Math.floor(i/W); n++; }
+  }
+  return n>0 ? {x:sx/n, y:sy/n} : {x:0,y:0};
+}
 
-  const DW = detCanvas.width, DH = detCanvas.height;
-  detCtx.drawImage(videoEl, 0, 0, DW, DH);
-  const data = detCtx.getImageData(0, 0, DW, DH).data;
+let debugData = {};
 
-  // Build ink mask + bounding box
-  const mask = new Uint8Array(DW * DH);
-  let minX=DW, maxX=0, minY=DH, maxY=0, cnt=0;
+function analyzeFrame(){
+  if(!videoEl||videoEl.readyState<2) return;
 
-  for(let i=0; i<data.length; i+=4){
-    const r=data[i], g=data[i+1], b=data[i+2];
-    const brightness = (r+g+b)/3;
-    if(detectInk(r,g,b,brightness)){
-      const px=(i/4)%DW, py=Math.floor((i/4)/DW);
-      mask[py*DW+px]=1; cnt++;
-      if(px<minX)minX=px; if(px>maxX)maxX=px;
-      if(py<minY)minY=py; if(py>maxY)maxY=py;
-    }
+  const DW=detCanvas.width, DH=detCanvas.height;
+  detCtx.drawImage(videoEl,0,0,DW,DH);
+  const px=detCtx.getImageData(0,0,DW,DH).data;
+
+  // ── 1. BUILD INK MASK ──
+  // Detect dark-red/maroon and near-black strokes
+  const ink = new Uint8Array(DW*DH);
+  let inkCount=0;
+  for(let i=0;i<px.length;i+=4){
+    const r=px[i],g=px[i+1],b=px[i+2];
+    const br=(r+g+b)/3;
+    const isDarkRed = r>45 && r<220 && g<85 && b<95 && r>g+12 && r>b+8;
+    const isBlack   = br<60 && r<80 && g<80 && b<80;
+    const isDarkBrown = r>35&&r<140&&g<65&&b<55&&r>g*1.3;
+    if(isDarkRed||isBlack||isDarkBrown){ ink[i/4]=1; inkCount++; }
   }
 
-  // Need a minimum amount of ink
-  if(cnt < 60){
-    confidence = Math.max(0, confidence - 0.07);
-    debugInfo = {cnt, reason:'too few ink pixels'};
+  if(inkCount < 50){
+    confidence=Math.max(0,confidence-.08);
+    debugData={status:'too few ink pixels: '+inkCount};
     return;
   }
 
-  const bw=maxX-minX+1, bh=maxY-minY+1;
+  // ── 2. FIND CONNECTED INK COMPONENTS ──
+  const {labels, componentSizes, count} = labelComponents(ink, DW, DH);
 
-  // Must be a reasonable size on screen
-  if(bw < 15 || bh < 15){
-    confidence = Math.max(0, confidence - 0.07);
-    debugInfo = {cnt, bw, bh, reason:'too small'};
+  // Keep only "significant" components (filter out specks)
+  // Minimum size: 0.3% of total pixels
+  const minSize = Math.max(15, DW*DH*0.003);
+  const sigLabels = [];
+  for(let l=1; l<=count; l++){
+    if(componentSizes[l] >= minSize) sigLabels.push(l);
+  }
+
+  if(sigLabels.length < 2){
+    // Need at least 2 ink components (the two hearts)
+    confidence=Math.max(0,confidence-.07);
+    debugData={status:`only ${sigLabels.length} significant components (need 2)`};
     return;
   }
 
-  // Aspect ratio: hearts are 0.7 to 1.4 wide-to-tall
-  const asp = bw / bh;
-  if(asp < 0.5 || asp > 1.7){
-    confidence = Math.max(0, confidence - 0.08);
-    debugInfo = {cnt, asp: asp.toFixed(2), reason:'bad aspect ratio'};
+  // ── 3. FIND THE TWO LARGEST COMPONENTS ──
+  sigLabels.sort((a,b)=>componentSizes[b]-componentSizes[a]);
+  const outerLabel = sigLabels[0];
+  const innerLabel = sigLabels[1];
+
+  const outerBB = componentBBox(labels, outerLabel, DW, DH);
+  const innerBB = componentBBox(labels, innerLabel, DW, DH);
+  const outerC  = componentCentroid(labels, outerLabel, DW, DH);
+  const innerC  = componentCentroid(labels, innerLabel, DW, DH);
+
+  // ── 4. CHECK: OUTER IS BIGGER THAN INNER ──
+  if(outerBB.w <= innerBB.w || outerBB.h <= innerBB.h){
+    confidence=Math.max(0,confidence-.07);
+    debugData={status:'inner not smaller than outer'};
     return;
   }
 
-  // ── Resample to 24×24 grid ──
-  const G = 24;
-  const grid = [];
-  for(let r=0; r<G; r++){
-    grid.push(new Uint8Array(G));
-    for(let c=0; c<G; c++){
-      const x0=minX+Math.floor(c*bw/G), y0=minY+Math.floor(r*bh/G);
-      const x1=minX+Math.floor((c+1)*bw/G), y1=minY+Math.floor((r+1)*bh/G);
-      let s=0, n=0;
-      for(let py=y0; py<=Math.min(y1,DH-1); py++)
-        for(let px=x0; px<=Math.min(x1,DW-1); px++){ s+=mask[py*DW+px]; n++; }
-      grid[r][c] = (n>0 && s/n > 0.12) ? 1 : 0;
+  // ── 5. CHECK: BOTH HAVE HEART-LIKE ASPECT RATIO (0.6 to 1.5) ──
+  const outerAsp = outerBB.w / outerBB.h;
+  const innerAsp = innerBB.w / innerBB.h;
+  if(outerAsp<0.5||outerAsp>1.7||innerAsp<0.5||innerAsp>1.7){
+    confidence=Math.max(0,confidence-.07);
+    debugData={status:`bad aspect: outer=${outerAsp.toFixed(2)} inner=${innerAsp.toFixed(2)}`};
+    return;
+  }
+
+  // ── 6. CHECK: THEY ARE CONCENTRIC — centroids close together ──
+  const distX = Math.abs(outerC.x - innerC.x);
+  const distY = Math.abs(outerC.y - innerC.y);
+  // Allow centroids to differ by at most 30% of outer width/height
+  const maxDistX = outerBB.w * 0.30;
+  const maxDistY = outerBB.h * 0.30;
+  if(distX > maxDistX || distY > maxDistY){
+    confidence=Math.max(0,confidence-.07);
+    debugData={status:`not concentric: dist=(${distX.toFixed(0)},${distY.toFixed(0)}) max=(${maxDistX.toFixed(0)},${maxDistY.toFixed(0)})`};
+    return;
+  }
+
+  // ── 7. CHECK: INNER IS WELL INSIDE OUTER (nested) ──
+  // Inner bounding box should be inside outer bounding box with margin
+  const margin = 2; // pixels tolerance
+  const innerInsideOuter =
+    innerBB.minX > outerBB.minX - margin &&
+    innerBB.maxX < outerBB.maxX + margin &&
+    innerBB.minY > outerBB.minY - margin &&
+    innerBB.maxY < outerBB.maxY + margin;
+  if(!innerInsideOuter){
+    confidence=Math.max(0,confidence-.07);
+    debugData={status:'inner not nested inside outer bbox'};
+    return;
+  }
+
+  // ── 8. CHECK: SIZE RATIO — inner should be 30–75% the size of outer ──
+  const sizeRatioW = innerBB.w / outerBB.w;
+  const sizeRatioH = innerBB.h / outerBB.h;
+  if(sizeRatioW < 0.25 || sizeRatioW > 0.85 || sizeRatioH < 0.25 || sizeRatioH > 0.85){
+    confidence=Math.max(0,confidence-.06);
+    debugData={status:`size ratio out of range: ${sizeRatioW.toFixed(2)} x ${sizeRatioH.toFixed(2)}`};
+    return;
+  }
+
+  // ── 9. CHECK: GAP EXISTS between them ──
+  // Sample pixels in a ring between outer and inner — should be mostly non-ink
+  const midX=Math.floor((outerBB.minX+outerBB.maxX)/2);
+  const midY=Math.floor((outerBB.minY+outerBB.maxY)/2);
+  // Check a small grid of points between the two radii
+  let gapEmpty=0, gapTotal=0;
+  for(let angle=0; angle<Math.PI*2; angle+=Math.PI/8){
+    // Point at 65% of outer radius = should be in gap region
+    const rx=(outerBB.w/2)*0.65*Math.cos(angle);
+    const ry=(outerBB.h/2)*0.65*Math.sin(angle);
+    const gx=Math.round(midX+rx), gy=Math.round(midY+ry);
+    if(gx>=0&&gx<DW&&gy>=0&&gy<DH){
+      gapTotal++;
+      if(!ink[gy*DW+gx]) gapEmpty++;
     }
   }
-
-  // ── TEST 1: LEFT-RIGHT SYMMETRY ──
-  // Hearts are approximately symmetric. Score how mirrored it is.
-  let symHits=0, symTotal=0;
-  for(let r=0; r<G; r++)
-    for(let c=0; c<Math.floor(G/2); c++){
-      symTotal++;
-      if(grid[r][c] === grid[r][G-1-c]) symHits++;
-    }
-  const symmetry = symHits/symTotal; // 0..1, expect > 0.58 for hearts
-
-  // ── TEST 2: TOP HALF WIDER THAN BOTTOM HALF ──
-  // Compute average row-span in top half vs bottom half
-  let topSpanSum=0, topSpanN=0, botSpanSum=0, botSpanN=0;
-  for(let r=0; r<G; r++){
-    let lo=G, hi=-1;
-    for(let c=0; c<G; c++) if(grid[r][c]){ if(c<lo)lo=c; if(c>hi)hi=c; }
-    const span = hi>=lo ? hi-lo+1 : 0;
-    if(r < G/2){ topSpanSum+=span; topSpanN++; }
-    else        { botSpanSum+=span; botSpanN++; }
+  const gapRatio = gapTotal>0 ? gapEmpty/gapTotal : 0;
+  // Gap should be mostly empty (>55%)
+  if(gapRatio < 0.50){
+    confidence=Math.max(0,confidence-.06);
+    debugData={status:`gap not empty enough: ${(gapRatio*100).toFixed(0)}%`};
+    return;
   }
-  const avgTop = topSpanN>0 ? topSpanSum/topSpanN : 0;
-  const avgBot = botSpanN>0 ? botSpanSum/botSpanN : 0;
-  // Taper ratio: bottom/top — should be < 0.72 for a heart
-  const taper = avgTop>2 ? avgBot/avgTop : 1;
 
-  // ── TEST 3: CLEFT DIP at top-center ──
-  // At ~15-25% down, look for a valley in the middle
-  let cleftScore = 0;
-  for(let r=Math.floor(G*0.12); r<Math.floor(G*0.30); r++){
-    const midC = Math.floor(G/2);
-    const leftFilled  = grid[r][midC-2] || grid[r][midC-3] || grid[r][midC-4];
-    const rightFilled = grid[r][midC+2] || grid[r][midC+3] || grid[r][midC+4];
-    const centerEmpty = !grid[r][midC] && !grid[r][midC-1] && !grid[r][midC+1];
-    if(leftFilled && rightFilled && centerEmpty) cleftScore++;
-  }
-  // cleftScore: how many rows in top section have the cleft pattern (max ~4)
-  const cleftNorm = Math.min(cleftScore / 2, 1); // 0..1
+  // ── ALL CHECKS PASSED ──
+  // Score based on how well each check did
+  const concentricScore = 1 - Math.max(distX/maxDistX, distY/maxDistY); // 0..1
+  const sizeScore       = 1 - Math.abs(sizeRatioW - 0.55)/0.30;         // peaked at 55%
+  const gapScore        = (gapRatio - 0.50) / 0.50;                     // 0..1
+  const aspScore        = 1 - Math.abs(outerAsp-1.0)*0.5 - Math.abs(innerAsp-1.0)*0.5;
 
-  // ── TEST 4: BOTTOM ROWS CONVERGE (V-point) ──
-  // The last few rows should have very few pixels (narrowing to point)
-  let bottomRows = [];
-  for(let r=Math.floor(G*0.75); r<G; r++){
-    let s=0; for(let c=0; c<G; c++) s+=grid[r][c];
-    bottomRows.push(s);
-  }
-  // Should narrow — last row narrower than first of these rows
-  const bottomNarrowing = bottomRows.length>1 && bottomRows[bottomRows.length-1] <= bottomRows[0];
-  const bottomTip = bottomRows[bottomRows.length-1] <= 4; // very few pixels at tip
+  const finalScore = (
+    concentricScore * 0.35 +
+    sizeScore       * 0.25 +
+    gapScore        * 0.25 +
+    aspScore        * 0.15
+  );
 
-  // ── WEIGHTED SCORE ──
-  const symScore    = Math.max(0, (symmetry - 0.50) / 0.35);     // 0..1 (passes at >0.50)
-  const taperScore  = Math.max(0, (0.72 - taper)   / 0.52);     // 0..1 (passes at <0.72)
-  const tipScore    = (bottomNarrowing ? 0.5 : 0) + (bottomTip ? 0.5 : 0); // 0..1
+  const gain = 0.06 + finalScore * 0.12; // 0.06..0.18 per frame
+  confidence = Math.min(1, confidence + gain);
 
-  // Cleft is a strong signal but optional (some drawings don't have obvious cleft)
-  const score = symScore*0.40 + taperScore*0.35 + cleftNorm*0.15 + tipScore*0.10;
-
-  debugInfo = {
-    cnt, asp:asp.toFixed(2),
-    sym:symmetry.toFixed(2), taper:taper.toFixed(2),
-    cleft:cleftScore, tip:bottomTip?1:0,
-    score:score.toFixed(2)
+  // Store detected position (use outer heart bounds)
+  detectedBounds = {
+    x: outerBB.minX, y: outerBB.minY,
+    w: outerBB.w,    h: outerBB.h
   };
 
-  // ── UPDATE CONFIDENCE ──
-  // Score > 0.30 = plausible heart → ramp up
-  // Score < 0.15 = definitely not → ramp down fast
-  if(score > 0.30){
-    const gain = 0.05 + score * 0.10; // 0.05..0.15 per frame
-    confidence = Math.min(1, confidence + gain);
-    detectedBounds = {x:minX, y:minY, w:bw, h:bh};
-  } else if(score > 0.15){
-    // ambiguous — hold steady
-    confidence = Math.max(0, confidence - 0.02);
-  } else {
-    confidence = Math.max(0, confidence - 0.10);
-  }
+  debugData = {
+    status:'✓ DOUBLE HEART',
+    outerAsp:outerAsp.toFixed(2), innerAsp:innerAsp.toFixed(2),
+    sizeRatio:sizeRatioW.toFixed(2),
+    concentric:`(${distX.toFixed(0)},${distY.toFixed(0)})`,
+    gap:(gapRatio*100).toFixed(0)+'%',
+    score:finalScore.toFixed(2),
+    conf:confidence.toFixed(2)
+  };
 
-  // ── DEBUG RENDER ──
+  // Debug rendering
   if(debugMode){
-    // Draw grid
-    const cell=7, ox=10, oy=55;
-    for(let r=0; r<G; r++)
-      for(let c=0; c<G; c++){
-        ctx.fillStyle = grid[r][c] ? '#ff4466' : 'rgba(255,255,255,0.04)';
-        ctx.fillRect(ox+c*cell, oy+r*cell, cell-1, cell-1);
+    const cell=3, ox=8, oy=50;
+    // Draw ink mask
+    for(let y=0;y<DH;y++)
+      for(let x=0;x<DW;x++){
+        if(ink[y*DW+x]){
+          const l=labels[y*DW+x];
+          ctx.fillStyle = l===outerLabel?'#ff4466': l===innerLabel?'#44aaff':'#ffffff44';
+          ctx.fillRect(ox+x*cell, oy+y*cell, cell, cell);
+        }
       }
-    // Highlight cleft row range
-    ctx.strokeStyle='rgba(255,220,0,0.4)';ctx.lineWidth=1;
-    ctx.strokeRect(ox, oy+Math.floor(G*0.12)*cell, G*cell, (Math.floor(G*0.30)-Math.floor(G*0.12))*cell);
-
-    const info = debugInfo;
-    ctx.fillStyle='rgba(0,0,0,0.7)';
-    ctx.fillRect(ox, oy+G*cell+4, 200, 80);
+    ctx.fillStyle='rgba(0,0,0,0.75)';ctx.fillRect(ox,oy+DH*cell+4,260,95);
     ctx.fillStyle='#fff';ctx.font='11px monospace';
     const lines=[
-      `ink:${info.cnt} asp:${info.asp}`,
-      `sym:${info.sym} taper:${info.taper}`,
-      `cleft:${info.cleft} tip:${info.tip}`,
-      `score:${info.score}  conf:${confidence.toFixed(2)}`,
-      info.reason||''
+      debugData.status,
+      `aspOuter:${debugData.outerAsp} aspInner:${debugData.innerAsp}`,
+      `sizeRatio:${debugData.sizeRatio} gap:${debugData.gap}`,
+      `concentric:${debugData.concentric}`,
+      `score:${debugData.score} conf:${debugData.conf}`
     ];
-    lines.forEach((l,i)=> ctx.fillText(l, ox+4, oy+G*cell+18+i*13));
+    lines.forEach((l,i)=>ctx.fillText(l,ox+4,oy+DH*cell+18+i*14));
   }
 }
 
-/* ═══════════════════════════════════════
-   STATE
-═══════════════════════════════════════ */
-let overlayCanvas, ctx, videoEl;
-let detCanvas, detCtx;
-let particles=[], ringEffects=[];
-let found=false, confidence=0;
-let heartCX=0, heartCY=0, heartSize=100;
-let heartGlowAlpha=0, heartGlowTarget=0;
-let cakeAlpha=0, cakeTarget=0, cakeEntrance=0;
-let burstTimer=0, time=0, lastDetect=0;
+/* ═══════════════════════════════════════════
+   STATE & RENDER
+═══════════════════════════════════════════ */
+let overlayCanvas,ctx,videoEl;
+let detCanvas,detCtx;
+let particles=[],ringEffects=[];
+let found=false,confidence=0;
+let heartCX=0,heartCY=0,heartSize=100;
+let heartGlowAlpha=0,heartGlowTarget=0;
+let cakeAlpha=0,cakeTarget=0,cakeEntrance=0;
+let burstTimer=0,time=0,lastDetect=0;
 let detectedBounds=null;
 
 function burst(cx,cy,n){ for(let i=0;i<n;i++) particles.push(new Ember(cx,cy)); }
@@ -468,24 +556,27 @@ function drawRing(cx,cy,r,alpha){
   ctx.shadowColor='#ff4466';ctx.shadowBlur=22;ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.stroke();ctx.restore();
 }
 
-/* ═══════════════════════════════════════
-   RENDER
-═══════════════════════════════════════ */
 function render(){
   time+=.016;
-  const W=overlayCanvas.width, H=overlayCanvas.height;
+  const W=overlayCanvas.width,H=overlayCanvas.height;
   ctx.clearRect(0,0,W,H);
 
-  if(Date.now()-lastDetect > 70){ analyzeFrame(); lastDetect=Date.now(); }
+  if(Date.now()-lastDetect>80){ analyzeFrame(); lastDetect=Date.now(); }
 
-  const isDetected = confidence > 0.55 && detectedBounds;
+  const isDetected = confidence>0.55 && detectedBounds;
+
+  // Live status
+  if(!found){
+    const s=debugData.status||'scanning…';
+    document.getElementById('status').textContent = `conf:${confidence.toFixed(2)} — ${s}`;
+  }
 
   if(isDetected){
-    heartGlowTarget=1; cakeTarget=1;
-    const sx=W/detCanvas.width, sy=H/detCanvas.height;
+    heartGlowTarget=1;cakeTarget=1;
+    const sx=W/detCanvas.width,sy=H/detCanvas.height;
     const tx=(detectedBounds.x+detectedBounds.w/2)*sx;
     const ty=(detectedBounds.y+detectedBounds.h/2)*sy;
-    heartCX=heartCX*.88+tx*.12; heartCY=heartCY*.88+ty*.12;
+    heartCX=heartCX*.88+tx*.12;heartCY=heartCY*.88+ty*.12;
     const ts=Math.max(detectedBounds.w,detectedBounds.h)*Math.min(sx,sy)*.5;
     heartSize=heartSize*.88+ts*.12;
     if(!found){
@@ -494,62 +585,50 @@ function render(){
       document.getElementById('scan-hint').classList.add('hidden');
       document.getElementById('status').textContent='🎂 Eran loves Mika! 💕';
       burst(heartCX,heartCY,120);
-      ringEffects.push({r:0,alpha:1}); ringEffects.push({r:0,alpha:.75});
+      ringEffects.push({r:0,alpha:1});ringEffects.push({r:0,alpha:.75});
     }
     burstTimer++;
-    if(burstTimer%7===0)  burst(heartCX,heartCY,5);
-    if(burstTimer%40===0){ burst(heartCX,heartCY,35); ringEffects.push({r:0,alpha:.85}); }
+    if(burstTimer%7===0)burst(heartCX,heartCY,5);
+    if(burstTimer%40===0){burst(heartCX,heartCY,35);ringEffects.push({r:0,alpha:.85});}
   } else {
-    heartGlowTarget=0; cakeTarget=0;
-    if(found && confidence < 0.20){
-      found=false; burstTimer=0;
+    heartGlowTarget=0;cakeTarget=0;
+    if(found&&confidence<0.20){
+      found=false;burstTimer=0;
       document.getElementById('found-banner').classList.remove('show');
       document.getElementById('scan-hint').classList.remove('hidden');
-      document.getElementById('status').textContent='🔍 Scanning for heart…';
     }
   }
 
-  // Update status with live score when not found
-  if(!found && debugInfo.score){
-    document.getElementById('status').textContent =
-      `🔍 score:${debugInfo.score} conf:${confidence.toFixed(2)} — ${debugInfo.reason||'analyzing…'}`;
-  }
-
-  heartGlowAlpha = heartGlowAlpha*.9  + heartGlowTarget*.1;
-  cakeAlpha      = cakeAlpha*.93      + cakeTarget*.07;
-  cakeEntrance   = cakeEntrance*.93   + (cakeTarget>.05?1:0)*.07;
+  heartGlowAlpha=heartGlowAlpha*.9+heartGlowTarget*.1;
+  cakeAlpha=cakeAlpha*.93+cakeTarget*.07;
+  cakeEntrance=cakeEntrance*.93+(cakeTarget>.05?1:0)*.07;
 
   ringEffects=ringEffects.filter(r=>r.alpha>.01);
-  for(const r of ringEffects){ r.r+=5; r.alpha*=.94; drawRing(heartCX,heartCY,r.r,r.alpha); }
-
+  for(const r of ringEffects){r.r+=5;r.alpha*=.94;drawRing(heartCX,heartCY,r.r,r.alpha);}
   if(heartGlowAlpha>.05&&heartSize>10) drawGlowHeart(heartCX,heartCY,heartSize*.85,heartGlowAlpha,time);
-
   if(cakeAlpha>.02){
-    const screenCX=W/2, screenCY=H/2+30;
-    const desiredH=H*0.68, localH=70+60+50+46;
-    const sc=(desiredH/localH)*cakeEntrance;
+    const sc=(H*0.68/(70+60+50+46))*cakeEntrance;
     const bs=sc*(1+Math.sin(Math.max(0,(cakeEntrance-.5)*Math.PI))*.08);
-    drawBigCake(ctx,screenCX,screenCY,bs,cakeAlpha,time);
+    drawBigCake(ctx,W/2,H/2+30,bs,cakeAlpha,time);
   }
-
   particles=particles.filter(p=>p.life>0);
-  for(const p of particles){ p.update(particles); p.draw(ctx); }
-
+  for(const p of particles){p.update(particles);p.draw(ctx);}
   requestAnimationFrame(render);
 }
 
-/* ═══════════════════════════════════════
-   INIT
-═══════════════════════════════════════ */
+/* ═══════════════════════════════════════════
+   INIT & CAMERA
+═══════════════════════════════════════════ */
 function initCanvas(){
   overlayCanvas=document.getElementById('overlay-canvas');
   ctx=overlayCanvas.getContext('2d');
+  // Use a decent resolution for component analysis
   detCanvas=document.createElement('canvas');
-  detCanvas.width=240; detCanvas.height=180;
+  detCanvas.width=200;detCanvas.height=150;
   detCtx=detCanvas.getContext('2d',{willReadFrequently:true});
-  function resize(){ overlayCanvas.width=window.innerWidth; overlayCanvas.height=window.innerHeight; }
-  resize(); window.addEventListener('resize',resize);
-  heartCX=window.innerWidth/2; heartCY=window.innerHeight/2;
+  function resize(){overlayCanvas.width=window.innerWidth;overlayCanvas.height=window.innerHeight;}
+  resize();window.addEventListener('resize',resize);
+  heartCX=window.innerWidth/2;heartCY=window.innerHeight/2;
   heartSize=Math.min(window.innerWidth,window.innerHeight)*.2;
 }
 
@@ -575,11 +654,11 @@ async function startCamera(){
     document.getElementById('loading').innerHTML=`
       <div style="text-align:center;padding:2rem;gap:1.2rem;display:flex;flex-direction:column;align-items:center">
         <div style="font-size:3rem">😕</div>
-        <h2 style="color:#ff4466;font-size:1.3rem">Camera blocked</h2>
+        <h2 style="color:#ff4466">Camera blocked</h2>
         <p style="color:#ff8899aa;line-height:1.7;max-width:300px;font-size:.88rem">
-          <strong>iPhone/Safari:</strong> Settings → Safari → Camera → Allow<br>
-          <strong>Android/Chrome:</strong> Tap 🔒 in address bar → Camera → Allow<br><br>
-          Then reload and tap <em>Start Camera</em>.
+          <strong>iPhone:</strong> Settings → Safari → Camera → Allow<br>
+          <strong>Android:</strong> Tap 🔒 in address bar → Camera → Allow<br><br>
+          Then reload and tap Start Camera.
         </p>
         <button onclick="location.reload()" style="padding:12px 30px;background:linear-gradient(135deg,#ff2255,#ff6688);border:none;border-radius:25px;color:#fff;font-size:1rem;cursor:pointer">🔄 Reload</button>
         <button onclick="startDemo()" style="padding:10px 25px;background:transparent;border:1px solid #ff446644;border-radius:25px;color:#ff8899;font-size:.9rem;cursor:pointer">✨ Demo Mode</button>
@@ -595,12 +674,12 @@ function startDemo(){
   document.getElementById('status').textContent='🎂 Eran loves Mika! 💕';
   document.getElementById('found-banner').classList.add('show');
   initCanvas();
-  heartGlowAlpha=1; heartGlowTarget=1; cakeAlpha=1; cakeTarget=1; cakeEntrance=1;
-  burst(heartCX,heartCY,140); ringEffects.push({r:0,alpha:1});
+  heartGlowAlpha=1;heartGlowTarget=1;cakeAlpha=1;cakeTarget=1;cakeEntrance=1;
+  burst(heartCX,heartCY,140);ringEffects.push({r:0,alpha:1});
   let t2=0;
   function demoLoop(){
-    time+=.016; t2++;
-    const W=overlayCanvas.width, H=overlayCanvas.height;
+    time+=.016;t2++;
+    const W=overlayCanvas.width,H=overlayCanvas.height;
     ctx.clearRect(0,0,W,H);
     const g=ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,Math.max(W,H)/2);
     g.addColorStop(0,'rgba(20,0,10,.5)');g.addColorStop(1,'rgba(4,0,4,.92)');
@@ -608,7 +687,7 @@ function startDemo(){
     drawGlowHeart(W/2,H/2,Math.min(W,H)*.42,0.85,time);
     ringEffects=ringEffects.filter(r=>r.alpha>.01);
     for(const r of ringEffects){r.r+=5;r.alpha*=.94;drawRing(W/2,H/2,r.r,r.alpha);}
-    const dH=H*0.68,lH=70+60+50+46,sc=dH/lH;
+    const sc=(H*0.68)/(70+60+50+46);
     drawBigCake(ctx,W/2,H/2+30,sc,1,time);
     if(t2%8===0)burst(W/2,H/2,6);
     if(t2%50===0){burst(W/2,H/2,45);ringEffects.push({r:0,alpha:.85});}
