@@ -13,522 +13,343 @@
       position:fixed; inset:0; display:flex; flex-direction:column;
       align-items:center; justify-content:center;
       background:radial-gradient(ellipse at center,#1a0010 0%,#0a0006 70%);
-      z-index:2000; gap:1.2rem;
+      z-index:2000; gap:1.1rem;
     }
-    .heart-emoji { font-size:4rem; animation:heartbeat 1s ease-in-out infinite; filter:drop-shadow(0 0 20px #ff4466); }
-    @keyframes heartbeat { 0%,100%{transform:scale(1)} 50%{transform:scale(1.2)} }
+    .he { font-size:4rem; animation:hb 1s ease-in-out infinite; filter:drop-shadow(0 0 20px #ff4466); }
+    @keyframes hb { 0%,100%{transform:scale(1)} 50%{transform:scale(1.2)} }
     #splash h1 { color:#ff4466; font-size:1.8rem; letter-spacing:.1em; text-shadow:0 0 30px #ff446688; }
-    #splash p { color:#ff8899bb; font-size:.88rem; text-align:center; padding:0 2rem; line-height:1.65; max-width:330px; }
-    #splash .target-hint {
-      display:flex; flex-direction:column; align-items:center; gap:.4rem;
+    #splash p { color:#ff8899bb; font-size:.88rem; text-align:center; padding:0 2rem; line-height:1.6; max-width:320px; }
+    .target-box {
       background:rgba(255,68,102,.07); border:1px solid #ff446633;
-      border-radius:16px; padding:14px 24px;
+      border-radius:14px; padding:12px 20px;
+      display:flex; flex-direction:column; align-items:center; gap:8px;
     }
-    #splash .target-hint span { color:#ff8899; font-size:.8rem; letter-spacing:.05em; }
-    .double-heart-icon {
-      position:relative; width:60px; height:55px;
-    }
-    .double-heart-icon svg { position:absolute; top:0; left:0; }
+    .target-box span { color:#ff8899aa; font-size:.72rem; letter-spacing:.08em; }
     #startBtn {
-      padding:15px 42px; background:linear-gradient(135deg,#ff2255,#ff6688);
+      padding:15px 40px; background:linear-gradient(135deg,#ff2255,#ff6688);
       border:none; border-radius:50px; color:#fff; font-size:1.05rem;
-      letter-spacing:.07em; cursor:pointer;
-      box-shadow:0 0 28px #ff446655; animation:glow 2s ease-in-out infinite; transition:transform .15s;
+      letter-spacing:.07em; cursor:pointer; box-shadow:0 0 28px #ff446655;
+      animation:glow 2s ease-in-out infinite; transition:transform .15s;
     }
     #startBtn:active{transform:scale(.95)}
-    @keyframes glow {
-      0%,100%{box-shadow:0 0 28px #ff446655} 50%{box-shadow:0 0 48px #ff4466aa}
-    }
-    #demoBtn { background:transparent; border:1px solid #ff446644; border-radius:50px; color:#ff8899; font-size:.85rem; padding:9px 26px; cursor:pointer; }
+    @keyframes glow{0%,100%{box-shadow:0 0 28px #ff446655}50%{box-shadow:0 0 48px #ff4466aa}}
+    #demoBtn{background:transparent;border:1px solid #ff446644;border-radius:50px;color:#ff8899;font-size:.85rem;padding:9px 26px;cursor:pointer;}
 
-    #loading {
-      position:fixed; inset:0; display:none; flex-direction:column;
-      align-items:center; justify-content:center;
-      background:#0a0006; z-index:1500; color:#ff4466; gap:1rem;
-    }
+    #loading{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;background:#0a0006;z-index:1500;color:#ff4466;gap:1rem;}
     #loading.show{display:flex}
-    #loading .lheart{font-size:3rem;animation:heartbeat 1s ease-in-out infinite}
+    #loading .lh{font-size:3rem;animation:hb 1s ease-in-out infinite}
     #loading h2{font-size:1.3rem;letter-spacing:.1em}
     #loading span{color:#ff8899aa;font-size:.88rem;text-align:center;padding:0 2rem}
 
-    #video-el { position:fixed; inset:0; width:100%; height:100%; object-fit:cover; }
-    #overlay-canvas { position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:100; }
+    #video-el{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;}
+    #oc{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:100;}
 
-    #scan-hint {
-      position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
-      pointer-events:none; z-index:200; transition:opacity .8s;
-      display:flex; flex-direction:column; align-items:center; gap:10px;
-    }
+    #scan-hint{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:200;transition:opacity .8s;display:flex;flex-direction:column;align-items:center;gap:8px;}
     #scan-hint.hidden{opacity:0;pointer-events:none}
-    .scan-frame {
-      width:210px; height:210px; border:2px solid #ff446655;
-      border-radius:8px; position:relative;
-      animation:scanPulse 2s ease-in-out infinite;
-      display:flex; align-items:center; justify-content:center;
-    }
-    @keyframes scanPulse {
-      0%,100%{border-color:#ff446655;box-shadow:0 0 18px #ff446610}
-      50%{border-color:#ff4466aa;box-shadow:0 0 36px #ff446628}
-    }
-    .scan-frame::before,.scan-frame::after{content:'';position:absolute;width:26px;height:26px;border-color:#ff4466;border-style:solid}
-    .scan-frame::before{top:-2px;left:-2px;border-width:3px 0 0 3px}
-    .scan-frame::after{bottom:-2px;right:-2px;border-width:0 3px 3px 0}
-    .scan-label{text-align:center;color:#ff8899aa;font-size:.72rem;letter-spacing:.1em}
+    .sf{width:220px;height:220px;border:2px solid #ff446655;border-radius:8px;position:relative;animation:sp 2s ease-in-out infinite;display:flex;align-items:center;justify-content:center;}
+    @keyframes sp{0%,100%{border-color:#ff446655;box-shadow:0 0 18px #ff446610}50%{border-color:#ff4466aa;box-shadow:0 0 36px #ff446628}}
+    .sf::before,.sf::after{content:'';position:absolute;width:26px;height:26px;border-color:#ff4466;border-style:solid}
+    .sf::before{top:-2px;left:-2px;border-width:3px 0 0 3px}
+    .sf::after{bottom:-2px;right:-2px;border-width:0 3px 3px 0}
+    .sl{text-align:center;color:#ff8899aa;font-size:.72rem;letter-spacing:.1em}
 
-    #status {
-      position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
-      background:rgba(0,0,0,0.65); border:1px solid #ff446630;
-      color:#ff8899bb; padding:7px 16px; border-radius:18px; font-size:.75rem;
-      z-index:500; pointer-events:none; display:none; max-width:92vw; text-align:center;
-    }
-    #found-banner {
-      position:fixed; top:20px; left:50%; transform:translateX(-50%);
-      color:#ffdd55; font-size:1.25rem; font-weight:bold; letter-spacing:.15em; z-index:300;
-      opacity:0; transition:opacity .5s; text-shadow:0 0 24px #ffaa00, 0 0 48px #ff4466;
-      pointer-events:none; white-space:nowrap;
-    }
+    #status{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.7);border:1px solid #ff446630;color:#ff8899bb;padding:7px 16px;border-radius:18px;font-size:.72rem;z-index:500;pointer-events:none;display:none;max-width:95vw;text-align:center;}
+    #found-banner{position:fixed;top:20px;left:50%;transform:translateX(-50%);color:#ffdd55;font-size:1.25rem;font-weight:bold;letter-spacing:.15em;z-index:300;opacity:0;transition:opacity .5s;text-shadow:0 0 24px #ffaa00,0 0 48px #ff4466;pointer-events:none;white-space:nowrap;}
     #found-banner.show{opacity:1}
-    #debugBtn {
-      position:fixed; top:8px; right:8px; z-index:600;
-      background:rgba(0,0,0,0.6); border:1px solid #ff446655;
-      color:#ff8899; font-size:.72rem; padding:5px 10px; border-radius:9px; cursor:pointer; display:none;
-    }
+    #dbg{position:fixed;top:8px;right:8px;z-index:600;background:rgba(0,0,0,.6);border:1px solid #ff446655;color:#ff8899;font-size:.7rem;padding:5px 10px;border-radius:9px;cursor:pointer;display:none;}
   </style>
 </head>
 <body>
 
 <div id="splash">
-  <div class="heart-emoji">💕</div>
+  <div class="he">💕</div>
   <h1>Heart AR</h1>
-  <div class="target-hint">
-    <span>SHOW THIS TO THE CAMERA:</span>
-    <!-- Double concentric heart SVG -->
-    <svg width="70" height="65" viewBox="0 0 70 65">
-      <path d="M35 58 C10 40 2 25 2 16 C2 7 9 2 18 2 C24 2 30 6 35 12 C40 6 46 2 52 2 C61 2 68 7 68 16 C68 25 60 40 35 58Z"
-            fill="none" stroke="#ff4466" stroke-width="2.5"/>
-      <path d="M35 45 C18 32 12 21 12 14 C12 9 17 6 22 6 C27 6 31 9 35 14 C39 9 43 6 48 6 C53 6 58 9 58 14 C58 21 52 32 35 45Z"
-            fill="none" stroke="#ff6688" stroke-width="2"/>
+  <div class="target-box">
+    <span>POINT CAMERA AT THIS DRAWING:</span>
+    <svg width="90" height="85" viewBox="0 0 90 85">
+      <path d="M45 76 C14 54 4 35 4 22 C4 10 13 3 24 3 C31 3 39 8 45 16 C51 8 59 3 66 3 C77 3 86 10 86 22 C86 35 76 54 45 76Z" fill="none" stroke="#ff4466" stroke-width="3"/>
+      <path d="M45 57 C26 42 19 28 19 19 C19 12 25 8 32 8 C37 8 42 12 45 18 C48 12 53 8 58 8 C65 8 71 12 71 19 C71 28 64 42 45 57Z" fill="none" stroke="#ff7799" stroke-width="2.5"/>
     </svg>
-    <span style="color:#ff8899aa;font-size:.72rem">two hearts, one inside the other</span>
+    <span style="font-size:.7rem;color:#ff8899aa">two hearts, one inside the other</span>
   </div>
   <button id="startBtn" onclick="startCamera()">✨ Start Camera</button>
-  <button id="demoBtn"  onclick="startDemo()">Try Demo (no camera)</button>
+  <button id="demoBtn" onclick="startDemo()">Try Demo (no camera)</button>
 </div>
 
 <div id="loading">
-  <div class="lheart">💕</div>
+  <div class="lh">💕</div>
   <h2>Opening camera…</h2>
-  <span>Tap <strong>Allow</strong> when your browser asks</span>
+  <span>Tap <strong>Allow</strong> when asked</span>
 </div>
 
 <video id="video-el" autoplay playsinline muted></video>
-<canvas id="overlay-canvas"></canvas>
+<canvas id="oc"></canvas>
 
 <div id="scan-hint" class="hidden">
-  <div class="scan-frame">
-    <!-- mini double heart inside scan frame as guide -->
-    <svg width="80" height="75" viewBox="0 0 70 65" style="opacity:0.25">
-      <path d="M35 58 C10 40 2 25 2 16 C2 7 9 2 18 2 C24 2 30 6 35 12 C40 6 46 2 52 2 C61 2 68 7 68 16 C68 25 60 40 35 58Z" fill="none" stroke="#ff4466" stroke-width="3"/>
-      <path d="M35 45 C18 32 12 21 12 14 C12 9 17 6 22 6 C27 6 31 9 35 14 C39 9 43 6 48 6 C53 6 58 9 58 14 C58 21 52 32 35 45Z" fill="none" stroke="#ff6688" stroke-width="2.5"/>
+  <div class="sf">
+    <svg width="90" height="85" viewBox="0 0 90 85" style="opacity:.2">
+      <path d="M45 76 C14 54 4 35 4 22 C4 10 13 3 24 3 C31 3 39 8 45 16 C51 8 59 3 66 3 C77 3 86 10 86 22 C86 35 76 54 45 76Z" fill="none" stroke="#ff4466" stroke-width="3.5"/>
+      <path d="M45 57 C26 42 19 28 19 19 C19 12 25 8 32 8 C37 8 42 12 45 18 C48 12 53 8 58 8 C65 8 71 12 71 19 C71 28 64 42 45 57Z" fill="none" stroke="#ff6688" stroke-width="3"/>
     </svg>
   </div>
-  <div class="scan-label">SHOW DOUBLE-HEART DRAWING</div>
+  <div class="sl">POINT AT DOUBLE-HEART DRAWING</div>
 </div>
 
 <div id="found-banner">🎂 HAPPY BIRTHDAY 🎂</div>
 <div id="status">scanning…</div>
-<button id="debugBtn" onclick="toggleDebug()">debug</button>
+<button id="dbg" onclick="toggleDbg()">debug</button>
 
 <script>
-/* ═══════════════════════════════════════════
+/* ═══════════════════════════════════════════════════════
    PARTICLES
-═══════════════════════════════════════════ */
-class Spark {
-  constructor(x,y,vx,vy,color){
-    this.x=x;this.y=y;this.vx=vx;this.vy=vy;this.color=color;
-    this.size=Math.random()*5+1;this.life=1;this.decay=Math.random()*.018+.006;this.trail=[];
-  }
-  update(){
-    this.trail.push({x:this.x,y:this.y});
-    if(this.trail.length>10)this.trail.shift();
-    this.x+=this.vx;this.y+=this.vy;this.vy+=.1;this.vx*=.98;
-    this.life-=this.decay;this.size*=.98;
-  }
-  draw(c){
-    if(this.life<=0)return;
-    for(let i=0;i<this.trail.length;i++){
-      const t=this.trail[i],f=i/this.trail.length;
-      c.save();c.globalAlpha=f*this.life*.4;c.fillStyle=this.color;c.shadowColor=this.color;c.shadowBlur=10;
-      c.beginPath();c.arc(t.x,t.y,this.size*.6*f,0,Math.PI*2);c.fill();c.restore();
-    }
-    c.save();c.globalAlpha=this.life;c.fillStyle=this.color;c.shadowColor=this.color;c.shadowBlur=16;
-    c.beginPath();c.arc(this.x,this.y,this.size,0,Math.PI*2);c.fill();c.restore();
-  }
+═══════════════════════════════════════════════════════ */
+class Spark{
+  constructor(x,y,vx,vy,col){this.x=x;this.y=y;this.vx=vx;this.vy=vy;this.col=col;this.sz=Math.random()*5+1;this.life=1;this.decay=Math.random()*.018+.006;this.tr=[];}
+  update(){this.tr.push({x:this.x,y:this.y});if(this.tr.length>10)this.tr.shift();this.x+=this.vx;this.y+=this.vy;this.vy+=.1;this.vx*=.98;this.life-=this.decay;this.sz*=.98;}
+  draw(c){if(this.life<=0)return;for(let i=0;i<this.tr.length;i++){const t=this.tr[i],f=i/this.tr.length;c.save();c.globalAlpha=f*this.life*.4;c.fillStyle=this.col;c.shadowColor=this.col;c.shadowBlur=10;c.beginPath();c.arc(t.x,t.y,this.sz*.6*f,0,Math.PI*2);c.fill();c.restore();}c.save();c.globalAlpha=this.life;c.fillStyle=this.col;c.shadowColor=this.col;c.shadowBlur=16;c.beginPath();c.arc(this.x,this.y,this.sz,0,Math.PI*2);c.fill();c.restore();}
 }
-class Ember {
-  constructor(cx,cy){
-    const a=Math.random()*Math.PI*2,s=Math.random()*11+3;
-    this.x=cx+(Math.random()-.5)*40;this.y=cy+(Math.random()-.5)*40;
-    this.vx=Math.cos(a)*s;this.vy=Math.sin(a)*s-4;
-    const C=['#ff2255','#ff6688','#ffaa33','#ff44cc','#ffffff','#ffdd55','#44ffcc','#ff88aa','#ffcc00'];
-    this.color=C[Math.floor(Math.random()*C.length)];
-    this.size=Math.random()*7+2;this.life=1;this.decay=Math.random()*.011+.004;this.sparkChance=.1;this.trail=[];
-  }
-  update(all){
-    this.trail.push({x:this.x,y:this.y});if(this.trail.length>14)this.trail.shift();
-    this.x+=this.vx;this.y+=this.vy;this.vy+=.07;this.vx*=.97;
-    this.life-=this.decay;this.size*=.97;
-    if(Math.random()<this.sparkChance&&this.life>.3){
-      const a2=Math.random()*Math.PI*2,s2=Math.random()*4+1;
-      all.push(new Spark(this.x,this.y,Math.cos(a2)*s2,Math.sin(a2)*s2-1.5,this.color));
-    }
-  }
-  draw(c){
-    if(this.life<=0)return;
-    for(let i=0;i<this.trail.length;i++){
-      const t=this.trail[i],f=i/this.trail.length;
-      c.save();c.globalAlpha=f*this.life*.55;c.fillStyle=this.color;c.shadowColor=this.color;c.shadowBlur=22;
-      c.beginPath();c.arc(t.x,t.y,this.size*f,0,Math.PI*2);c.fill();c.restore();
-    }
-    c.save();c.globalAlpha=this.life;c.fillStyle=this.color;c.shadowColor=this.color;c.shadowBlur=28;
-    c.beginPath();c.arc(this.x,this.y,this.size,0,Math.PI*2);c.fill();
-    c.fillStyle='white';c.shadowBlur=6;c.globalAlpha=this.life*.85;
-    c.beginPath();c.arc(this.x,this.y,this.size*.4,0,Math.PI*2);c.fill();c.restore();
-  }
+class Ember{
+  constructor(cx,cy){const a=Math.random()*Math.PI*2,s=Math.random()*11+3;this.x=cx+(Math.random()-.5)*40;this.y=cy+(Math.random()-.5)*40;this.vx=Math.cos(a)*s;this.vy=Math.sin(a)*s-4;const C=['#ff2255','#ff6688','#ffaa33','#ff44cc','#ffffff','#ffdd55','#44ffcc','#ff88aa','#ffcc00'];this.col=C[Math.floor(Math.random()*C.length)];this.sz=Math.random()*7+2;this.life=1;this.decay=Math.random()*.011+.004;this.sc=.1;this.tr=[];}
+  update(all){this.tr.push({x:this.x,y:this.y});if(this.tr.length>14)this.tr.shift();this.x+=this.vx;this.y+=this.vy;this.vy+=.07;this.vx*=.97;this.life-=this.decay;this.sz*=.97;if(Math.random()<this.sc&&this.life>.3){const a=Math.random()*Math.PI*2,s=Math.random()*4+1;all.push(new Spark(this.x,this.y,Math.cos(a)*s,Math.sin(a)*s-1.5,this.col));}}
+  draw(c){if(this.life<=0)return;for(let i=0;i<this.tr.length;i++){const t=this.tr[i],f=i/this.tr.length;c.save();c.globalAlpha=f*this.life*.55;c.fillStyle=this.col;c.shadowColor=this.col;c.shadowBlur=22;c.beginPath();c.arc(t.x,t.y,this.sz*f,0,Math.PI*2);c.fill();c.restore();}c.save();c.globalAlpha=this.life;c.fillStyle=this.col;c.shadowColor=this.col;c.shadowBlur=28;c.beginPath();c.arc(this.x,this.y,this.sz,0,Math.PI*2);c.fill();c.fillStyle='white';c.shadowBlur=6;c.globalAlpha=this.life*.85;c.beginPath();c.arc(this.x,this.y,this.sz*.4,0,Math.PI*2);c.fill();c.restore();}
 }
 
-/* ═══════════════════════════════════════════
+/* ═══════════════════════════════════════════════════════
    CAKE
-═══════════════════════════════════════════ */
+═══════════════════════════════════════════════════════ */
 function drawBigCake(c,cx,cy,ms,alpha,t){
   if(alpha<0.01)return;
   c.save();c.globalAlpha=alpha;c.translate(cx,cy);c.scale(ms,ms);
   const tiers=[{hw:160,h:70,col:'#e8294e',top:'#f04060'},{hw:115,h:60,col:'#f5416b',top:'#ff5580'},{hw:75,h:50,col:'#ff6688',top:'#ff88aa'}];
   let baseY=0;
-  c.save();c.fillStyle='#f5c842';c.shadowColor='#c8a020';c.shadowBlur=14;
-  c.beginPath();c.ellipse(0,10,175,18,0,0,Math.PI*2);c.fill();
-  c.fillStyle='#ffe070';c.beginPath();c.ellipse(0,6,170,14,0,0,Math.PI*2);c.fill();c.restore();
+  c.save();c.fillStyle='#f5c842';c.shadowColor='#c8a020';c.shadowBlur=14;c.beginPath();c.ellipse(0,10,175,18,0,0,Math.PI*2);c.fill();c.fillStyle='#ffe070';c.beginPath();c.ellipse(0,6,170,14,0,0,Math.PI*2);c.fill();c.restore();
   tiers.forEach((tier,ti)=>{
     const{hw,h,col,top}=tier,by=baseY;
-    c.save();c.fillStyle=col;c.shadowColor='#aa0030';c.shadowBlur=8;
-    c.beginPath();c.moveTo(-hw,by);c.lineTo(-hw,by-h+10);c.quadraticCurveTo(-hw,by-h,-hw+10,by-h);
-    c.lineTo(hw-10,by-h);c.quadraticCurveTo(hw,by-h,hw,by-h+10);c.lineTo(hw,by);c.closePath();c.fill();c.restore();
-    c.save();c.fillStyle='rgba(255,255,255,0.12)';
-    c.beginPath();c.moveTo(-hw+4,by-8);c.lineTo(-hw+4,by-h+14);c.quadraticCurveTo(-hw+4,by-h+4,-hw+14,by-h+4);
-    c.lineTo(hw-14,by-h+4);c.quadraticCurveTo(hw-4,by-h+4,hw-4,by-h+14);c.lineTo(hw-4,by-8);c.closePath();c.fill();c.restore();
-    c.save();c.fillStyle=top;c.strokeStyle='rgba(255,50,80,.5)';c.lineWidth=2;
-    c.beginPath();c.ellipse(0,by-h,hw,hw*0.24,0,0,Math.PI*2);c.fill();c.stroke();c.restore();
-    const dn=Math.round(hw/22);
-    c.save();c.fillStyle='#fff';c.shadowColor='#eee';c.shadowBlur=5;
-    for(let d=0;d<dn;d++){
-      const dx=-hw+hw*2/(dn-1||1)*d,dh=14+Math.sin(d*2.1+ti*1.3)*8,dw=10+Math.sin(d*1.5)*4;
-      c.beginPath();c.moveTo(dx-dw/2,by-h+4);c.bezierCurveTo(dx-dw/2,by-h+dh,dx+dw/2,by-h+dh,dx+dw/2,by-h+4);c.closePath();c.fill();
-    }
+    c.save();c.fillStyle=col;c.shadowColor='#aa0030';c.shadowBlur=8;c.beginPath();c.moveTo(-hw,by);c.lineTo(-hw,by-h+10);c.quadraticCurveTo(-hw,by-h,-hw+10,by-h);c.lineTo(hw-10,by-h);c.quadraticCurveTo(hw,by-h,hw,by-h+10);c.lineTo(hw,by);c.closePath();c.fill();c.restore();
+    c.save();c.fillStyle='rgba(255,255,255,0.12)';c.beginPath();c.moveTo(-hw+4,by-8);c.lineTo(-hw+4,by-h+14);c.quadraticCurveTo(-hw+4,by-h+4,-hw+14,by-h+4);c.lineTo(hw-14,by-h+4);c.quadraticCurveTo(hw-4,by-h+4,hw-4,by-h+14);c.lineTo(hw-4,by-8);c.closePath();c.fill();c.restore();
+    c.save();c.fillStyle=top;c.strokeStyle='rgba(255,50,80,.5)';c.lineWidth=2;c.beginPath();c.ellipse(0,by-h,hw,hw*0.24,0,0,Math.PI*2);c.fill();c.stroke();c.restore();
+    const dn=Math.round(hw/22);c.save();c.fillStyle='#fff';c.shadowColor='#eee';c.shadowBlur=5;
+    for(let d=0;d<dn;d++){const dx=-hw+hw*2/(dn-1||1)*d,dh=14+Math.sin(d*2.1+ti*1.3)*8,dw=10+Math.sin(d*1.5)*4;c.beginPath();c.moveTo(dx-dw/2,by-h+4);c.bezierCurveTo(dx-dw/2,by-h+dh,dx+dw/2,by-h+dh,dx+dw/2,by-h+4);c.closePath();c.fill();}
     c.fillStyle='rgba(255,255,255,0.55)';c.beginPath();c.ellipse(0,by-h,hw*.8,hw*0.16,0,0,Math.PI*2);c.fill();c.restore();
     c.save();const sc2=['#ffee44','#44ffcc','#ff44cc','#44aaff','#ff8833'];const sn=Math.round(hw/14);
-    for(let d=0;d<sn;d++){
-      const dx=-hw*.88+hw*1.76/(sn-1)*d,dy=by-h*.38-Math.sin(d*1.2+ti)*h*.22;
-      c.fillStyle=sc2[d%sc2.length];c.shadowColor=sc2[d%sc2.length];c.shadowBlur=6;
-      c.save();c.translate(dx,dy);c.rotate(d*.6);c.fillRect(-5,-2,10,4);c.restore();
-    }
+    for(let d=0;d<sn;d++){const dx=-hw*.88+hw*1.76/(sn-1)*d,dy=by-h*.38-Math.sin(d*1.2+ti)*h*.22;c.fillStyle=sc2[d%sc2.length];c.shadowColor=sc2[d%sc2.length];c.shadowBlur=6;c.save();c.translate(dx,dy);c.rotate(d*.6);c.fillRect(-5,-2,10,4);c.restore();}
     c.restore();baseY-=h;
   });
   const topY=baseY;
   [-54,-36,-18,0,18,36,54].forEach((cx2,i)=>{
     const cBase=topY,cH=28,cc=['#ff3344','#3399ff','#ffcc00','#aa44ff','#44dd88','#ff8833','#ff44aa'];
-    c.save();c.fillStyle=cc[i];c.strokeStyle='rgba(0,0,0,0.25)';c.lineWidth=1.5;
-    c.beginPath();c.roundRect(cx2-6,cBase-cH,12,cH,3);c.fill();c.stroke();
+    c.save();c.fillStyle=cc[i];c.strokeStyle='rgba(0,0,0,0.25)';c.lineWidth=1.5;c.beginPath();c.roundRect(cx2-6,cBase-cH,12,cH,3);c.fill();c.stroke();
     c.fillStyle='rgba(255,255,255,0.4)';for(let s=0;s<4;s++)c.fillRect(cx2-6,cBase-cH+s*7,12,3.5);c.restore();
     const flk=Math.sin(t*9+i*1.7)*2.5,fh=18+flk;
-    c.save();c.fillStyle='#ff8800';c.shadowColor='#ffaa00';c.shadowBlur=18;
-    c.beginPath();c.moveTo(cx2,cBase-cH-fh);c.bezierCurveTo(cx2+8,cBase-cH-fh*.5,cx2+5,cBase-cH,cx2,cBase-cH);
-    c.bezierCurveTo(cx2-5,cBase-cH,cx2-8,cBase-cH-fh*.5,cx2,cBase-cH-fh);c.fill();
-    c.fillStyle='#ffff88';c.shadowColor='#ffff00';c.shadowBlur=10;
-    c.beginPath();c.moveTo(cx2,cBase-cH-fh*.72);c.bezierCurveTo(cx2+4,cBase-cH-fh*.4,cx2+3,cBase-cH,cx2,cBase-cH);
-    c.bezierCurveTo(cx2-3,cBase-cH,cx2-4,cBase-cH-fh*.4,cx2,cBase-cH-fh*.72);c.fill();c.restore();
+    c.save();c.fillStyle='#ff8800';c.shadowColor='#ffaa00';c.shadowBlur=18;c.beginPath();c.moveTo(cx2,cBase-cH-fh);c.bezierCurveTo(cx2+8,cBase-cH-fh*.5,cx2+5,cBase-cH,cx2,cBase-cH);c.bezierCurveTo(cx2-5,cBase-cH,cx2-8,cBase-cH-fh*.5,cx2,cBase-cH-fh);c.fill();
+    c.fillStyle='#ffff88';c.shadowColor='#ffff00';c.shadowBlur=10;c.beginPath();c.moveTo(cx2,cBase-cH-fh*.72);c.bezierCurveTo(cx2+4,cBase-cH-fh*.4,cx2+3,cBase-cH,cx2,cBase-cH);c.bezierCurveTo(cx2-3,cBase-cH,cx2-4,cBase-cH-fh*.4,cx2,cBase-cH-fh*.72);c.fill();c.restore();
   });
-  const textY=-tiers[0].h*.5;
+  const ty=-tiers[0].h*.5;
   c.save();c.font='bold 32px Georgia,serif';c.textAlign='center';c.textBaseline='middle';
-  c.strokeStyle='#880022';c.lineWidth=7;c.lineJoin='round';c.strokeText('Eran loves Mika',0,textY);
-  c.shadowColor='#ff2255';c.shadowBlur=22;c.fillStyle='#fff';c.globalAlpha=alpha*(0.9+Math.sin(t*2.5)*.1);
-  c.fillText('Eran loves Mika',0,textY);c.shadowBlur=0;c.fillStyle='#ffe0ea';c.globalAlpha=alpha;
-  c.fillText('Eran loves Mika',0,textY);c.restore();
+  c.strokeStyle='#880022';c.lineWidth=7;c.lineJoin='round';c.strokeText('Eran loves Mika',0,ty);
+  c.shadowColor='#ff2255';c.shadowBlur=22;c.fillStyle='#fff';c.globalAlpha=alpha*(0.9+Math.sin(t*2.5)*.1);c.fillText('Eran loves Mika',0,ty);
+  c.shadowBlur=0;c.fillStyle='#ffe0ea';c.globalAlpha=alpha;c.fillText('Eran loves Mika',0,ty);c.restore();
   c.restore();
 }
 
-/* ═══════════════════════════════════════════
-   CONCENTRIC DOUBLE-HEART DETECTOR
+/* ═══════════════════════════════════════════════════════
+   DETECTOR
+   
+   Core insight from analysing the ACTUAL drawing at camera res (240×180):
+   - Ink is BLACK (gray < 110), NOT red
+   - Middle rows (y=85–120 of 180) show EXACTLY 4 ink clusters per row:
+       [outer-left stroke | gap | inner-left stroke | inner-right stroke | gap | outer-right stroke]
+   - ~55% of mid-section rows have 4 clusters (vs ~0% for random scenes)
+   - Inner width / outer width ≈ 0.30–0.55
+   - Gap symmetry: left gap ≈ right gap (diff < 35% of outer width)
+   
+   We require: 4-cluster-row ratio > 30% in the middle band,
+               PLUS size ratio in range [0.20, 0.75],
+               PLUS gap symmetry < 0.40
+   This combination is essentially unique to two concentric heart outlines.
+═══════════════════════════════════════════════════════ */
 
-   Core idea:
-   1. Find all dark ink pixels → build mask
-   2. Erode/shrink the mask to find the OUTER ring pixels
-      (pixels at the edge of ink clusters)
-   3. Flood-fill from outside to find the GAP region between the two hearts
-   4. Check that there IS a gap band (ring of empty space between two ink rings)
-   5. Both ink rings must have heart-like aspect ratios and be concentric
+let showDbg = false;
+let dbgInfo = {};
+function toggleDbg(){ showDbg=!showDbg; document.getElementById('dbg').textContent=showDbg?'debug OFF':'debug'; }
 
-   This is robust because almost nothing else in the world has
-   two separate closed-loop strokes at different scales sharing the same center.
-═══════════════════════════════════════════ */
-
-let debugMode = false;
-function toggleDebug(){ debugMode=!debugMode; document.getElementById('debugBtn').textContent=debugMode?'debug OFF':'debug'; }
-
-// Label connected components in a binary grid using BFS
-function labelComponents(grid, W, H) {
-  const labels = new Int16Array(W * H); // 0=unlabeled
-  let nextLabel = 1;
-  const queue = [];
-  const componentSizes = [0]; // index 0 unused
-
-  for(let i=0; i<W*H; i++){
-    if(grid[i] && !labels[i]){
-      const label = nextLabel++;
-      componentSizes.push(0);
-      queue.push(i);
-      labels[i] = label;
-      let head = 0;
-      while(head < queue.length){
-        const idx = queue[head++];
-        componentSizes[label]++;
-        const x=idx%W, y=Math.floor(idx/W);
-        // 4-connected neighbours
-        const nbrs = [];
-        if(x>0)   nbrs.push(idx-1);
-        if(x<W-1) nbrs.push(idx+1);
-        if(y>0)   nbrs.push(idx-W);
-        if(y<H-1) nbrs.push(idx+W);
-        for(const n of nbrs){
-          if(grid[n] && !labels[n]){ labels[n]=label; queue.push(n); }
-        }
-      }
-    }
+// Returns array of merged clusters [{lo, hi, mid}]
+function getClusters(row, DW, thresh, minGap) {
+  const raw = [];
+  let inC=false, start=0;
+  for(let x=0; x<DW; x++){
+    const dark = row[x] < thresh;
+    if(dark && !inC){ inC=true; start=x; }
+    else if(!dark && inC){ inC=false; raw.push([start, x-1]); }
   }
-  return { labels, componentSizes, count: nextLabel-1 };
-}
-
-// Get bounding box of a component
-function componentBBox(labels, label, W, H){
-  let minX=W,maxX=0,minY=H,maxY=0;
-  for(let i=0;i<W*H;i++){
-    if(labels[i]===label){
-      const x=i%W,y=Math.floor(i/W);
-      if(x<minX)minX=x;if(x>maxX)maxX=x;
-      if(y<minY)minY=y;if(y>maxY)maxY=y;
-    }
+  if(inC) raw.push([start, DW-1]);
+  // merge close clusters
+  const merged = [];
+  for(const c of raw){
+    if(merged.length && c[0]-merged[merged.length-1][1] <= minGap)
+      merged[merged.length-1][1] = c[1];
+    else merged.push([...c]);
   }
-  return {minX,maxX,minY,maxY,w:maxX-minX+1,h:maxY-minY+1};
+  return merged.map(c=>({ lo:c[0], hi:c[1], mid:(c[0]+c[1])>>1 }));
 }
-
-// Centroid of a component
-function componentCentroid(labels, label, W, H){
-  let sx=0,sy=0,n=0;
-  for(let i=0;i<W*H;i++){
-    if(labels[i]===label){ sx+=i%W; sy+=Math.floor(i/W); n++; }
-  }
-  return n>0 ? {x:sx/n, y:sy/n} : {x:0,y:0};
-}
-
-let debugData = {};
 
 function analyzeFrame(){
-  if(!videoEl||videoEl.readyState<2) return;
+  if(!videoEl || videoEl.readyState < 2) return;
 
-  const DW=detCanvas.width, DH=detCanvas.height;
-  detCtx.drawImage(videoEl,0,0,DW,DH);
-  const px=detCtx.getImageData(0,0,DW,DH).data;
+  const DW=detCv.width, DH=detCv.height;
+  detCtx.drawImage(videoEl, 0, 0, DW, DH);
+  const imgData = detCtx.getImageData(0, 0, DW, DH).data;
 
-  // ── 1. BUILD INK MASK ──
-  // Detect dark-red/maroon and near-black strokes
-  const ink = new Uint8Array(DW*DH);
-  let inkCount=0;
-  for(let i=0;i<px.length;i+=4){
-    const r=px[i],g=px[i+1],b=px[i+2];
-    const br=(r+g+b)/3;
-    const isDarkRed = r>45 && r<220 && g<85 && b<95 && r>g+12 && r>b+8;
-    const isBlack   = br<60 && r<80 && g<80 && b<80;
-    const isDarkBrown = r>35&&r<140&&g<65&&b<55&&r>g*1.3;
-    if(isDarkRed||isBlack||isDarkBrown){ ink[i/4]=1; inkCount++; }
+  // Build grayscale row arrays
+  const gray = new Uint8Array(DW*DH);
+  for(let i=0; i<DW*DH; i++){
+    gray[i] = (imgData[i*4] + imgData[i*4+1] + imgData[i*4+2]) / 3;
   }
 
-  if(inkCount < 50){
-    confidence=Math.max(0,confidence-.08);
-    debugData={status:'too few ink pixels: '+inkCount};
-    return;
-  }
+  // ── Find ink bounding box ──
+  const INK = 115; // threshold — black ink on white/grey paper
+  const MINGAP = 4; // min pixel gap between clusters (at 240px wide)
 
-  // ── 2. FIND CONNECTED INK COMPONENTS ──
-  const {labels, componentSizes, count} = labelComponents(ink, DW, DH);
-
-  // Keep only "significant" components (filter out specks)
-  // Minimum size: 0.3% of total pixels
-  const minSize = Math.max(15, DW*DH*0.003);
-  const sigLabels = [];
-  for(let l=1; l<=count; l++){
-    if(componentSizes[l] >= minSize) sigLabels.push(l);
-  }
-
-  if(sigLabels.length < 2){
-    // Need at least 2 ink components (the two hearts)
-    confidence=Math.max(0,confidence-.07);
-    debugData={status:`only ${sigLabels.length} significant components (need 2)`};
-    return;
-  }
-
-  // ── 3. FIND THE TWO LARGEST COMPONENTS ──
-  sigLabels.sort((a,b)=>componentSizes[b]-componentSizes[a]);
-  const outerLabel = sigLabels[0];
-  const innerLabel = sigLabels[1];
-
-  const outerBB = componentBBox(labels, outerLabel, DW, DH);
-  const innerBB = componentBBox(labels, innerLabel, DW, DH);
-  const outerC  = componentCentroid(labels, outerLabel, DW, DH);
-  const innerC  = componentCentroid(labels, innerLabel, DW, DH);
-
-  // ── 4. CHECK: OUTER IS BIGGER THAN INNER ──
-  if(outerBB.w <= innerBB.w || outerBB.h <= innerBB.h){
-    confidence=Math.max(0,confidence-.07);
-    debugData={status:'inner not smaller than outer'};
-    return;
-  }
-
-  // ── 5. CHECK: BOTH HAVE HEART-LIKE ASPECT RATIO (0.6 to 1.5) ──
-  const outerAsp = outerBB.w / outerBB.h;
-  const innerAsp = innerBB.w / innerBB.h;
-  if(outerAsp<0.5||outerAsp>1.7||innerAsp<0.5||innerAsp>1.7){
-    confidence=Math.max(0,confidence-.07);
-    debugData={status:`bad aspect: outer=${outerAsp.toFixed(2)} inner=${innerAsp.toFixed(2)}`};
-    return;
-  }
-
-  // ── 6. CHECK: THEY ARE CONCENTRIC — centroids close together ──
-  const distX = Math.abs(outerC.x - innerC.x);
-  const distY = Math.abs(outerC.y - innerC.y);
-  // Allow centroids to differ by at most 30% of outer width/height
-  const maxDistX = outerBB.w * 0.30;
-  const maxDistY = outerBB.h * 0.30;
-  if(distX > maxDistX || distY > maxDistY){
-    confidence=Math.max(0,confidence-.07);
-    debugData={status:`not concentric: dist=(${distX.toFixed(0)},${distY.toFixed(0)}) max=(${maxDistX.toFixed(0)},${maxDistY.toFixed(0)})`};
-    return;
-  }
-
-  // ── 7. CHECK: INNER IS WELL INSIDE OUTER (nested) ──
-  // Inner bounding box should be inside outer bounding box with margin
-  const margin = 2; // pixels tolerance
-  const innerInsideOuter =
-    innerBB.minX > outerBB.minX - margin &&
-    innerBB.maxX < outerBB.maxX + margin &&
-    innerBB.minY > outerBB.minY - margin &&
-    innerBB.maxY < outerBB.maxY + margin;
-  if(!innerInsideOuter){
-    confidence=Math.max(0,confidence-.07);
-    debugData={status:'inner not nested inside outer bbox'};
-    return;
-  }
-
-  // ── 8. CHECK: SIZE RATIO — inner should be 30–75% the size of outer ──
-  const sizeRatioW = innerBB.w / outerBB.w;
-  const sizeRatioH = innerBB.h / outerBB.h;
-  if(sizeRatioW < 0.25 || sizeRatioW > 0.85 || sizeRatioH < 0.25 || sizeRatioH > 0.85){
-    confidence=Math.max(0,confidence-.06);
-    debugData={status:`size ratio out of range: ${sizeRatioW.toFixed(2)} x ${sizeRatioH.toFixed(2)}`};
-    return;
-  }
-
-  // ── 9. CHECK: GAP EXISTS between them ──
-  // Sample pixels in a ring between outer and inner — should be mostly non-ink
-  const midX=Math.floor((outerBB.minX+outerBB.maxX)/2);
-  const midY=Math.floor((outerBB.minY+outerBB.maxY)/2);
-  // Check a small grid of points between the two radii
-  let gapEmpty=0, gapTotal=0;
-  for(let angle=0; angle<Math.PI*2; angle+=Math.PI/8){
-    // Point at 65% of outer radius = should be in gap region
-    const rx=(outerBB.w/2)*0.65*Math.cos(angle);
-    const ry=(outerBB.h/2)*0.65*Math.sin(angle);
-    const gx=Math.round(midX+rx), gy=Math.round(midY+ry);
-    if(gx>=0&&gx<DW&&gy>=0&&gy<DH){
-      gapTotal++;
-      if(!ink[gy*DW+gx]) gapEmpty++;
+  let inkMinY=DH, inkMaxY=0, inkMinX=DW, inkMaxX=0, inkTotal=0;
+  for(let y=0; y<DH; y++){
+    for(let x=0; x<DW; x++){
+      if(gray[y*DW+x] < INK){
+        inkTotal++;
+        if(y<inkMinY)inkMinY=y; if(y>inkMaxY)inkMaxY=y;
+        if(x<inkMinX)inkMinX=x; if(x>inkMaxX)inkMaxX=x;
+      }
     }
   }
-  const gapRatio = gapTotal>0 ? gapEmpty/gapTotal : 0;
-  // Gap should be mostly empty (>55%)
-  if(gapRatio < 0.50){
-    confidence=Math.max(0,confidence-.06);
-    debugData={status:`gap not empty enough: ${(gapRatio*100).toFixed(0)}%`};
+
+  // Need some ink
+  if(inkTotal < 40){
+    confidence = Math.max(0, confidence - 0.08);
+    dbgInfo = {s:'no ink ('+inkTotal+')'};
     return;
   }
 
-  // ── ALL CHECKS PASSED ──
-  // Score based on how well each check did
-  const concentricScore = 1 - Math.max(distX/maxDistX, distY/maxDistY); // 0..1
-  const sizeScore       = 1 - Math.abs(sizeRatioW - 0.55)/0.30;         // peaked at 55%
-  const gapScore        = (gapRatio - 0.50) / 0.50;                     // 0..1
-  const aspScore        = 1 - Math.abs(outerAsp-1.0)*0.5 - Math.abs(innerAsp-1.0)*0.5;
+  const bboxW = inkMaxX - inkMinX + 1;
+  const bboxH = inkMaxY - inkMinY + 1;
+  const asp = bboxW / bboxH;
 
-  const finalScore = (
-    concentricScore * 0.35 +
-    sizeScore       * 0.25 +
-    gapScore        * 0.25 +
-    aspScore        * 0.15
-  );
+  // Aspect ratio check — hearts are roughly 0.65–1.4 wide-to-tall
+  if(asp < 0.45 || asp > 1.6 || bboxW < 20 || bboxH < 20){
+    confidence = Math.max(0, confidence - 0.07);
+    dbgInfo = {s:`bad bbox asp=${asp.toFixed(2)} ${bboxW}x${bboxH}`};
+    return;
+  }
 
-  const gain = 0.06 + finalScore * 0.12; // 0.06..0.18 per frame
-  confidence = Math.min(1, confidence + gain);
+  // ── Count 4-cluster rows in middle band of bounding box ──
+  // Middle band: y from 25% to 75% of bounding box height
+  const bandY0 = inkMinY + Math.floor(bboxH * 0.25);
+  const bandY1 = inkMinY + Math.floor(bboxH * 0.75);
 
-  // Store detected position (use outer heart bounds)
-  detectedBounds = {
-    x: outerBB.minX, y: outerBB.minY,
-    w: outerBB.w,    h: outerBB.h
+  let fourRows=0, totalRows=0;
+  let ratioSum=0, ratioN=0;
+  let symSum=0, symN=0;
+
+  for(let y=bandY0; y<=bandY1; y++){
+    const rowSlice = gray.subarray(y*DW, y*DW+DW);
+    const clusters = getClusters(rowSlice, DW, INK, MINGAP);
+    totalRows++;
+
+    if(clusters.length === 4){
+      fourRows++;
+      // Compute inner/outer width ratio
+      const outerW = clusters[3].mid - clusters[0].mid;
+      const innerW = clusters[2].mid - clusters[1].mid;
+      if(outerW > 0){
+        ratioSum += innerW / outerW;
+        ratioN++;
+      }
+      // Compute gap symmetry: left gap vs right gap
+      const gapLeft  = clusters[1].lo - clusters[0].hi;
+      const gapRight = clusters[3].lo - clusters[2].hi;
+      const symDiff  = Math.abs(gapLeft - gapRight) / Math.max(outerW, 1);
+      symSum += symDiff;
+      symN++;
+    }
+  }
+
+  const fourRatio = totalRows > 0 ? fourRows / totalRows : 0;
+  const avgRatio  = ratioN > 0 ? ratioSum / ratioN : 0;
+  const avgSym    = symN   > 0 ? symSum   / symN   : 1;
+
+  dbgInfo = {
+    s: `4cl:${(fourRatio*100).toFixed(0)}% ratio:${avgRatio.toFixed(2)} sym:${avgSym.toFixed(2)}`,
+    fourRatio, avgRatio, avgSym, bboxW, bboxH, asp:asp.toFixed(2)
   };
 
-  debugData = {
-    status:'✓ DOUBLE HEART',
-    outerAsp:outerAsp.toFixed(2), innerAsp:innerAsp.toFixed(2),
-    sizeRatio:sizeRatioW.toFixed(2),
-    concentric:`(${distX.toFixed(0)},${distY.toFixed(0)})`,
-    gap:(gapRatio*100).toFixed(0)+'%',
-    score:finalScore.toFixed(2),
-    conf:confidence.toFixed(2)
-  };
+  // ── DECISION ──
+  // From real image analysis:
+  //   fourRatio ≈ 0.55–0.68  (we require > 0.28 to be generous)
+  //   avgRatio  ≈ 0.30–0.55  (inner heart is 30–55% width of outer)
+  //   avgSym    ≈ 0.03–0.11  (very symmetric, require < 0.40)
+  //
+  // Random scenes almost never have >20% 4-cluster rows simultaneously
+  // with a consistent size ratio AND symmetric gaps — all three together.
 
-  // Debug rendering
-  if(debugMode){
-    const cell=3, ox=8, oy=50;
-    // Draw ink mask
+  const goodFour  = fourRatio > 0.28;
+  const goodRatio = avgRatio > 0.18 && avgRatio < 0.80;
+  const goodSym   = avgSym < 0.42;
+
+  if(goodFour && goodRatio && goodSym){
+    // Score 0..1 from how well each criterion is met
+    const fScore = Math.min((fourRatio - 0.28) / 0.30, 1);    // peaks at 58%+
+    const rScore = 1 - Math.abs(avgRatio - 0.45) / 0.30;       // peaks at ratio=0.45
+    const sScore = Math.max(0, (0.42 - avgSym) / 0.42);        // lower sym = better
+
+    const score = fScore*0.50 + Math.max(0,rScore)*0.30 + sScore*0.20;
+    const gain  = 0.07 + score * 0.13;
+    confidence  = Math.min(1, confidence + gain);
+
+    // Store detection center
+    detectedBounds = {
+      x: inkMinX, y: inkMinY, w: bboxW, h: bboxH,
+      cx: (inkMinX + inkMaxX) >> 1, cy: (inkMinY + inkMaxY) >> 1
+    };
+    dbgInfo.s += ` ✓ sc=${score.toFixed(2)} DETECTED`;
+  } else {
+    confidence = Math.max(0, confidence - 0.09);
+    dbgInfo.s += ` ✗ (${goodFour?'':'!4cl '}${goodRatio?'':'!ratio '}${goodSym?'':'!sym'})`;
+  }
+
+  // ── DEBUG OVERLAY ──
+  if(showDbg){
+    const cell=3, ox=6, oy=45;
+    // Draw grayscale downsampled image
     for(let y=0;y<DH;y++)
       for(let x=0;x<DW;x++){
-        if(ink[y*DW+x]){
-          const l=labels[y*DW+x];
-          ctx.fillStyle = l===outerLabel?'#ff4466': l===innerLabel?'#44aaff':'#ffffff44';
-          ctx.fillRect(ox+x*cell, oy+y*cell, cell, cell);
-        }
+        const g=gray[y*DW+x];
+        ctx.fillStyle = g<INK ? '#ff4466' : `rgba(${g},${g},${g},0.15)`;
+        ctx.fillRect(ox+x*cell, oy+y*cell, cell, cell);
       }
-    ctx.fillStyle='rgba(0,0,0,0.75)';ctx.fillRect(ox,oy+DH*cell+4,260,95);
+    // Draw bounding box
+    ctx.strokeStyle='#ffff00';ctx.lineWidth=2;
+    ctx.strokeRect(ox+inkMinX*cell, oy+inkMinY*cell, bboxW*cell, bboxH*cell);
+    // Draw band lines
+    ctx.strokeStyle='rgba(0,255,0,0.5)';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(ox,oy+bandY0*cell);ctx.lineTo(ox+DW*cell,oy+bandY0*cell);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(ox,oy+bandY1*cell);ctx.lineTo(ox+DW*cell,oy+bandY1*cell);ctx.stroke();
+    // Info box
+    ctx.fillStyle='rgba(0,0,0,.8)';ctx.fillRect(ox, oy+DH*cell+3, 320, 70);
     ctx.fillStyle='#fff';ctx.font='11px monospace';
-    const lines=[
-      debugData.status,
-      `aspOuter:${debugData.outerAsp} aspInner:${debugData.innerAsp}`,
-      `sizeRatio:${debugData.sizeRatio} gap:${debugData.gap}`,
-      `concentric:${debugData.concentric}`,
-      `score:${debugData.score} conf:${debugData.conf}`
-    ];
-    lines.forEach((l,i)=>ctx.fillText(l,ox+4,oy+DH*cell+18+i*14));
+    ctx.fillText(dbgInfo.s, ox+4, oy+DH*cell+17);
+    ctx.fillText(`bbox:${bboxW}x${bboxH} asp:${dbgInfo.asp} ink:${inkTotal}`, ox+4, oy+DH*cell+31);
+    ctx.fillText(`conf:${confidence.toFixed(3)} rows:${totalRows} 4cl:${fourRows}`, ox+4, oy+DH*cell+45);
   }
 }
 
-/* ═══════════════════════════════════════════
+/* ═══════════════════════════════════════════════════════
    STATE & RENDER
-═══════════════════════════════════════════ */
-let overlayCanvas,ctx,videoEl;
-let detCanvas,detCtx;
-let particles=[],ringEffects=[];
-let found=false,confidence=0;
-let heartCX=0,heartCY=0,heartSize=100;
-let heartGlowAlpha=0,heartGlowTarget=0;
-let cakeAlpha=0,cakeTarget=0,cakeEntrance=0;
-let burstTimer=0,time=0,lastDetect=0;
+═══════════════════════════════════════════════════════ */
+let oc, ctx, videoEl, detCv, detCtx;
+let particles=[], ringEffects=[];
+let found=false, confidence=0;
+let heartCX=0, heartCY=0, heartSize=0;
+let heartGlowAlpha=0, heartGlowTarget=0;
+let cakeAlpha=0, cakeTarget=0, cakeEntrance=0;
+let burstTimer=0, time=0, lastDetect=0;
 let detectedBounds=null;
 
 function burst(cx,cy,n){ for(let i=0;i<n;i++) particles.push(new Ember(cx,cy)); }
@@ -544,92 +365,86 @@ function heartPath(c,cx,cy,s){
 }
 function drawGlowHeart(cx,cy,s,alpha,t){
   const ss=s*(1+Math.sin(t*3)*.06);
-  for(let i=4;i>=0;i--){
-    ctx.save();ctx.globalAlpha=alpha*(.12-i*.02);ctx.strokeStyle='#ff2255';ctx.lineWidth=5+i*10;
-    ctx.shadowColor='#ff2255';ctx.shadowBlur=35+i*12;ctx.lineJoin='round';heartPath(ctx,cx,cy,ss);ctx.stroke();ctx.restore();
-  }
-  ctx.save();ctx.globalAlpha=alpha;ctx.strokeStyle='#ff6688';ctx.lineWidth=2.5;
-  ctx.shadowColor='#ff99aa';ctx.shadowBlur=18;ctx.lineJoin='round';heartPath(ctx,cx,cy,ss);ctx.stroke();ctx.restore();
+  for(let i=4;i>=0;i--){ctx.save();ctx.globalAlpha=alpha*(.12-i*.02);ctx.strokeStyle='#ff2255';ctx.lineWidth=5+i*10;ctx.shadowColor='#ff2255';ctx.shadowBlur=35+i*12;ctx.lineJoin='round';heartPath(ctx,cx,cy,ss);ctx.stroke();ctx.restore();}
+  ctx.save();ctx.globalAlpha=alpha;ctx.strokeStyle='#ff6688';ctx.lineWidth=2.5;ctx.shadowColor='#ff99aa';ctx.shadowBlur=18;ctx.lineJoin='round';heartPath(ctx,cx,cy,ss);ctx.stroke();ctx.restore();
 }
-function drawRing(cx,cy,r,alpha){
-  ctx.save();ctx.globalAlpha=alpha;ctx.strokeStyle='#ff4466';ctx.lineWidth=2.5;
-  ctx.shadowColor='#ff4466';ctx.shadowBlur=22;ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.stroke();ctx.restore();
-}
+function drawRing(cx,cy,r,alpha){ctx.save();ctx.globalAlpha=alpha;ctx.strokeStyle='#ff4466';ctx.lineWidth=2.5;ctx.shadowColor='#ff4466';ctx.shadowBlur=22;ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.stroke();ctx.restore();}
 
 function render(){
   time+=.016;
-  const W=overlayCanvas.width,H=overlayCanvas.height;
+  const W=oc.width, H=oc.height;
   ctx.clearRect(0,0,W,H);
 
-  if(Date.now()-lastDetect>80){ analyzeFrame(); lastDetect=Date.now(); }
+  if(Date.now()-lastDetect > 70){ analyzeFrame(); lastDetect=Date.now(); }
 
-  const isDetected = confidence>0.55 && detectedBounds;
+  const isDetected = confidence > 0.50 && detectedBounds;
 
-  // Live status
-  if(!found){
-    const s=debugData.status||'scanning…';
-    document.getElementById('status').textContent = `conf:${confidence.toFixed(2)} — ${s}`;
-  }
+  // Update live status
+  if(!found) document.getElementById('status').textContent = `conf:${confidence.toFixed(2)} — ${dbgInfo.s||'scanning…'}`;
 
   if(isDetected){
-    heartGlowTarget=1;cakeTarget=1;
-    const sx=W/detCanvas.width,sy=H/detCanvas.height;
-    const tx=(detectedBounds.x+detectedBounds.w/2)*sx;
-    const ty=(detectedBounds.y+detectedBounds.h/2)*sy;
-    heartCX=heartCX*.88+tx*.12;heartCY=heartCY*.88+ty*.12;
-    const ts=Math.max(detectedBounds.w,detectedBounds.h)*Math.min(sx,sy)*.5;
+    heartGlowTarget=1; cakeTarget=1;
+    // Map detection coords from det canvas to screen
+    const sx=W/detCv.width, sy=H/detCv.height;
+    const tx=detectedBounds.cx*sx, ty=detectedBounds.cy*sy;
+    heartCX=heartCX*.88+tx*.12; heartCY=heartCY*.88+ty*.12;
+    const ts=Math.max(detectedBounds.w,detectedBounds.h)*Math.min(sx,sy)*.48;
     heartSize=heartSize*.88+ts*.12;
+
     if(!found){
       found=true;
       document.getElementById('found-banner').classList.add('show');
       document.getElementById('scan-hint').classList.add('hidden');
       document.getElementById('status').textContent='🎂 Eran loves Mika! 💕';
-      burst(heartCX,heartCY,120);
-      ringEffects.push({r:0,alpha:1});ringEffects.push({r:0,alpha:.75});
+      burst(heartCX,heartCY,130);
+      ringEffects.push({r:0,alpha:1}); ringEffects.push({r:0,alpha:.75});
     }
     burstTimer++;
-    if(burstTimer%7===0)burst(heartCX,heartCY,5);
-    if(burstTimer%40===0){burst(heartCX,heartCY,35);ringEffects.push({r:0,alpha:.85});}
+    if(burstTimer%7===0)  burst(heartCX,heartCY,5);
+    if(burstTimer%40===0){ burst(heartCX,heartCY,35); ringEffects.push({r:0,alpha:.85}); }
   } else {
-    heartGlowTarget=0;cakeTarget=0;
-    if(found&&confidence<0.20){
-      found=false;burstTimer=0;
+    heartGlowTarget=0; cakeTarget=0;
+    if(found && confidence < 0.18){
+      found=false; burstTimer=0;
       document.getElementById('found-banner').classList.remove('show');
       document.getElementById('scan-hint').classList.remove('hidden');
     }
   }
 
-  heartGlowAlpha=heartGlowAlpha*.9+heartGlowTarget*.1;
-  cakeAlpha=cakeAlpha*.93+cakeTarget*.07;
-  cakeEntrance=cakeEntrance*.93+(cakeTarget>.05?1:0)*.07;
+  heartGlowAlpha = heartGlowAlpha*.9  + heartGlowTarget*.1;
+  cakeAlpha      = cakeAlpha*.93      + cakeTarget*.07;
+  cakeEntrance   = cakeEntrance*.93   + (cakeTarget>.05?1:0)*.07;
 
   ringEffects=ringEffects.filter(r=>r.alpha>.01);
-  for(const r of ringEffects){r.r+=5;r.alpha*=.94;drawRing(heartCX,heartCY,r.r,r.alpha);}
-  if(heartGlowAlpha>.05&&heartSize>10) drawGlowHeart(heartCX,heartCY,heartSize*.85,heartGlowAlpha,time);
+  for(const r of ringEffects){ r.r+=5; r.alpha*=.94; drawRing(heartCX,heartCY,r.r,r.alpha); }
+
+  if(heartGlowAlpha>.05 && heartSize>10) drawGlowHeart(heartCX,heartCY,heartSize*.85,heartGlowAlpha,time);
+
   if(cakeAlpha>.02){
     const sc=(H*0.68/(70+60+50+46))*cakeEntrance;
     const bs=sc*(1+Math.sin(Math.max(0,(cakeEntrance-.5)*Math.PI))*.08);
     drawBigCake(ctx,W/2,H/2+30,bs,cakeAlpha,time);
   }
+
   particles=particles.filter(p=>p.life>0);
-  for(const p of particles){p.update(particles);p.draw(ctx);}
+  for(const p of particles){ p.update(particles); p.draw(ctx); }
+
   requestAnimationFrame(render);
 }
 
-/* ═══════════════════════════════════════════
+/* ═══════════════════════════════════════════════════════
    INIT & CAMERA
-═══════════════════════════════════════════ */
+═══════════════════════════════════════════════════════ */
 function initCanvas(){
-  overlayCanvas=document.getElementById('overlay-canvas');
-  ctx=overlayCanvas.getContext('2d');
-  // Use a decent resolution for component analysis
-  detCanvas=document.createElement('canvas');
-  detCanvas.width=200;detCanvas.height=150;
-  detCtx=detCanvas.getContext('2d',{willReadFrequently:true});
-  function resize(){overlayCanvas.width=window.innerWidth;overlayCanvas.height=window.innerHeight;}
-  resize();window.addEventListener('resize',resize);
-  heartCX=window.innerWidth/2;heartCY=window.innerHeight/2;
-  heartSize=Math.min(window.innerWidth,window.innerHeight)*.2;
+  oc=document.getElementById('oc');
+  ctx=oc.getContext('2d');
+  detCv=document.createElement('canvas');
+  detCv.width=240; detCv.height=180;
+  detCtx=detCv.getContext('2d',{willReadFrequently:true});
+  function resize(){ oc.width=window.innerWidth; oc.height=window.innerHeight; }
+  resize(); window.addEventListener('resize',resize);
+  heartCX=window.innerWidth/2; heartCY=window.innerHeight/2;
+  heartSize=Math.min(window.innerWidth,window.innerHeight)*.22;
 }
 
 async function startCamera(){
@@ -647,7 +462,7 @@ async function startCamera(){
       document.getElementById('loading').classList.remove('show');
       document.getElementById('status').style.display='block';
       document.getElementById('scan-hint').classList.remove('hidden');
-      document.getElementById('debugBtn').style.display='block';
+      document.getElementById('dbg').style.display='block';
       render();
     };
   }catch(err){
@@ -674,25 +489,25 @@ function startDemo(){
   document.getElementById('status').textContent='🎂 Eran loves Mika! 💕';
   document.getElementById('found-banner').classList.add('show');
   initCanvas();
-  heartGlowAlpha=1;heartGlowTarget=1;cakeAlpha=1;cakeTarget=1;cakeEntrance=1;
-  burst(heartCX,heartCY,140);ringEffects.push({r:0,alpha:1});
+  heartGlowAlpha=1; heartGlowTarget=1; cakeAlpha=1; cakeTarget=1; cakeEntrance=1;
+  burst(heartCX,heartCY,140); ringEffects.push({r:0,alpha:1});
   let t2=0;
   function demoLoop(){
-    time+=.016;t2++;
-    const W=overlayCanvas.width,H=overlayCanvas.height;
+    time+=.016; t2++;
+    const W=oc.width, H=oc.height;
     ctx.clearRect(0,0,W,H);
     const g=ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,Math.max(W,H)/2);
-    g.addColorStop(0,'rgba(20,0,10,.5)');g.addColorStop(1,'rgba(4,0,4,.92)');
-    ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+    g.addColorStop(0,'rgba(20,0,10,.5)'); g.addColorStop(1,'rgba(4,0,4,.92)');
+    ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
     drawGlowHeart(W/2,H/2,Math.min(W,H)*.42,0.85,time);
     ringEffects=ringEffects.filter(r=>r.alpha>.01);
-    for(const r of ringEffects){r.r+=5;r.alpha*=.94;drawRing(W/2,H/2,r.r,r.alpha);}
+    for(const r of ringEffects){ r.r+=5; r.alpha*=.94; drawRing(W/2,H/2,r.r,r.alpha); }
     const sc=(H*0.68)/(70+60+50+46);
     drawBigCake(ctx,W/2,H/2+30,sc,1,time);
-    if(t2%8===0)burst(W/2,H/2,6);
-    if(t2%50===0){burst(W/2,H/2,45);ringEffects.push({r:0,alpha:.85});}
+    if(t2%8===0)  burst(W/2,H/2,6);
+    if(t2%50===0){ burst(W/2,H/2,45); ringEffects.push({r:0,alpha:.85}); }
     particles=particles.filter(p=>p.life>0);
-    for(const p of particles){p.update(particles);p.draw(ctx);}
+    for(const p of particles){ p.update(particles); p.draw(ctx); }
     requestAnimationFrame(demoLoop);
   }
   demoLoop();
@@ -700,7 +515,7 @@ function startDemo(){
 
 window.startCamera=startCamera;
 window.startDemo=startDemo;
-window.toggleDebug=toggleDebug;
+window.toggleDbg=toggleDbg;
 </script>
 </body>
 </html>
